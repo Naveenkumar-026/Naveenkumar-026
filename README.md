@@ -1,16 +1,48 @@
-## Hi there 👋
+<div align="left">
 
-<!--
-**Naveenkumar-026/Naveenkumar-026** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<!-- Stealth motion header (italic via font variant) -->
+<p align="left">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono+Italic&size=18&duration=2600&pause=900&color=22C55E&width=620&lines=%E2%88%B4+%F0%9D%93%97(x)+%E2%86%92+%E2%88%9E;Security+%C2%B7+Intelligence+%C2%B7+Autonomy;Signal+Over+Noise" />
+</p>
 
-Here are some ideas to get you started:
+<p>
+At the confluence of<br/>
+<strong><em>Security</em></strong>, <strong><em>Intelligence</em></strong>, and <strong><em>Autonomy</em></strong>.
+</p>
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+<hr/>
+
+<p><strong>Domains of focus</strong></p>
+
+<p>⟡ Cybersecurity & defensive architectures</p>
+<p>⟡ Artificial intelligence, agent systems, and ASI research</p>
+<p>⟡ Privacy-preserving, low-infrastructure computing</p>
+<p>⟡ Quantum computing & firearms systems — foundations, safety, analysis</p>
+<p>⟡ Long-horizon system foundations</p>
+
+<hr/>
+
+<p>
+Most work is exploratory. Some is operational.<br/>
+Almost none is announced.
+</p>
+
+<table>
+  <tr>
+    <td><em>Structure precedes implementation.</em></td>
+  </tr>
+</table>
+
+<p align="center">
+  <span>──────── ⧉ ────────</span>
+</p>
+
+<p align="center">
+Signal over time: sustained development, consistent iteration
+</p>
+
+<p align="center"><em>
+"Not everything here is meant to be understood on first pass."
+</em></p>
+
+</div>
