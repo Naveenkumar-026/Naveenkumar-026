@@ -38,6 +38,10 @@ Almost none is announced.
 </p>
 
 <p align="center">
+  <img src="./assets/constellation.svg" alt="Constellation Map" width="100%" />
+</p>
+
+<p align="center">
   <img src="./assets/signal_barcode.svg" alt="Signal Telemetry" width="100%" />
 </p>
 
