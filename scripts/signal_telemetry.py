@@ -56,8 +56,8 @@ def main():
     query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
         contributionsCollection(from: $from, to: $to) {
-          totalContributions
           contributionCalendar {
+            totalContributions
             weeks {
               contributionDays {
                 date
@@ -80,7 +80,7 @@ def main():
         raise SystemExit(json.dumps(data["errors"], indent=2))
 
     cc = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
-    total = data["data"]["user"]["contributionsCollection"]["totalContributions"]
+    total = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
 
     days = []
     for w in cc:
