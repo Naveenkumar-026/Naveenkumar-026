@@ -64,7 +64,7 @@ def main():
         x2, y2 = pos[b]
         lines.append(
             f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
-            f'stroke="{ACCENT}" stroke-width="1" opacity="0.22"/>'
+            f'stroke="{ACCENT}" stroke-width="1" opacity="0.16"/>'
         )
 
     # Nodes: glow + core
