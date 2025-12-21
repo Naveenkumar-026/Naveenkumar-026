@@ -38,6 +38,10 @@ Almost none is announced.
 </p>
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/Naveenkumar-026/Naveenkumar-026/main/assets/signal.svg" alt="Signal Telemetry" />
+</p>
+
+<p align="center">
 Signal over time: sustained development, consistent iteration
 </p>
 
