@@ -39,7 +39,7 @@ def main():
     pos = {}
     for name, nx, ny in NODES:
         x = PAD + nx * (WIDTH - PAD*2)
-        y = PAD + ny * (HEIGHT - PAD*2)
+        y = PAD + ny * (HEIGHT - PAD*2) - 8
         pos[name] = (x, y)
 
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
