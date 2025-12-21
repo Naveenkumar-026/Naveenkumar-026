@@ -3,7 +3,7 @@ import os, json, datetime, urllib.request
 USER = os.environ.get("GH_USER", "Naveenkumar-026")
 TOKEN = os.environ.get("GH_TOKEN")
 
-OUT_PATH = os.environ.get("OUT_PATH", "assets/signal.svg")
+OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 
 BG = "#0D1117"
 FG = "#9CA3AF"
@@ -143,18 +143,18 @@ def main():
         x_mid = x0 + i*bw + (bw * 0.5)
     
         # Full-height faint scan pulse (opacity encodes activity)
-        op_line = 0.03 + (intensity * 0.35)
+        op_line = 0.06 + (intensity * 0.55)
         pulses.append(
             f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
-            f'stroke="{ACCENT}" stroke-width="1" opacity="{op_line:.3f}"/>'
+            f'stroke="{ACCENT}" stroke-width="1.4" opacity="{op_line:.3f}"/>'
         )
     
         # Bottom “burst” segment (short, stronger) – looks like traffic spikes
         burst_h = 2.0 + intensity * (PLOT_H * 0.32)
-        op_burst = 0.10 + (intensity * 0.75)
+        op_burst = 0.18 + (intensity * 0.82)
         pulses.append(
             f'<line x1="{x_mid:.2f}" y1="{PLOT_BOTTOM - burst_h:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
-            f'stroke="{ACCENT}" stroke-width="2" opacity="{op_burst:.3f}"/>'
+            f'stroke="{ACCENT}" stroke-width="2.4" opacity="{op_burst:.3f}"/>'
         )
 
     # Moving-average line (telemetry feel)
@@ -166,7 +166,7 @@ def main():
     d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x,y in path])
 
     title = "SIGNAL // 365D"
-    subtitle = f"{total} contributions · peak/day {raw_max} · normalized@p95 {scale_max}"
+    subtitle = f"{total} contributions · peak/day {raw_max} · normalized@p90 {scale_max} · mode BARCODE"
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
