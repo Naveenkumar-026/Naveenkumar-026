@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os, math, datetime
 
 OUT_PATH = os.environ.get("OUT_PATH", "assets/constellation.svg")
