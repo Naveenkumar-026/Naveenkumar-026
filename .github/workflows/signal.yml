@@ -24,7 +24,7 @@ jobs:
         env:
           GH_USER: Naveenkumar-026
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUT_PATH: assets/signal.svg
+          OUT_PATH: assets/signal_barcode.svg
         run: |
           python scripts/signal_telemetry.py
 
