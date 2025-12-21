@@ -40,6 +40,18 @@ def moving_avg(vals, w=14):
         window = vals[a:i+1]
         out.append(sum(window) / len(window))
     return out
+    
+def percentile(values, p: float) -> int:
+    """Nearest-rank percentile (p in [0,100]). Returns int cap >= 1 when possible."""
+    if not values:
+        return 1
+    s = sorted(values)
+    n = len(s)
+    if n == 1:
+        return max(1, int(s[0]))
+    idx = int(round((p / 100.0) * (n - 1)))
+    idx = clamp(idx, 0, n - 1)
+    return max(1, int(s[idx]))
 
 def svg_escape(s):
     return (s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
@@ -90,7 +102,11 @@ def main():
     # exactly 365-ish days; keep last 365 entries
     days = days[-365:]
     counts = [c for _, c in days]
-    max_c = max(counts) if counts else 1
+    raw_max = max(counts) if counts else 1
+
+    # Normalize: cap extreme spikes to keep the year readable
+    cap = percentile(counts, 95)  # p95 cap; change to 90/97 if you want
+    scale_max = max(1, cap)
 
     # Plot geometry
     n = len(counts)
@@ -104,8 +120,9 @@ def main():
 
     # Scale values
     def y_for(v):
-        # v=0 -> bottom, v=max -> top
-        t = v / max_c if max_c else 0
+        # v=0 -> bottom, v=scale_max -> top (normalized)
+        v = min(v, scale_max)
+        t = (v / scale_max) if scale_max else 0
         return PLOT_BOTTOM - t * PLOT_H
 
     ma = moving_avg(counts, w=21)
@@ -137,7 +154,7 @@ def main():
     d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x,y in path])
 
     title = "SIGNAL // 365D"
-    subtitle = f"{total} contributions · max/day {max_c}"
+    subtitle = f"{total} contributions · peak/day {raw_max} · normalized@p95 {scale_max}"
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
