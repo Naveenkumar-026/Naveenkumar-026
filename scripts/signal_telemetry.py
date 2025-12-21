@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os, json, datetime, urllib.request
 
 USER = os.environ.get("GH_USER", "Naveenkumar-026")
@@ -105,7 +104,7 @@ def main():
     raw_max = max(counts) if counts else 1
 
     # Normalize: cap extreme spikes to keep the year readable
-    cap = percentile(counts, 95)  # p95 cap; change to 90/97 if you want
+    cap = percentile(counts, 90)  # p95 cap; change to 90/97 if you want
     scale_max = max(1, cap)
 
     # Plot geometry
@@ -195,9 +194,9 @@ def main():
 
   <!-- Area under moving avg -->
   <path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" fill="url(#fade)" opacity="0.55"/>
-
-  <!-- Bars -->
-  {"".join(bars)}
+  
+  <!-- Barcode pulses -->
+  {"".join(pulses)}
 
   <!-- Moving avg line -->
   <path d="{d}" fill="none" stroke="{ACCENT}" stroke-width="2.2" filter="url(#softGlow)" opacity="0.95"/>
