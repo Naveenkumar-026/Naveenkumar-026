@@ -35,11 +35,13 @@ def svg_escape(s: str) -> str:
              .replace('"',"&quot;").replace("'","&#39;"))
 
 def main():
+    FRAME_Y = PAD + 44
+    FRAME_H = HEIGHT - (PAD + 44) - PAD
     # Build lookup of positions
     pos = {}
     for name, nx, ny in NODES:
         x = PAD + nx * (WIDTH - PAD*2)
-        y = PAD + ny * (HEIGHT - PAD*2) - 8
+        y = FRAME_Y + ny * FRAME_H
         pos[name] = (x, y)
 
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
@@ -50,7 +52,7 @@ def main():
         # a simple low-discrepancy-ish sequence
         t = i * 12.9898
         sx = PAD + (math.fmod(t * 78.233, 1.0)) * (WIDTH - PAD*2)
-        sy = PAD + (math.fmod((t + 0.37) * 19.1919, 1.0)) * (HEIGHT - PAD*2)
+        sy = FRAME_Y + (math.fmod((t + 0.37) * 19.1919, 1.0)) * FRAME_H
         r = 0.6 + (i % 5) * 0.12
         a = 0.08 + (i % 7) * 0.01
         stars.append(f'<circle cx="{sx:.2f}" cy="{sy:.2f}" r="{r:.2f}" fill="{FG}" opacity="{a:.3f}"/>')
