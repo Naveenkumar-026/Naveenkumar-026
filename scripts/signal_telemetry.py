@@ -103,8 +103,8 @@ def main():
     counts = [c for _, c in days]
     raw_max = max(counts) if counts else 1
 
-    # Normalize: cap extreme spikes to keep the year readable
-    cap = percentile(counts, 90)  # p95 cap; change to 90/97 if you want
+    nonzero = [v for v in counts if v > 0]
+    cap = percentile(nonzero, 85) if nonzero else 1
     scale_max = max(1, cap)
 
     # Plot geometry
