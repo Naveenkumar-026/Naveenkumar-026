@@ -9,7 +9,7 @@ ACCENT = "#22C55E"
 GRID = "#1F2937"
 
 WIDTH = 980
-HEIGHT = 260
+HEIGHT = 220
 PAD = 28
 
 # Node labels (identity only, not “projects”)
