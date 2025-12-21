@@ -38,7 +38,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Naveenkumar-026/Naveenkumar-026/main/assets/signal.svg" alt="Signal Telemetry" />
+  <img src="./assets/signal_barcode.svg" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center">
