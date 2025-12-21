@@ -29,11 +29,17 @@ jobs:
           python scripts/signal_telemetry.py
           ls -la assets || true
 
+      - name: Generate Constellation Map
+        env:
+          OUT_PATH: assets/constellation.svg
+        run: |
+          python scripts/constellation_map.py
+
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/signal_barcode.svg
+          git add assets/*.svg
           git commit -m "chore: update signal telemetry" || exit 0
           git push
 
