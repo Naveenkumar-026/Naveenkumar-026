@@ -125,7 +125,8 @@ def main():
         t = (v / scale_max) if scale_max else 0
         return PLOT_BOTTOM - t * PLOT_H
 
-    ma = moving_avg(counts, w=21)
+    capped_counts = [min(v, scale_max) for v in counts]
+    ma = moving_avg(capped_counts, w=21)
 
     # Grid lines (subtle)
     grid_lines = []
@@ -133,16 +134,28 @@ def main():
         y = PLOT_TOP + (PLOT_H * k / 4.0)
         grid_lines.append(f'<line x1="{PAD_X}" y1="{y:.2f}" x2="{WIDTH-PAD_X}" y2="{y:.2f}" stroke="{GRID}" stroke-width="1"/>')
 
-    # Bars (signal)
-    bars = []
-    for i, v in enumerate(counts):
-        x = x0 + i*bw
-        y = y_for(v)
-        h = PLOT_BOTTOM - y
-        # faint when zero, stronger when active
-        op = 0.22 if v == 0 else 0.85
-        bars.append(
-            f'<rect x="{x:.2f}" y="{y:.2f}" width="{bw*0.82:.2f}" height="{h:.2f}" rx="1.2" fill="{ACCENT}" opacity="{op}"/>'
+    # Barcode telemetry (encrypted-traffic vibe)
+    pulses = []
+    for i, v_raw in enumerate(counts):
+        v = min(v_raw, scale_max)
+        intensity = (v / scale_max) if scale_max else 0.0
+    
+        # Centerline for this "tick"
+        x_mid = x0 + i*bw + (bw * 0.5)
+    
+        # Full-height faint scan pulse (opacity encodes activity)
+        op_line = 0.03 + (intensity * 0.35)
+        pulses.append(
+            f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
+            f'stroke="{ACCENT}" stroke-width="1" opacity="{op_line:.3f}"/>'
+        )
+    
+        # Bottom “burst” segment (short, stronger) – looks like traffic spikes
+        burst_h = 2.0 + intensity * (PLOT_H * 0.32)
+        op_burst = 0.10 + (intensity * 0.75)
+        pulses.append(
+            f'<line x1="{x_mid:.2f}" y1="{PLOT_BOTTOM - burst_h:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
+            f'stroke="{ACCENT}" stroke-width="2" opacity="{op_burst:.3f}"/>'
         )
 
     # Moving-average line (telemetry feel)
