@@ -82,28 +82,37 @@ def spaced_top_events(counts, threshold, limit=7, min_gap=6):
     return picked
 
 def main():
-    to_dt = datetime.datetime.utcnow().replace(microsecond=0, second=0)
+    to_dt = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
     from_dt = to_dt - datetime.timedelta(days=365)
 
     query = """
     query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
-        contributionsCollection(from: $from, to: $to) {
-          contributionCalendar {
-            totalContributions
-            weeks {
-              contributionDays {
-                date
-                contributionCount
+        include_private = os.environ.get("INCLUDE_PRIVATE", "true").strip().lower() in ("1","true","yes","y","on")
+        
+        query = """
+        query($user:String!, $from:DateTime!, $to:DateTime!, $priv:Boolean!) {
+          user(login: $user) {
+            contributionsCollection(from: $from, to: $to, includePrivateContributions: $priv) {
+              contributionCalendar {
+                totalContributions
+                weeks {
+                  contributionDays {
+                    date
+                    contributionCount
+                  }
+                }
               }
             }
           }
         }
-      }
-    }
-    """
-
-    data = gh_api(query, {"user": USER, "from": from_dt.isoformat()+"Z", "to": to_dt.isoformat()+"Z"})
+        """
+        data = gh_api(query, {
+          "user": USER,
+          "from": from_dt.isoformat() + "Z",
+          "to": to_dt.isoformat() + "Z",
+          "priv": include_private,
+        })
     cc = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
     total = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
 
@@ -116,6 +125,7 @@ def main():
     days = days[-365:]
     dates = [datetime.date.fromisoformat(dt) for dt, _ in days]
     counts = [c for _, c in days]
+    total = sum(counts)
     raw_max = max(counts) if counts else 1
 
     nonzero = [v for v in counts if v > 0]
