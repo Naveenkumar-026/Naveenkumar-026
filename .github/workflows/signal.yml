@@ -29,12 +29,6 @@ jobs:
           python scripts/signal_telemetry.py
           ls -la assets || true
 
-      - name: Generate Constellation Map
-        env:
-          OUT_PATH: assets/constellation.svg
-        run: |
-          python scripts/constellation_map.py
-
       - name: Generate Hero Sweep
         env:
           OUT_PATH: assets/hero_sweep.svg
