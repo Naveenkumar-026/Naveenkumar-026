@@ -1,5 +1,9 @@
 <div align="left">
 
+<p align="center">
+  <img src="./assets/hero_sweep.svg?v=0" alt="Signal Sweep" width="100%" />
+</p>
+
 <!-- Stealth motion header (italic via font variant) -->
 <p align="left">
   <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono+Italic&size=18&duration=2600&pause=900&color=22C55E&width=620&lines=%E2%88%B4+%F0%9D%93%97(x)+%E2%86%92+%E2%88%9E;Security+%C2%B7+Intelligence+%C2%B7+Autonomy;Signal+Over+Noise" />
