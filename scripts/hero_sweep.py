@@ -89,9 +89,6 @@ def main():
     ys = ys2
     pts = " ".join(f"{xs[i]:.2f},{ys[i]:.2f}" for i in range(N))
 
-    # Build spectrum polyline points
-    pts = " ".join(f"{xs[i]:.2f},{ys[i]:.2f}" for i in range(N))
-
     # Compute a simple peak marker (for readout)
     min_y = min(ys)
     peak_idx = ys.index(min_y)
@@ -140,7 +137,7 @@ def main():
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
   <defs>
     <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
       <feMerge>
         <feMergeNode in="b"/>
         <feMergeNode in="SourceGraphic"/>
@@ -204,7 +201,7 @@ def main():
     <rect x="{frame_x}" y="{wf_y}" width="{frame_w}" height="{wf_h}" rx="10"/>
   </clipPath>
 
-  <g clip-path="url(#wfClip)" opacity="0.95">
+  <g clip-path="url(#wfClip)" opacity="0.78">
     <g>
       {"".join(wf_cells)}
       <animateTransform attributeName="transform" type="translate"
@@ -215,9 +212,9 @@ def main():
 
   <!-- Spectrum fill + trace -->
   <polygon points="{frame_x:.2f},{frame_y + frame_h:.2f} {pts} {frame_x + frame_w:.2f},{frame_y + frame_h:.2f}"
-           fill="url(#specFill)" opacity="0.85"/>
+           fill="url(#specFill)" opacity="0.55"/>
 
-  <polyline points="{pts}" fill="none" stroke="{ACCENT}" stroke-width="2.2" filter="url(#glow)" opacity="0.75"/>
+  <polyline points="{pts}" fill="none" stroke="{ACCENT}" stroke-width="2.2" filter="url(#glow)" opacity="0.62"/>
 
   <!-- Peak marker -->
   <line x1="{peak_x:.2f}" y1="{frame_y}" x2="{peak_x:.2f}" y2="{frame_y + frame_h}" stroke="{ACCENT_DIM}" stroke-width="1.4" opacity="0.65" stroke-dasharray="4 6"/>
