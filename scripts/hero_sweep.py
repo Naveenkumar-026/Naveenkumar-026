@@ -62,7 +62,7 @@ def main():
         # shaped noise floor + slight slope + ripple
         nf = base + (t - 0.5) * 6.0
         nf += math.sin(t * 9.0) * 1.6
-        nf += (pseudo(i * 0.7) - 0.5) * 2.2
+        nf += (pseudo(i * 0.45) - 0.5) * 1.2
 
         # add a few narrowband peaks like an FFT capture
         def peak(center, width, height):
@@ -81,6 +81,13 @@ def main():
 
         xs.append(x)
         ys.append(y)
+
+    # Light smoothing to reduce harsh jaggedness (keeps peaks sharp)
+    ys2 = ys[:]
+    for i in range(2, N - 2):
+        ys2[i] = (ys[i-2]*0.08 + ys[i-1]*0.22 + ys[i]*0.40 + ys[i+1]*0.22 + ys[i+2]*0.08)
+    ys = ys2
+    pts = " ".join(f"{xs[i]:.2f},{ys[i]:.2f}" for i in range(N))
 
     # Build spectrum polyline points
     pts = " ".join(f"{xs[i]:.2f},{ys[i]:.2f}" for i in range(N))
@@ -120,7 +127,7 @@ def main():
             intensity += 0.30 * math.exp(-((t - 0.80) ** 2) / (2 * 0.018 ** 2))
             # time variation per row (deterministic)
             intensity += (pseudo(r * 9.1 + c * 0.17) - 0.5) * 0.06
-            intensity = clamp(intensity, 0.02, 0.45)
+            intensity = clamp(intensity, 0.02, 0.32)
 
             x = frame_x + c * cell_w
             y = wf_y + r * cell_h
@@ -177,11 +184,12 @@ def main():
             for k in range(1, 6)])}
 
   <!-- Axis labels -->
-  <text x="{frame_x}" y="{frame_y - 10}" fill="{MUTED}" font-size="11"
+  <!-- dB labels (kept inside plot area, aligned) -->
+  <text x="{frame_x + 8}" y="{frame_y + 14}" fill="{MUTED}" font-size="11"
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_top)}</text>
-  <text x="{frame_x}" y="{frame_y + frame_h/2:.2f}" fill="{MUTED}" font-size="11"
+  <text x="{frame_x + 8}" y="{frame_y + frame_h/2 + 4:.2f}" fill="{MUTED}" font-size="11"
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_mid)}</text>
-  <text x="{frame_x}" y="{frame_y + frame_h - 6}" fill="{MUTED}" font-size="11"
+  <text x="{frame_x + 8}" y="{frame_y + frame_h - 8:.2f}" fill="{MUTED}" font-size="11"
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_bot)}</text>
 
   <text x="{frame_x}" y="{frame_y + frame_h + 18}" fill="{MUTED}" font-size="11"
@@ -215,16 +223,20 @@ def main():
   <line x1="{peak_x:.2f}" y1="{frame_y}" x2="{peak_x:.2f}" y2="{frame_y + frame_h}" stroke="{ACCENT_DIM}" stroke-width="1.4" opacity="0.65" stroke-dasharray="4 6"/>
   <circle cx="{peak_x:.2f}" cy="{peak_y:.2f}" r="3.2" fill="{ACCENT}" opacity="0.85"/>
 
-  <!-- Readout (SDR-style) -->
-  <text x="{frame_x + frame_w - 12}" y="{frame_y + 22}" text-anchor="end" fill="{TEXT}" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-    MKR {esc(marker_freq)}  Δf {esc(df)}
-  </text>
+  <!-- HUD box (top-right) -->
+  <g opacity="0.92">
+    <rect x="{frame_x + frame_w - 290}" y="{frame_y + 10}" width="276" height="44"
+          rx="8" fill="{BG}" opacity="0.55" stroke="{GRID}" stroke-width="1"/>
+    <text x="{frame_x + frame_w - 18}" y="{frame_y + 28}" text-anchor="end" fill="{TEXT}" font-size="11"
+          font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+      MKR {esc(marker_freq)}  Δf {esc(df)}
+    </text>
+    <text x="{frame_x + frame_w - 18}" y="{frame_y + 44}" text-anchor="end" fill="{MUTED}" font-size="11"
+          font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+      Peak {peak_db:.1f} dB   Noise {noise_db:.1f} dB   SNR {snr:.1f} dB
+    </text>
+  </g>
 
-  <text x="{frame_x + frame_w - 12}" y="{frame_y + 40}" text-anchor="end" fill="{MUTED}" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-    Peak {peak_db:.1f} dB   Noise {noise_db:.1f} dB   SNR {snr:.1f} dB
-  </text>
 </svg>
 '''
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
