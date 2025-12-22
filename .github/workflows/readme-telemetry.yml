@@ -21,14 +21,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
+      
       - name: Render SVGs
         env:
           GH_USER: ${{ github.repository_owner }}
           GH_TOKEN: ${{ secrets.SIGNAL_TOKEN }}
         run: |
-          python signal_telemetry.py
-          python constellation_map.py
+          python scripts/signal_telemetry.py
+          python scripts/constellation_map.py
 
       # Optional but strongly recommended: cache-bust so GitHub’s image proxy shows the newest SVG fast
       - name: Cache-bust README image URLs
