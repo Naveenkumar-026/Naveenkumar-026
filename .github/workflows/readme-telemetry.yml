@@ -28,7 +28,6 @@ jobs:
           GH_TOKEN: ${{ secrets.SIGNAL_TOKEN }}
         run: |
           python scripts/signal_telemetry.py
-          python scripts/constellation_map.py
           python scripts/hero_sweep.py
 
       # Optional but strongly recommended: cache-bust so GitHub’s image proxy shows the newest SVG fast
@@ -40,7 +39,6 @@ jobs:
           s = p.read_text(encoding="utf-8")
           v = str(int(time.time()))
           s = re.sub(r'(\./assets/signal_barcode\.svg)(\?v=\d+)?', r'\1?v='+v, s)
-          s = re.sub(r'(\./assets/constellation\.svg)(\?v=\d+)?', r'\1?v='+v, s)
           s = re.sub(r'(\./assets/hero_sweep\.svg)(\?v=\d+)?', r'\1?v='+v, s)
           p.write_text(s, encoding="utf-8")
           PY
