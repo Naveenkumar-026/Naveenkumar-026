@@ -22,7 +22,7 @@
   <text x="28" y="54" fill="#9CA3AF" font-size="12"
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Security · Intelligence · Autonomy</text>
   <text x="952" y="54" text-anchor="end" fill="#6B7280" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2025-12-21 UTC</text>
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2025-12-22 UTC</text>
 
   <!-- Subtle scan band -->
   <rect x="28" y="134" width="924" height="1.5" fill="url(#fade)" opacity="0.9"/>
