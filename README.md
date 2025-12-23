@@ -1,23 +1,3 @@
-<!-- WATERMARK (GitHub-safe): low-opacity ASCII "background" -->
-<div align="center">
-  <pre style="margin:0; padding:18px 12px; line-height:1.05; font-size:10px; opacity:0.10; color:#9ca3af;">
-                        .-=========-.
-                     .-'             '-.
-                   .'   .-"""-._.-"""-.  '.
-                  /    /  _   _   _   \    \
-                 ;    |  (o) (o) (o)   |    ;
-                 |    |       __        |    |
-                 |    |    .-'  '-.     |    |
-                 ;    |   /  .--.  \    |    ;
-                  \    \  | (____) |   /    /
-                   '.   '-.\      /.-'   .'
-                     '-._   '----'   _.-'
-                          '========='
-
-               ░░░░░░░░░░░░░  SIGNAL  ░░░░░░░░░░░░░
-  </pre>
-</div>
-
 <div align="left">
 
 <p align="center">
