@@ -1,14 +1,12 @@
-import os, json, datetime, urllib.request, urllib.error
+import os, json, datetime, urllib.request
 
 USER = os.environ.get("GH_USER", "Naveenkumar-026")
 TOKEN = os.environ.get("GH_TOKEN")
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 
-# Render window
-DAYS = int(os.environ.get("DAYS", "365"))
-
-# Match GitHub profile UI day boundaries (India = +330)
+# Local timezone alignment (IST default)
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
+DAYS = 365
 
 BG = "#0D1117"
 FG = "#9CA3AF"
@@ -19,30 +17,20 @@ GRID = "#1F2937"
 WIDTH = 980
 HEIGHT = 220
 PAD_X = 24
-
 PLOT_TOP = 86
 PLOT_H = 104
 PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
 
-def gh_api(query: str, variables: dict) -> dict:
+def gh_api(query, variables):
     if not TOKEN:
         raise SystemExit("GH_TOKEN missing. Set GH_TOKEN env or Actions secret.")
-
     req = urllib.request.Request("https://api.github.com/graphql", method="POST")
     req.add_header("Authorization", f"bearer {TOKEN}")
     req.add_header("Content-Type", "application/json")
-    req.add_header("User-Agent", "signal-telemetry-script")
-
-    payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
-    try:
-        with urllib.request.urlopen(req, payload, timeout=30) as r:
-            data = json.loads(r.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
-        raise SystemExit(f"GitHub GraphQL HTTPError {e.code}: {body}")
-    except Exception as e:
-        raise SystemExit(f"GitHub GraphQL request failed: {e}")
+    data = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+    with urllib.request.urlopen(req, data=data, timeout=30) as r:
+        data = json.loads(r.read().decode("utf-8"))
 
     if "errors" in data and data["errors"]:
         raise SystemExit(f"GitHub GraphQL errors: {data['errors']}")
@@ -82,6 +70,7 @@ def streak_stats(counts):
             cur += 1
         else:
             break
+
     best = 0
     run = 0
     for v in counts:
@@ -131,7 +120,7 @@ def compute_window(days: int, tz_offset_minutes: int):
 def main():
     from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
-    # IMPORTANT: do NOT use includePrivateContributions here (your Actions run rejects it)
+    # IMPORTANT: do NOT use includePrivateContributions (your Actions run rejects it)
     query = """
     query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
@@ -157,7 +146,6 @@ def main():
 
     weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
 
-    # date -> count
     by_date = {}
     for w in weeks:
         for d in w["contributionDays"]:
@@ -174,7 +162,7 @@ def main():
         counts.append(by_date.get(ds, 0))
         cur += datetime.timedelta(days=1)
 
-    total = sum(counts)  # EXACT plotted total
+    total = sum(counts)
     raw_max = max(counts) if counts else 1
 
     nonzero = [v for v in counts if v > 0]
@@ -214,7 +202,7 @@ def main():
     month_labels = []
     for i, dt in enumerate(dates):
         x_mid = x0 + i * bw + (bw * 0.5)
-        if dt.weekday() == 0:
+        if dt.weekday() == 0:  # Monday
             week_lines.append(
                 f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
                 f'stroke="{GRID}" stroke-width="1" opacity="0.10"/>'
@@ -224,136 +212,81 @@ def main():
                 f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
                 f'stroke="{GRID}" stroke-width="1.2" opacity="0.22"/>'
             )
-            month_labels.append(
-                f'<text x="{x_mid+4:.2f}" y="{PLOT_BOTTOM+18:.2f}" fill="{MUTED}" '
-                f'font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" '
-                f'font-size="10">{dt.strftime("%b")}</text>'
-            )
+            month_labels.append((x_mid + 4, dt.strftime("%b")))
 
-    streak_band = ""
-    if cur_streak >= 5:
-        start_i = max(0, n - cur_streak)
-        x1 = x0 + start_i * bw
-        w = cur_streak * bw
-        streak_band = (
-            f'<rect x="{x1:.2f}" y="{PLOT_TOP:.2f}" width="{w:.2f}" height="{PLOT_H:.2f}" '
-            f'fill="{ACCENT}" opacity="0.035"/>'
+    bars = []
+    for i, v in enumerate(counts):
+        x = x0 + i * bw
+        h = max(0.0, PLOT_BOTTOM - y_for(v))
+        y = PLOT_BOTTOM - h
+        op = 0.18 + 0.55 * (min(v, scale_max) / float(scale_max))
+        bars.append(
+            f'<rect x="{x:.2f}" y="{y:.2f}" width="{bw:.2f}" height="{h:.2f}" '
+            f'fill="{ACCENT}" opacity="{op:.3f}"/>'
         )
 
-    pulses = []
-    for i, v_raw in enumerate(counts):
-        v = min(v_raw, scale_max)
-        intensity = (v / scale_max) if scale_max else 0.0
-        x_mid = x0 + i * bw + (bw * 0.5)
-
-        op_line = 0.03 + (intensity * 0.22)
-        pulses.append(
-            f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
-            f'stroke="{ACCENT}" stroke-width="1.0" opacity="{op_line:.3f}"/>'
-        )
-
-        if v_raw > 0:
-            burst_h = 2.0 + intensity * (PLOT_H * 0.34)
-            op_burst = 0.12 + (intensity * 0.62)
-            pulses.append(
-                f'<line x1="{x_mid:.2f}" y1="{PLOT_BOTTOM - burst_h:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
-                f'stroke="{ACCENT}" stroke-width="1.9" opacity="{op_burst:.3f}"/>'
-            )
-
-    path = []
+    line_pts = []
     for i, v in enumerate(ma):
-        x = x0 + i * bw + (bw * 0.41)
+        x = x0 + i * bw + (bw * 0.5)
         y = y_for(v)
-        path.append((x, y))
-    d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x, y in path]) if path else ""
+        line_pts.append(f"{x:.2f},{y:.2f}")
+    line = f'<polyline points="{" ".join(line_pts)}" fill="none" stroke="{ACCENT}" stroke-width="2" opacity="0.85"/>'
 
-    pips = []
+    event_marks = []
     for v, i in events:
-        x_mid = x0 + i * bw + (bw * 0.5)
+        x = x0 + i * bw + (bw * 0.5)
         y = y_for(min(v, scale_max))
-        pips.append(
-            f'<g opacity="0.90">'
-            f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
-            f'stroke="{ACCENT}" stroke-width="1" opacity="0.22"/>'
-            f'<circle cx="{x_mid:.2f}" cy="{y:.2f}" r="3.2" fill="{ACCENT}" filter="url(#softGlow)"/>'
-            f'</g>'
-        )
+        event_marks.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="2.6" fill="{ACCENT}" opacity="0.95"/>')
 
-    hud_lines = [
-        f"Streak {cur_streak}d  ·  Best {best_streak}d",
-        f"Last 7d {last7}  ·  30d {last30}",
-        f"Avg {avg_day:.2f}/d  ·  Peak {raw_max}  ·  Cap p85 {scale_max}",
-    ]
-    hud_w = 320
-    hud_h = 18 + 14 * len(hud_lines)
-    hud_x = WIDTH - PAD_X - hud_w
-    hud_y = PLOT_TOP + 10
-    hud = (
-        f'<g>'
-        f'<rect x="{hud_x}" y="{hud_y}" width="{hud_w}" height="{hud_h}" rx="10" '
-        f'fill="#0B1220" opacity="0.78" stroke="{GRID}" stroke-width="1"/>'
-    )
-    for j, line in enumerate(hud_lines):
-        ty = hud_y + 18 + 14 * j
-        hud += (
-            f'<text x="{hud_x + hud_w - 12}" y="{ty}" text-anchor="end" fill="{FG}" '
-            f'font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" '
-            f'font-size="11">{svg_escape(line)}</text>'
-        )
-    hud += '</g>'
-
-    title = "SIGNAL // 365D"
-    subtitle = f"{total} contributions · peak/day {raw_max} · cap@p85 {scale_max} · mode BARCODE"
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
-    area = ""
-    if path:
-        area = (
-            f'<path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" '
-            f'fill="url(#fade)" opacity="0.42"/>'
-        )
+    header = f"""
+    <text x="{PAD_X}" y="30" fill="{ACCENT}" font-size="14" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      SIGNAL // 365D
+    </text>
+    <text x="{PAD_X}" y="48" fill="{FG}" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      {total} contributions · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE
+    </text>
+    <text x="{WIDTH-PAD_X}" y="30" fill="{MUTED}" font-size="11" text-anchor="end"
+      font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      {svg_escape(now)}
+    </text>
+    """
 
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
-  <defs>
-    <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="{ACCENT}" stop-opacity="0.26"/>
-      <stop offset="1" stop-color="{ACCENT}" stop-opacity="0.00"/>
-    </linearGradient>
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="1.6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
+    hud = f"""
+    <g transform="translate({WIDTH-310},{70})">
+      <rect x="0" y="0" width="286" height="58" rx="10" fill="#0B1220" opacity="0.90" stroke="{GRID}" stroke-width="1"/>
+      <text x="14" y="22" fill="{FG}" font-size="11"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Streak {cur_streak}d · Best {best_streak}d
+      </text>
+      <text x="14" y="40" fill="{FG}" font-size="11"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Last 7d {last7:>3} · 30d {last30:>3}
+      </text>
+      <text x="14" y="56" fill="{MUTED}" font-size="10"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Avg {avg_day:.2f}/d
+      </text>
+    </g>
+    """
 
-  <rect x="0" y="0" width="{WIDTH}" height="{HEIGHT}" fill="{BG}"/>
-
-  <text x="{PAD_X}" y="32" fill="{ACCENT}" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" letter-spacing="1.2">{svg_escape(title)}</text>
-  <text x="{PAD_X}" y="52" fill="{FG}" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12">{svg_escape(subtitle)}</text>
-  <text x="{WIDTH-PAD_X}" y="52" text-anchor="end" fill="{MUTED}" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12">{svg_escape(now)}</text>
-
-  {"".join(grid_lines)}
-  {"".join(week_lines)}
-  {"".join(month_lines)}
-  {streak_band}
-
-  {area}
-
-  {"".join(pulses)}
-
-  <path d="{d}" fill="none" stroke="{ACCENT}" stroke-width="1.9" filter="url(#softGlow)" opacity="0.92"/>
-
-  {"".join(pips)}
-
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
+  <rect width="{WIDTH}" height="{HEIGHT}" fill="{BG}"/>
+  {header}
+  <g opacity="1.0">
+    {"".join(grid_lines)}
+    {"".join(week_lines)}
+    {"".join(month_lines)}
+    {"".join(bars)}
+    {line}
+    {"".join(event_marks)}
+  </g>
+  {"".join([f'<text x="{x:.2f}" y="{HEIGHT-14}" fill="{MUTED}" font-size="10" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace">{m}</text>' for x, m in month_labels])}
   {hud}
-
-  {"".join(month_labels)}
-
-  <rect x="{PAD_X}" y="{PLOT_TOP}" width="{WIDTH-PAD_X*2}" height="{PLOT_H}" fill="none" stroke="{GRID}" stroke-width="1" rx="10"/>
 </svg>
-'''
+"""
+
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(svg)
