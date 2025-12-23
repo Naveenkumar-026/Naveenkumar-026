@@ -139,18 +139,11 @@ def main():
     }
     """
 
-data = gh_api(query, {
-    "user": USER,
-    "from": from_dt.isoformat() + "Z",
-    "to": to_dt.isoformat() + "Z",
-    "priv": bool(INCLUDE_PRIVATE),
-})
-
-
     data = gh_api(query, {
         "user": USER,
         "from": from_dt.isoformat() + "Z",
         "to": to_dt.isoformat() + "Z",
+        "priv": bool(INCLUDE_PRIVATE),
     })
 
     weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
