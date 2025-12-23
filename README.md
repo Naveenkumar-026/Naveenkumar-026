@@ -1,7 +1,7 @@
 <div align="left">
 
 <p align="center">
-  <img src="./assets/hero_sweep.svg?v=1766451204" alt="Signal Sweep" width="100%" />
+  <img src="./assets/hero_sweep.svg?v=1766452634" alt="Signal Sweep" width="100%" />
 </p>
 
 <!-- Stealth motion header (italic via font variant) -->
@@ -42,7 +42,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=1766451204" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=1766452634" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center">
