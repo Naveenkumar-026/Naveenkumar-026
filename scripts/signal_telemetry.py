@@ -4,8 +4,11 @@ USER = os.environ.get("GH_USER", "Naveenkumar-026")
 TOKEN = os.environ.get("GH_TOKEN")
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 
-INCLUDE_PRIVATE = os.environ.get("INCLUDE_PRIVATE", "true").strip().lower() in ("1","true","yes","y","on")
+# Number of days to render (default: 365)
 DAYS = int(os.environ.get("DAYS", "365"))
+
+# Match GitHub UI timezone behavior (India = +330). Override in workflow if needed.
+TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 
 BG = "#0D1117"
 FG = "#9CA3AF"
@@ -68,8 +71,8 @@ def moving_avg(xs, window=11):
 
 
 def svg_escape(s):
-    return (s or "").replace("&","&amp;").replace("<","&lt;").replace(">","&gt;") \
-                    .replace('"',"&quot;").replace("'","&apos;")
+    return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") \
+                    .replace('"', "&quot;").replace("'", "&apos;")
 
 
 def streak_stats(counts):
@@ -103,15 +106,35 @@ def spaced_top_events(counts, threshold, limit=7, min_gap=7):
     return picked
 
 
-def main():
-    # Use a stable “last N days” boundary (includes today)
-    to_dt = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
-    from_dt = to_dt - datetime.timedelta(days=DAYS)
+def compute_window(days: int, tz_offset_minutes: int):
+    """
+    Build a stable [from_dt, to_dt) window aligned to 'local day' boundaries like GitHub UI.
 
+    - We interpret "today" in local time, then set to_dt to tomorrow local midnight.
+    - Convert those boundaries back to UTC for GraphQL.
+    """
+    now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    local_now = now_utc + datetime.timedelta(minutes=tz_offset_minutes)
+
+    local_midnight = local_now.replace(hour=0, minute=0, second=0, microsecond=0)
+    # to_dt includes today => tomorrow local midnight
+    local_to = local_midnight + datetime.timedelta(days=1)
+    local_from = local_to - datetime.timedelta(days=days)
+
+    # convert back to UTC, then drop tzinfo for isoformat + "Z"
+    to_dt_utc = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    from_dt_utc = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    return from_dt_utc, to_dt_utc
+
+
+def main():
+    from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
+
+    # IMPORTANT: do NOT use includePrivateContributions here; GitHub rejects it in your workflow.
     query = """
-    query($user:String!, $from:DateTime!, $to:DateTime!, $priv:Boolean!) {
+    query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
-        contributionsCollection(from: $from, to: $to, includePrivateContributions: $priv) {
+        contributionsCollection(from: $from, to: $to) {
           contributionCalendar {
             totalContributions
             weeks {
@@ -130,7 +153,6 @@ def main():
         "user": USER,
         "from": from_dt.isoformat() + "Z",
         "to": to_dt.isoformat() + "Z",
-        "priv": INCLUDE_PRIVATE,
     })
 
     weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
@@ -141,9 +163,10 @@ def main():
         for d in w["contributionDays"]:
             by_date[d["date"]] = int(d["contributionCount"])
 
-    # Build exact day range to avoid “weeks padding” mismatches
+    # Build exact day range [from_dt, to_dt) to avoid “weeks padding” mismatches
     dates = []
     counts = []
+
     cur = from_dt.date()
     end = (to_dt - datetime.timedelta(days=1)).date()  # inclusive last day
     while cur <= end:
@@ -152,7 +175,7 @@ def main():
         counts.append(by_date.get(ds, 0))
         cur += datetime.timedelta(days=1)
 
-    # Ensure subtitle total matches exactly what is plotted
+    # Total should match what is plotted
     total = sum(counts)
     raw_max = max(counts) if counts else 1
 
@@ -180,6 +203,7 @@ def main():
         t = max(0.0, min(1.0, t))
         return PLOT_BOTTOM - (t * PLOT_H)
 
+    # horizontal grid
     grid_lines = []
     for k in range(5):
         y = PLOT_TOP + (PLOT_H * k / 4.0)
@@ -188,11 +212,12 @@ def main():
             f'stroke="{GRID}" stroke-width="1" opacity="0.55"/>'
         )
 
+    # week & month markers
     week_lines = []
     month_lines = []
     month_labels = []
     for i, dt in enumerate(dates):
-        x_mid = x0 + i*bw + (bw * 0.5)
+        x_mid = x0 + i * bw + (bw * 0.5)
         if dt.weekday() == 0:  # Monday
             week_lines.append(
                 f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
@@ -209,21 +234,23 @@ def main():
                 f'font-size="10">{dt.strftime("%b")}</text>'
             )
 
+    # streak band
     streak_band = ""
     if cur_streak >= 5:
         start_i = max(0, n - cur_streak)
-        x1 = x0 + start_i*bw
-        w = cur_streak*bw
+        x1 = x0 + start_i * bw
+        w = cur_streak * bw
         streak_band = (
             f'<rect x="{x1:.2f}" y="{PLOT_TOP:.2f}" width="{w:.2f}" height="{PLOT_H:.2f}" '
             f'fill="{ACCENT}" opacity="0.035"/>'
         )
 
+    # barcode pulses
     pulses = []
     for i, v_raw in enumerate(counts):
         v = min(v_raw, scale_max)
         intensity = (v / scale_max) if scale_max else 0.0
-        x_mid = x0 + i*bw + (bw * 0.5)
+        x_mid = x0 + i * bw + (bw * 0.5)
 
         op_line = 0.03 + (intensity * 0.22)
         pulses.append(
@@ -239,16 +266,18 @@ def main():
                 f'stroke="{ACCENT}" stroke-width="1.9" opacity="{op_burst:.3f}"/>'
             )
 
+    # moving average path
     path = []
     for i, v in enumerate(ma):
-        x = x0 + i*bw + (bw*0.41)
+        x = x0 + i * bw + (bw * 0.41)
         y = y_for(v)
         path.append((x, y))
     d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x, y in path]) if path else ""
 
+    # event pips
     pips = []
     for v, i in events:
-        x_mid = x0 + i*bw + (bw * 0.5)
+        x_mid = x0 + i * bw + (bw * 0.5)
         y = y_for(min(v, scale_max))
         pips.append(
             f'<g opacity="0.90">'
@@ -258,13 +287,14 @@ def main():
             f'</g>'
         )
 
+    # HUD
     hud_lines = [
         f"Streak {cur_streak}d  ·  Best {best_streak}d",
         f"Last 7d {last7}  ·  30d {last30}",
         f"Avg {avg_day:.2f}/d  ·  Peak {raw_max}  ·  Cap p85 {scale_max}",
     ]
     hud_w = 320
-    hud_h = 18 + 14*len(hud_lines)
+    hud_h = 18 + 14 * len(hud_lines)
     hud_x = WIDTH - PAD_X - hud_w
     hud_y = PLOT_TOP + 10
     hud = (
@@ -273,7 +303,7 @@ def main():
         f'fill="#0B1220" opacity="0.78" stroke="{GRID}" stroke-width="1"/>'
     )
     for j, line in enumerate(hud_lines):
-        ty = hud_y + 18 + 14*j
+        ty = hud_y + 18 + 14 * j
         hud += (
             f'<text x="{hud_x + hud_w - 12}" y="{ty}" text-anchor="end" fill="{FG}" '
             f'font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" '
@@ -283,12 +313,15 @@ def main():
 
     title = "SIGNAL // 365D"
     subtitle = f"{total} contributions · peak/day {raw_max} · cap@p85 {scale_max} · mode BARCODE"
-    now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
+    now = datetime.datetime.utcnow().strftime("%S%M%H %Y-%m-%d UTC")[-14:]  # "YYYY-MM-DD UTC" stable length
 
-    # Avoid referencing path[-1] if path is empty
+    # area fill under moving avg
     area = ""
     if path:
-        area = f'<path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" fill="url(#fade)" opacity="0.42"/>'
+        area = (
+            f'<path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" '
+            f'fill="url(#fade)" opacity="0.42"/>'
+        )
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
   <defs>
