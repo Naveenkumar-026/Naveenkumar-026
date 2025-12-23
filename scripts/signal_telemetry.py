@@ -1,307 +1,326 @@
-import os, json, datetime, urllib.request, urllib.parse, re, html as _html
+import os, json, datetime, urllib.request
 
-USER = os.environ.get("GH_USER", os.environ.get("GITHUB_ACTOR", ""))
-TOKEN = os.environ.get("GH_TOKEN", "")
+USER = os.environ.get("GH_USER", "Naveenkumar-026")
+TOKEN = os.environ.get("GH_TOKEN")
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 
-# ------------------------
-# Helpers
-# ------------------------
+# Local timezone alignment (IST default)
+TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
+DAYS = 365
 
-def iso(dt: datetime.datetime) -> str:
-    return dt.replace(microsecond=0).isoformat() + "Z"
+BG = "#0D1117"
+FG = "#9CA3AF"
+MUTED = "#6B7280"
+ACCENT = "#22C55E"
+GRID = "#1F2937"
 
-def clamp(v: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, v))
-
-def compute_window(days: int, tz_offset_minutes: int):
-    # Window is [from_dt, to_dt) in local midnight boundaries, then converted to UTC datetimes.
-    # to_dt is next local midnight so "today" is included.
-    now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
-    tz = datetime.timezone(datetime.timedelta(minutes=tz_offset_minutes))
-    now_local = now_utc.astimezone(tz)
-
-    # Align to local midnight boundaries
-    today_local_midnight = now_local.replace(hour=0, minute=0, second=0, microsecond=0)
-    from_local = today_local_midnight - datetime.timedelta(days=days - 1)
-    to_local = today_local_midnight + datetime.timedelta(days=1)
-
-    from_dt = from_local.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-    to_dt = to_local.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-    return from_dt, to_dt
+WIDTH = 980
+HEIGHT = 220
+PAD_X = 24
+PLOT_TOP = 86
+PLOT_H = 104
+PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
 
-def fetch_contrib_counts(user: str, from_date: str, to_date: str):
-    """Fetch daily contribution counts from GitHub's profile graph endpoint.
+def gh_api(query, variables):
+    if not TOKEN:
+        raise SystemExit("GH_TOKEN missing. Set GH_TOKEN env or Actions secret.")
+    req = urllib.request.Request("https://api.github.com/graphql", method="POST")
+    req.add_header("Authorization", f"bearer {TOKEN}")
+    req.add_header("Content-Type", "application/json")
+    data = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+    with urllib.request.urlopen(req, data=data, timeout=30) as r:
+        data = json.loads(r.read().decode("utf-8"))
 
-    GitHub sometimes changes attribute order and (occasionally) omits data-count, but keeps an aria-label like:
-      aria-label="3 contributions on Dec 23, 2025"
-    This parser supports both patterns.
-
-    This endpoint matches the public profile contribution graph (including private contributions only if
-    the user enabled 'Include private contributions on my profile').
-    """
-    u = urllib.parse.quote(user, safe="")
-    url = f"https://github.com/users/{u}/contributions?from={from_date}&to={to_date}"
-    req = urllib.request.Request(url, method="GET")
-    req.add_header("User-Agent", "readme-telemetry/1.0")
-    req.add_header("Accept", "text/html,application/xhtml+xml")
-    # Avoid requesting gzip explicitly; urllib doesn't auto-decompress.
-    with urllib.request.urlopen(req, timeout=30) as r:
-        raw = r.read()
-
-    html_txt = raw.decode("utf-8", errors="replace")
-    by_date = {}
-
-    # Robust tag parse: any tag that has data-date="YYYY-MM-DD"
-    tag_re = re.compile(r'<[^>]*\bdata-date="(\d{4}-\d{2}-\d{2})"[^>]*>', re.I)
-    for m in tag_re.finditer(html_txt):
-        date = m.group(1)
-        tag = m.group(0)
-
-        count = None
-        m_count = re.search(r'\bdata-count="(\d+)"', tag)
-        if m_count:
-            count = int(m_count.group(1))
-        else:
-            # Fallback: parse from aria-label (e.g., "No contributions on ..." or "3 contributions on ...")
-            m_label = re.search(r'\baria-label="([^"]+)"', tag)
-            if m_label:
-                label = _html.unescape(m_label.group(1)).strip()
-                if label.lower().startswith("no "):
-                    count = 0
-                else:
-                    m_num = re.match(r'(\d+)', label)
-                    if m_num:
-                        count = int(m_num.group(1))
-
-        if count is not None:
-            by_date[date] = count
-
-    if not by_date:
-        # Print a small sample to logs for debugging without flooding output
-        sample = html_txt[:400].replace("\n", " ")
-        raise SystemExit(f"Could not parse contributions HTML. Sample: {sample!r}")
-
-    return by_date
-
-# ------------------------
-# SVG builder
-# ------------------------
-
-def build_svg(stats: dict) -> str:
-    # Minimal barcode-style telemetry with text overlay
-    days = stats["days"]
-    total = stats["total"]
-    peak = stats["peak"]
-    cap_p85 = stats["cap_p85"]
-    mode = stats["mode"]
-    best_streak = stats["best_streak"]
-    last7 = stats["last7"]
-    last30 = stats["last30"]
-    avg = stats["avg"]
-    date_label = stats["date_label"]
-
-    W = 1200
-    H = 320
-    margin = 40
-    bar_h = 90
-    bar_y = 130
-    bar_w = (W - 2 * margin) / len(days)
-    grid_y1 = bar_y - 10
-    grid_y2 = bar_y + bar_h + 10
-
-    bg = "#0b0f14"
-    fg = "#d9e2ec"
-    dim = "#9fb3c8"
-    neon = "#20c997"
-    grid = "#12202e"
-    stroke = "#1c2d3e"
-
-    # Build bars
-    bars = []
-    for i, d in enumerate(days):
-        x = margin + i * bar_w
-        v = d["count"]
-        # robust scaling using p85 cap to avoid one spike flattening everything
-        scaled = 0.0 if cap_p85 <= 0 else clamp(v / cap_p85, 0.0, 1.0)
-        h = scaled * bar_h
-        y = bar_y + (bar_h - h)
-        bars.append(
-            f'<rect x="{x:.2f}" y="{y:.2f}" width="{bar_w:.2f}" height="{h:.2f}" rx="0.8" fill="{neon}" opacity="0.90" />'
-        )
-
-    # Subtle grid
-    grid_lines = []
-    for k in range(0, 13):
-        gx = margin + k * ((W - 2 * margin) / 12.0)
-        grid_lines.append(f'<line x1="{gx:.2f}" y1="{grid_y1}" x2="{gx:.2f}" y2="{grid_y2}" stroke="{grid}" stroke-width="1" opacity="0.55" />')
-    for k in range(0, 5):
-        gy = grid_y1 + k * ((grid_y2 - grid_y1) / 4.0)
-        grid_lines.append(f'<line x1="{margin}" y1="{gy:.2f}" x2="{W - margin}" y2="{gy:.2f}" stroke="{grid}" stroke-width="1" opacity="0.35" />')
-
-    # Telemetry labels
-    header_left = f"SIGNAL  //  365D"
-    header_mid = f"{total} contributions  •  peak/day {peak}  •  cap@p85 {cap_p85}  •  mode {mode}"
-    header_right = date_label
-
-    panel = (
-        f'<rect x="{margin}" y="{70}" width="{W - 2*margin}" height="{H - 100}" rx="16" fill="none" stroke="{stroke}" stroke-width="1.2" opacity="0.9" />'
-    )
-
-    tooltip = (
-        f'<g opacity="0.95">'
-        f'<rect x="{W-360}" y="{150}" width="300" height="72" rx="12" fill="#0d141c" stroke="{stroke}" stroke-width="1.0" />'
-        f'<text x="{W-340}" y="{178}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" fill="{fg}">'
-        f'Streak {stats["current_streak"]}d  •  Best {best_streak}d</text>'
-        f'<text x="{W-340}" y="{200}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="{dim}">'
-        f'Last 7d {last7}  •  30d {last30}</text>'
-        f'<text x="{W-340}" y="{220}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="{dim}">'
-        f'Avg {avg:.2f}/d</text>'
-        f'</g>'
-    )
-
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
-  <defs>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="{neon}" stop-opacity="0.0" />
-      <stop offset="50%" stop-color="{neon}" stop-opacity="0.25" />
-      <stop offset="100%" stop-color="{neon}" stop-opacity="0.0" />
-    </linearGradient>
-  </defs>
-
-  <rect x="0" y="0" width="{W}" height="{H}" fill="{bg}" />
-
-  {panel}
-
-  <text x="{margin}" y="110" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-        font-size="18" fill="{neon}">{header_left}</text>
-
-  <text x="{margin}" y="135" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-        font-size="12" fill="{dim}">{header_mid}</text>
-
-  <text x="{W - margin}" y="110" text-anchor="end"
-        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-        font-size="12" fill="{dim}">{header_right}</text>
-
-  {''.join(grid_lines)}
-
-  <rect x="{margin}" y="{bar_y-10}" width="{W - 2*margin}" height="{bar_h+20}" fill="url(#fade)" opacity="0.55" />
-
-  {''.join(bars)}
-
-  {tooltip}
-
-  <text x="{W/2}" y="{H-30}" text-anchor="middle"
-        font-family="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif"
-        font-size="14" fill="{fg}">
-    Signal over time: sustained development, consistent iteration
-  </text>
-</svg>'''
-    return svg
+    if "errors" in data and data["errors"]:
+        raise SystemExit(f"GitHub GraphQL errors: {data['errors']}")
+    return data
 
 
-def compute_streak(days):
-    # days: list of dict(date, count) sorted
-    best = 0
-    cur = 0
-    for d in days:
-        if d["count"] > 0:
-            cur += 1
-            best = max(best, cur)
-        else:
-            cur = 0
-    # current streak from the end
-    cur_end = 0
-    for d in reversed(days):
-        if d["count"] > 0:
-            cur_end += 1
-        else:
-            break
-    return best, cur_end
-
-
-def percentile(values, p: float) -> int:
+def percentile(values, p):
     if not values:
         return 0
     xs = sorted(values)
-    if len(xs) == 1:
-        return xs[0]
-    k = (len(xs) - 1) * (p / 100.0)
-    f = int(k)
-    c = min(f + 1, len(xs) - 1)
-    if f == c:
-        return xs[f]
-    return int(round(xs[f] + (xs[c] - xs[f]) * (k - f)))
+    k = int(round((p / 100.0) * (len(xs) - 1)))
+    return xs[max(0, min(len(xs) - 1, k))]
 
 
-def mode_int(values):
-    if not values:
-        return 0
-    freq = {}
-    for v in values:
-        freq[v] = freq.get(v, 0) + 1
-    # prefer non-zero if tied
-    items = sorted(freq.items(), key=lambda kv: (kv[1], kv[0] != 0, kv[0]))
-    return items[-1][0]
+def moving_avg(xs, window=11):
+    if not xs:
+        return []
+    w = max(3, int(window) | 1)  # odd
+    half = w // 2
+    out = []
+    for i in range(len(xs)):
+        lo = max(0, i - half)
+        hi = min(len(xs), i + half + 1)
+        out.append(sum(xs[lo:hi]) / (hi - lo))
+    return out
+
+
+def svg_escape(s):
+    return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") \
+        .replace('"', "&quot;").replace("'", "&apos;")
+
+
+def streak_stats(counts):
+    cur = 0
+    for v in reversed(counts):
+        if v > 0:
+            cur += 1
+        else:
+            break
+
+    best = 0
+    run = 0
+    for v in counts:
+        if v > 0:
+            run += 1
+            best = max(best, run)
+        else:
+            run = 0
+    return cur, best
+
+
+def spaced_top_events(counts, threshold, limit=7, min_gap=7):
+    cands = [(v, i) for i, v in enumerate(counts) if v >= threshold and v > 0]
+    cands.sort(reverse=True)
+    picked = []
+    for v, i in cands:
+        if all(abs(i - j) > min_gap for _, j in picked):
+            picked.append((v, i))
+            if len(picked) >= limit:
+                break
+    picked.sort(key=lambda t: t[1])
+    return picked
+
+
+def compute_window(days: int, tz_offset_minutes: int):
+    """
+    Create [from_dt, to_dt) aligned to LOCAL midnight boundaries like GitHub profile UI.
+
+    Example (IST):
+      local_to = tomorrow 00:00 IST
+      local_from = local_to - 365 days
+      then convert both to UTC timestamps for GraphQL.
+    """
+    now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    local_now = now_utc + datetime.timedelta(minutes=tz_offset_minutes)
+
+    local_midnight = local_now.replace(hour=0, minute=0, second=0, microsecond=0)
+    local_to = local_midnight + datetime.timedelta(days=1)
+    local_from = local_to - datetime.timedelta(days=days)
+
+    # Convert back to UTC, drop tzinfo for isoformat+"Z"
+    to_dt = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    from_dt = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    return from_dt, to_dt
 
 
 def main():
-    if not USER:
-        raise SystemExit("GH_USER not set (or GITHUB_ACTOR missing).")
+    from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
-    tz_offset = int(os.environ.get("TZ_OFFSET_MINUTES", "0"))
-    from_dt, to_dt = compute_window(365, tz_offset)
+    include_private = os.environ.get("INCLUDE_PRIVATE", "1").strip().lower() not in ("0","false","no","off")
 
-    # Pull the exact same daily counts GitHub renders on your profile page.
-    # Note: 'Include private contributions' is controlled by your GitHub profile setting.
-    from_date = from_dt.date().isoformat()
-    to_date = (to_dt - datetime.timedelta(days=1)).date().isoformat()
-    by_date = fetch_contrib_counts(USER, from_date, to_date)
-
-    # Build ordered day list
-    days = []
-    cursor = from_dt.date()
-    end = (to_dt - datetime.timedelta(days=1)).date()
-    while cursor <= end:
-        ds = cursor.isoformat()
-        days.append({"date": ds, "count": int(by_date.get(ds, 0))})
-        cursor += datetime.timedelta(days=1)
-
-    counts = [d["count"] for d in days]
-    total = sum(counts)
-    peak = max(counts) if counts else 0
-    cap_p85 = percentile(counts, 85.0)
-    mode = mode_int(counts)
-    best_streak, current_streak = compute_streak(days)
-
-    last7 = sum(d["count"] for d in days[-7:]) if len(days) >= 7 else total
-    last30 = sum(d["count"] for d in days[-30:]) if len(days) >= 30 else total
-    avg = (total / len(days)) if days else 0.0
-
-    date_label = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
-
-    stats = {
-        "days": days,
-        "total": total,
-        "peak": peak,
-        "cap_p85": cap_p85,
-        "mode": mode,
-        "best_streak": best_streak,
-        "current_streak": current_streak,
-        "last7": last7,
-        "last30": last30,
-        "avg": avg,
-        "date_label": date_label,
+    # GitHub GraphQL schema does NOT support includePrivateContributions on contributionsCollection anymore.
+    # Instead, private/restricted contributions are exposed via `restrictedContributionsCount` when the user
+    # has enabled "private contribution counts" on their GitHub profile.
+    query = """
+    query($user:String!, $from:DateTime!, $to:DateTime!) {
+      user(login: $user) {
+        contributionsCollection(from: $from, to: $to) {
+          restrictedContributionsCount
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+        }
+      }
     }
+    """
 
-    svg = build_svg(stats)
+    payload = {
+        "user": USER,
+        "from": from_dt.isoformat() + "Z",
+        "to": to_dt.isoformat() + "Z",
+    }
+    data = gh_api(query, payload)
 
-    os.makedirs(os.path.dirname(OUT_PATH) or ".", exist_ok=True)
+    coll = data["data"]["user"]["contributionsCollection"]
+    cal = coll["contributionCalendar"]
+    restricted = int(coll.get("restrictedContributionsCount", 0) or 0)
+    if not include_private:
+        restricted = 0
+
+    weeks = cal["weeks"]
+
+    by_date = {}
+    for w in weeks:
+        for d in w["contributionDays"]:
+            by_date[d["date"]] = int(d["contributionCount"])
+
+    # Build exact day range [from_dt, to_dt) aligned to local midnight boundaries
+    dates = []
+    counts = []
+    cur = from_dt.date()
+    end = (to_dt - datetime.timedelta(days=1)).date()
+    while cur <= end:
+        ds = cur.isoformat()
+        dates.append(cur)
+        counts.append(by_date.get(ds, 0))
+        cur += datetime.timedelta(days=1)
+
+    total_visible = sum(counts)
+    total = total_visible + restricted
+    raw_max = max(counts) if counts else 1
+
+    nonzero = [v for v in counts if v > 0]
+    cap_p85 = percentile(nonzero, 85) if nonzero else 1
+    scale_max = max(1, cap_p85)
+
+    ma = moving_avg([min(v, scale_max) for v in counts], window=11)
+
+    cur_streak, best_streak = streak_stats(counts)
+    last7 = sum(counts[-7:]) if len(counts) >= 7 else sum(counts)
+    last30 = sum(counts[-30:]) if len(counts) >= 30 else sum(counts)
+    avg_day = (total / len(counts)) if counts else 0.0
+
+    hot_thr = max(1, percentile(nonzero, 95) if nonzero else raw_max)
+    events = spaced_top_events(counts, hot_thr, limit=7, min_gap=7)
+
+    n = len(counts)
+    plot_w = WIDTH - (PAD_X * 2)
+    bw = plot_w / max(1, n)
+    x0 = PAD_X
+
+    def y_for(v):
+        t = 0 if scale_max == 0 else (v / float(scale_max))
+        t = max(0.0, min(1.0, t))
+        return PLOT_BOTTOM - (t * PLOT_H)
+
+    grid_lines = []
+    for k in range(5):
+        y = PLOT_TOP + (PLOT_H * k / 4.0)
+        grid_lines.append(
+            f'<line x1="{PAD_X}" y1="{y:.2f}" x2="{WIDTH-PAD_X}" y2="{y:.2f}" '
+            f'stroke="{GRID}" stroke-width="1" opacity="0.55"/>'
+        )
+
+    week_lines = []
+    month_lines = []
+    month_labels = []
+    for i, dt in enumerate(dates):
+        x_mid = x0 + i * bw + (bw * 0.5)
+        if dt.weekday() == 0:  # Monday
+            week_lines.append(
+                f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
+                f'stroke="{GRID}" stroke-width="1" opacity="0.20"/>'
+            )
+        if dt.day == 1:
+            month_lines.append(
+                f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
+                f'stroke="{GRID}" stroke-width="1" opacity="0.50"/>'
+            )
+            month_labels.append((dt.strftime("%b"), x_mid))
+
+    month_label_svg = ""
+    if month_labels:
+        labels = []
+        for label, x in month_labels:
+            labels.append(
+                f'<text x="{x:.2f}" y="{PLOT_BOTTOM+18}" fill="{MUTED}" font-size="10" text-anchor="middle" '
+                f'font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace">{label}</text>'
+            )
+        month_label_svg = "<g>" + "".join(labels) + "</g>"
+
+    bars = []
+    for i, v in enumerate(counts):
+        x = x0 + i * bw
+        y = y_for(min(v, scale_max))
+        h = PLOT_BOTTOM - y
+        op = 0.10 + 0.90 * (0 if scale_max == 0 else min(v, scale_max) / float(scale_max))
+        bars.append(
+            f'<rect x="{x:.2f}" y="{y:.2f}" width="{max(1.0, bw*0.92):.2f}" height="{h:.2f}" rx="1" '
+            f'fill="{ACCENT}" opacity="{op:.3f}"/>'
+        )
+
+    line_pts = []
+    for i, v in enumerate(ma):
+        x = x0 + i * bw + (bw * 0.5)
+        y = y_for(v)
+        line_pts.append(f"{x:.2f},{y:.2f}")
+    line = f'<polyline points="{" ".join(line_pts)}" fill="none" stroke="{ACCENT}" stroke-width="2" opacity="0.85"/>'
+
+    event_marks = []
+    for v, i in events:
+        x = x0 + i * bw + (bw * 0.5)
+        y = y_for(min(v, scale_max))
+        event_marks.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="2.6" fill="{ACCENT}" opacity="0.95"/>')
+
+    now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
+
+    # Header: show public+restricted split when available
+    total_line = f"{total} contributions · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
+    if restricted > 0:
+        total_line = f"{total} contributions (public {total_visible} + private {restricted}) · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
+
+    header = f"""
+    <text x="{PAD_X}" y="30" fill="{FG}" font-size="14" font-weight="600"
+      font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      SIGNAL // {DAYS}D
+    </text>
+    <text x="{PAD_X}" y="52" fill="{MUTED}" font-size="11"
+      font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      {svg_escape(total_line)}
+    </text>
+    <text x="{WIDTH-PAD_X}" y="30" fill="{MUTED}" font-size="11" text-anchor="end"
+      font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+      {svg_escape(now)}
+    </text>
+    """
+
+    hud = f"""
+    <g transform="translate({WIDTH-310},{70})">
+      <rect x="0" y="0" width="286" height="58" rx="10" fill="#0B1220" opacity="0.90" stroke="{GRID}" stroke-width="1"/>
+      <text x="14" y="22" fill="{FG}" font-size="11"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Streak {cur_streak}d · Best {best_streak}d
+      </text>
+      <text x="14" y="40" fill="{FG}" font-size="11"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Last 7d {last7:>3} · 30d {last30:>3}
+      </text>
+      <text x="14" y="56" fill="{MUTED}" font-size="10"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+        Avg {avg_day:.2f}/d
+      </text>
+    </g>
+    """
+
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
+  <rect width="{WIDTH}" height="{HEIGHT}" fill="{BG}"/>
+  {header}
+  <g opacity="1.0">
+    {"".join(grid_lines)}
+    {"".join(week_lines)}
+    {"".join(month_lines)}
+    {"".join(bars)}
+    {line}
+    {"".join(event_marks)}
+  </g>
+  {month_label_svg}
+  {hud}
+</svg>
+"""
+
+    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(svg)
-
-    print(f"[signal_telemetry] wrote {OUT_PATH}  total={total}  peak={peak}  cap_p85={cap_p85}")
 
 
 if __name__ == "__main__":
