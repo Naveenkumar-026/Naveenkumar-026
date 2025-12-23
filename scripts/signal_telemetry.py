@@ -97,28 +97,29 @@ def spaced_top_events(counts, threshold, limit=7, min_gap=7):
 
 def compute_window(days: int, tz_offset_minutes: int):
     """
-    Create [from_dt, to_dt) aligned to LOCAL midnight boundaries like GitHub profile UI.
-
-    Example (IST):
-      local_to = tomorrow 00:00 IST
-      local_from = local_to - 365 days
-      then convert both to UTC timestamps for GraphQL.
+    Return:
+      - from_dt_utc, to_dt_utc (naive UTC datetimes for GraphQL)
+      - start_date_local, end_date_local (date range to render/sum, inclusive)
+    This prevents UTC date drift (e.g., IST midnight == previous-day 18:30 UTC).
     """
     now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     local_now = now_utc + datetime.timedelta(minutes=tz_offset_minutes)
 
-    local_midnight = local_now.replace(hour=0, minute=0, second=0, microsecond=0)
-    local_to = local_midnight + datetime.timedelta(days=1)
-    local_from = local_to - datetime.timedelta(days=days)
+    end_date_local = local_now.date()                     # "today" in local time
+    start_date_local = end_date_local - datetime.timedelta(days=days - 1)
 
-    # Convert back to UTC, drop tzinfo for isoformat+"Z"
-    to_dt = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
-    from_dt = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
-    return from_dt, to_dt
+    # Local midnight boundaries for query
+    local_from = datetime.datetime.combine(start_date_local, datetime.time(0, 0, 0))
+    local_to = datetime.datetime.combine(end_date_local + datetime.timedelta(days=1), datetime.time(0, 0, 0))
 
+    # Convert to UTC naive for GraphQL
+    from_dt_utc = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    to_dt_utc = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+
+    return from_dt_utc, to_dt_utc, start_date_local, end_date_local
 
 def main():
-    from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
+    from_dt, to_dt, start_date, end_date = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
     include_private = os.environ.get("INCLUDE_PRIVATE", "1").strip().lower() not in ("0","false","no","off")
 
@@ -167,8 +168,8 @@ def main():
     # Build exact day range [from_dt, to_dt) aligned to local midnight boundaries
     dates = []
     counts = []
-    cur = from_dt.date()
-    end = (to_dt - datetime.timedelta(days=1)).date()
+    cur = start_date
+    end = end_date
     while cur <= end:
         ds = cur.isoformat()
         dates.append(cur)
