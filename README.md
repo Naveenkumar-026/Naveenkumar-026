@@ -45,10 +45,6 @@ Almost none is announced.
   <img src="./assets/signal_barcode.svg?v=1766452634" alt="Signal Telemetry" width="100%" />
 </p>
 
-<p align="center">
-Signal over time: sustained development, consistent iteration
-</p>
-
 <p align="center"><em>
 "Not everything here is meant to be understood on first pass."
 </em></p>
