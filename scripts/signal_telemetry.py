@@ -121,7 +121,7 @@ def compute_window(days: int, tz_offset_minutes: int):
 def main():
     from_dt, to_dt, start_date, end_date = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
-    include_private = os.environ.get("INCLUDE_PRIVATE", "1").strip().lower() not in ("0","false","no","off")
+    include_private = os.environ.get("INCLUDE_PRIVATE", "0").strip().lower() not in ("0","false","no","off")
 
     # GitHub GraphQL schema does NOT support includePrivateContributions on contributionsCollection anymore.
     # Instead, private/restricted contributions are exposed via `restrictedContributionsCount` when the user
@@ -154,30 +154,12 @@ def main():
 
     coll = data["data"]["user"]["contributionsCollection"]
     cal = coll["contributionCalendar"]
-    restricted = int(coll.get("restrictedContributionsCount", 0) or 0)
-    if not include_private:
-        restricted = 0
-
-    weeks = cal["weeks"]
-
-    by_date = {}
-    for w in weeks:
-        for d in w["contributionDays"]:
-            by_date[d["date"]] = int(d["contributionCount"])
-
-    # Build exact day range [from_dt, to_dt) aligned to local midnight boundaries
-    dates = []
-    counts = []
-    cur = start_date
-    end = end_date
-    while cur <= end:
-        ds = cur.isoformat()
-        dates.append(cur)
-        counts.append(by_date.get(ds, 0))
-        cur += datetime.timedelta(days=1)
-
+    restricted_raw = int(coll.get("restrictedContributionsCount", 0) or 0)
+    restricted_used = restricted_raw if include_private else 0
+    
     total_visible = sum(counts)
-    total = total_visible + restricted
+    total = total_visible
+
     raw_max = max(counts) if counts else 1
 
     nonzero = [v for v in counts if v > 0]
@@ -267,8 +249,8 @@ def main():
 
     # Header: show public+restricted split when available
     total_line = f"{total} contributions · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
-    if restricted > 0:
-        total_line = f"{total} contributions (public {total_visible} + private {restricted}) · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
+    if restricted_used > 0:
+        total_line = f"{total} contributions (private {restricted_used} not counted) · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
 
     header = f"""
     <text x="{PAD_X}" y="30" fill="{FG}" font-size="14" font-weight="600"
