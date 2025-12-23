@@ -1,4 +1,4 @@
-import os, json, datetime, urllib.request, urllib.parse, re
+import os, json, datetime, urllib.request, urllib.parse, re, html as _html
 
 USER = os.environ.get("GH_USER", os.environ.get("GITHUB_ACTOR", ""))
 TOKEN = os.environ.get("GH_TOKEN", "")
@@ -32,33 +32,58 @@ def compute_window(days: int, tz_offset_minutes: int):
 
 
 def fetch_contrib_counts(user: str, from_date: str, to_date: str):
-    """Fetch daily contribution counts from GitHub's public contributions endpoint.
+    """Fetch daily contribution counts from GitHub's profile graph endpoint.
 
-    This matches the GitHub profile UI (including 'private contributions' if the user has enabled
-    'Include private contributions on my profile'). No authentication required.
+    GitHub sometimes changes attribute order and (occasionally) omits data-count, but keeps an aria-label like:
+      aria-label="3 contributions on Dec 23, 2025"
+    This parser supports both patterns.
+
+    This endpoint matches the public profile contribution graph (including private contributions only if
+    the user enabled 'Include private contributions on my profile').
     """
     u = urllib.parse.quote(user, safe="")
     url = f"https://github.com/users/{u}/contributions?from={from_date}&to={to_date}"
     req = urllib.request.Request(url, method="GET")
     req.add_header("User-Agent", "readme-telemetry/1.0")
     req.add_header("Accept", "text/html,application/xhtml+xml")
+    # Avoid requesting gzip explicitly; urllib doesn't auto-decompress.
     with urllib.request.urlopen(req, timeout=30) as r:
-        html = r.read().decode("utf-8", errors="replace")
+        raw = r.read()
 
-    pairs = re.findall(r'data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-count="(\d+)"', html)
-    if not pairs:
-        # Some responses may reorder attributes; try the inverse.
-        inv = re.findall(r'data-count="(\d+)"[^>]*data-date="(\d{4}-\d{2}-\d{2})"', html)
-        pairs = [(d, c) for c, d in inv]
-
-    if not pairs:
-        raise SystemExit("Could not parse contributions HTML (GitHub markup changed or blocked).")
-
+    html_txt = raw.decode("utf-8", errors="replace")
     by_date = {}
-    for d, c in pairs:
-        by_date[d] = int(c)
-    return by_date
 
+    # Robust tag parse: any tag that has data-date="YYYY-MM-DD"
+    tag_re = re.compile(r'<[^>]*\bdata-date="(\d{4}-\d{2}-\d{2})"[^>]*>', re.I)
+    for m in tag_re.finditer(html_txt):
+        date = m.group(1)
+        tag = m.group(0)
+
+        count = None
+        m_count = re.search(r'\bdata-count="(\d+)"', tag)
+        if m_count:
+            count = int(m_count.group(1))
+        else:
+            # Fallback: parse from aria-label (e.g., "No contributions on ..." or "3 contributions on ...")
+            m_label = re.search(r'\baria-label="([^"]+)"', tag)
+            if m_label:
+                label = _html.unescape(m_label.group(1)).strip()
+                if label.lower().startswith("no "):
+                    count = 0
+                else:
+                    m_num = re.match(r'(\d+)', label)
+                    if m_num:
+                        count = int(m_num.group(1))
+
+        if count is not None:
+            by_date[date] = count
+
+    if not by_date:
+        # Print a small sample to logs for debugging without flooding output
+        sample = html_txt[:400].replace("\n", " ")
+        raise SystemExit(f"Could not parse contributions HTML. Sample: {sample!r}")
+
+    return by_date
 
 # ------------------------
 # SVG builder
