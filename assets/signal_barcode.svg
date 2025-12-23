@@ -7,7 +7,7 @@
     </text>
     <text x="24" y="52" fill="#6B7280" font-size="11"
       font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
-      142 contributions (public 107 + private 35) · peak/day 32 · cap@p85 31 · mode BARCODE
+      111 contributions (private 35 hidden) · peak/day 36 · cap@p85 31 · mode BARCODE
     </text>
     <text x="956" y="30" fill="#6B7280" font-size="11" text-anchor="end"
       font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
@@ -32,11 +32,11 @@
       </text>
       <text x="14" y="40" fill="#9CA3AF" font-size="11"
         font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
-        Last 7d  63 · 30d 102
+        Last 7d  67 · 30d 106
       </text>
       <text x="14" y="56" fill="#6B7280" font-size="10"
         font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
-        Avg 0.39/d
+        Avg 0.30/d
       </text>
     </g>
     
