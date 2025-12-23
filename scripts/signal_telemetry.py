@@ -1,9 +1,11 @@
-import os, json, datetime, urllib.request
+import os, json, datetime, urllib.request, urllib.error
 
 USER = os.environ.get("GH_USER", "Naveenkumar-026")
 TOKEN = os.environ.get("GH_TOKEN")
-
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
+
+INCLUDE_PRIVATE = os.environ.get("INCLUDE_PRIVATE", "true").strip().lower() in ("1","true","yes","y","on")
+DAYS = int(os.environ.get("DAYS", "365"))
 
 BG = "#0D1117"
 FG = "#9CA3AF"
@@ -19,22 +21,38 @@ PLOT_TOP = 86
 PLOT_H = 104
 PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
-def gh_api(query, variables):
+
+def gh_api(query: str, variables: dict) -> dict:
     if not TOKEN:
         raise SystemExit("GH_TOKEN missing. Set GH_TOKEN env or Actions secret.")
+
     req = urllib.request.Request("https://api.github.com/graphql", method="POST")
     req.add_header("Authorization", f"bearer {TOKEN}")
     req.add_header("Content-Type", "application/json")
-    data = json.dumps({"query": query, "variables": variables}).encode("utf-8")
-    with urllib.request.urlopen(req, data=data, timeout=30) as r:
-        return json.loads(r.read().decode("utf-8"))
+    req.add_header("User-Agent", "signal-telemetry-script")
+
+    payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+    try:
+        with urllib.request.urlopen(req, payload, timeout=30) as r:
+            data = json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        raise SystemExit(f"GitHub GraphQL HTTPError {e.code}: {body}")
+    except Exception as e:
+        raise SystemExit(f"GitHub GraphQL request failed: {e}")
+
+    if "errors" in data and data["errors"]:
+        raise SystemExit(f"GitHub GraphQL errors: {data['errors']}")
+    return data
+
 
 def percentile(values, p):
     if not values:
         return 0
     xs = sorted(values)
-    k = int(round((p/100.0) * (len(xs)-1)))
-    return xs[max(0, min(len(xs)-1, k))]
+    k = int(round((p / 100.0) * (len(xs) - 1)))
+    return xs[max(0, min(len(xs) - 1, k))]
+
 
 def moving_avg(xs, window=11):
     if not xs:
@@ -43,13 +61,16 @@ def moving_avg(xs, window=11):
     half = w // 2
     out = []
     for i in range(len(xs)):
-        lo = max(0, i-half)
-        hi = min(len(xs), i+half+1)
-        out.append(sum(xs[lo:hi]) / (hi-lo))
+        lo = max(0, i - half)
+        hi = min(len(xs), i + half + 1)
+        out.append(sum(xs[lo:hi]) / (hi - lo))
     return out
 
+
 def svg_escape(s):
-    return (s or "").replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;").replace("'","&apos;")
+    return (s or "").replace("&","&amp;").replace("<","&lt;").replace(">","&gt;") \
+                    .replace('"',"&quot;").replace("'","&apos;")
+
 
 def streak_stats(counts):
     cur = 0
@@ -68,10 +89,10 @@ def streak_stats(counts):
             run = 0
     return cur, best
 
-def spaced_top_events(counts, threshold, limit=7, min_gap=6):
-    # pick up to N strongest spikes, avoid clustering
+
+def spaced_top_events(counts, threshold, limit=7, min_gap=7):
     cands = [(v, i) for i, v in enumerate(counts) if v >= threshold and v > 0]
-    cands.sort(reverse=True)  # by v then i
+    cands.sort(reverse=True)
     picked = []
     for v, i in cands:
         if all(abs(i - j) > min_gap for _, j in picked):
@@ -81,50 +102,57 @@ def spaced_top_events(counts, threshold, limit=7, min_gap=6):
     picked.sort(key=lambda t: t[1])
     return picked
 
+
 def main():
+    # Use a stable “last N days” boundary (includes today)
     to_dt = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
-    from_dt = to_dt - datetime.timedelta(days=365)
+    from_dt = to_dt - datetime.timedelta(days=DAYS)
 
     query = """
-    query($user:String!, $from:DateTime!, $to:DateTime!) {
+    query($user:String!, $from:DateTime!, $to:DateTime!, $priv:Boolean!) {
       user(login: $user) {
-        include_private = os.environ.get("INCLUDE_PRIVATE", "true").strip().lower() in ("1","true","yes","y","on")
-        
-        query = """
-        query($user:String!, $from:DateTime!, $to:DateTime!, $priv:Boolean!) {
-          user(login: $user) {
-            contributionsCollection(from: $from, to: $to, includePrivateContributions: $priv) {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    date
-                    contributionCount
-                  }
-                }
+        contributionsCollection(from: $from, to: $to, includePrivateContributions: $priv) {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
               }
             }
           }
         }
-        """
-        data = gh_api(query, {
-          "user": USER,
-          "from": from_dt.isoformat() + "Z",
-          "to": to_dt.isoformat() + "Z",
-          "priv": include_private,
-        })
-    cc = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
-    total = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+      }
+    }
+    """
 
-    days = []
-    for w in cc:
+    data = gh_api(query, {
+        "user": USER,
+        "from": from_dt.isoformat() + "Z",
+        "to": to_dt.isoformat() + "Z",
+        "priv": INCLUDE_PRIVATE,
+    })
+
+    weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
+
+    # Map date -> count from API
+    by_date = {}
+    for w in weeks:
         for d in w["contributionDays"]:
-            days.append((d["date"], int(d["contributionCount"])))
+            by_date[d["date"]] = int(d["contributionCount"])
 
-    # keep last ~365 entries
-    days = days[-365:]
-    dates = [datetime.date.fromisoformat(dt) for dt, _ in days]
-    counts = [c for _, c in days]
+    # Build exact day range to avoid “weeks padding” mismatches
+    dates = []
+    counts = []
+    cur = from_dt.date()
+    end = (to_dt - datetime.timedelta(days=1)).date()  # inclusive last day
+    while cur <= end:
+        ds = cur.isoformat()
+        dates.append(cur)
+        counts.append(by_date.get(ds, 0))
+        cur += datetime.timedelta(days=1)
+
+    # Ensure subtitle total matches exactly what is plotted
     total = sum(counts)
     raw_max = max(counts) if counts else 1
 
@@ -134,7 +162,6 @@ def main():
 
     ma = moving_avg([min(v, scale_max) for v in counts], window=11)
 
-    # Stats for HUD
     cur_streak, best_streak = streak_stats(counts)
     last7 = sum(counts[-7:]) if len(counts) >= 7 else sum(counts)
     last30 = sum(counts[-30:]) if len(counts) >= 30 else sum(counts)
@@ -143,7 +170,6 @@ def main():
     hot_thr = max(1, percentile(nonzero, 95) if nonzero else raw_max)
     events = spaced_top_events(counts, hot_thr, limit=7, min_gap=7)
 
-    # Plot geometry
     n = len(counts)
     plot_w = WIDTH - (PAD_X * 2)
     bw = plot_w / max(1, n)
@@ -154,7 +180,6 @@ def main():
         t = max(0.0, min(1.0, t))
         return PLOT_BOTTOM - (t * PLOT_H)
 
-    # Horizontal grid lines (subtle)
     grid_lines = []
     for k in range(5):
         y = PLOT_TOP + (PLOT_H * k / 4.0)
@@ -163,7 +188,6 @@ def main():
             f'stroke="{GRID}" stroke-width="1" opacity="0.55"/>'
         )
 
-    # Week + month cadence markers
     week_lines = []
     month_lines = []
     month_labels = []
@@ -185,7 +209,6 @@ def main():
                 f'font-size="10">{dt.strftime("%b")}</text>'
             )
 
-    # Streak band (subtle): current streak window highlighted
     streak_band = ""
     if cur_streak >= 5:
         start_i = max(0, n - cur_streak)
@@ -196,7 +219,6 @@ def main():
             f'fill="{ACCENT}" opacity="0.035"/>'
         )
 
-    # Barcode pulses (cleaner)
     pulses = []
     for i, v_raw in enumerate(counts):
         v = min(v_raw, scale_max)
@@ -217,7 +239,6 @@ def main():
                 f'stroke="{ACCENT}" stroke-width="1.9" opacity="{op_burst:.3f}"/>'
             )
 
-    # Moving-average line path
     path = []
     for i, v in enumerate(ma):
         x = x0 + i*bw + (bw*0.41)
@@ -225,7 +246,6 @@ def main():
         path.append((x, y))
     d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x, y in path]) if path else ""
 
-    # Hot event pips (release-style markers)
     pips = []
     for v, i in events:
         x_mid = x0 + i*bw + (bw * 0.5)
@@ -238,7 +258,6 @@ def main():
             f'</g>'
         )
 
-    # HUD (top-right)
     hud_lines = [
         f"Streak {cur_streak}d  ·  Best {best_streak}d",
         f"Last 7d {last7}  ·  30d {last30}",
@@ -266,6 +285,11 @@ def main():
     subtitle = f"{total} contributions · peak/day {raw_max} · cap@p85 {scale_max} · mode BARCODE"
     now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
+    # Avoid referencing path[-1] if path is empty
+    area = ""
+    if path:
+        area = f'<path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" fill="url(#fade)" opacity="0.42"/>'
+
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
   <defs>
     <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1">
@@ -292,31 +316,25 @@ def main():
   {"".join(month_lines)}
   {streak_band}
 
-  <!-- Area under moving avg -->
-  <path d="{d} L {path[-1][0]:.2f} {PLOT_BOTTOM:.2f} L {path[0][0]:.2f} {PLOT_BOTTOM:.2f} Z" fill="url(#fade)" opacity="0.42"/>
-  
-  <!-- Barcode pulses -->
+  {area}
+
   {"".join(pulses)}
 
-  <!-- Moving avg line -->
   <path d="{d}" fill="none" stroke="{ACCENT}" stroke-width="1.9" filter="url(#softGlow)" opacity="0.92"/>
 
-  <!-- Hot event pips -->
   {"".join(pips)}
 
-  <!-- HUD -->
   {hud}
 
-  <!-- Month labels -->
   {"".join(month_labels)}
 
-  <!-- Frame -->
   <rect x="{PAD_X}" y="{PLOT_TOP}" width="{WIDTH-PAD_X*2}" height="{PLOT_H}" fill="none" stroke="{GRID}" stroke-width="1" rx="10"/>
 </svg>
 '''
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(svg)
+
 
 if __name__ == "__main__":
     main()
