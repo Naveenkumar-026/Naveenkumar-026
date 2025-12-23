@@ -23,12 +23,11 @@ jobs:
       - name: Render SVGs
         env:
           GH_USER: ${{ github.repository_owner }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SIGNAL_TOKEN || secrets.GITHUB_TOKEN }}
           TZ_OFFSET_MINUTES: "330"
-          OUT_PATH: assets/signal_barcode.svg
         run: |
-          python scripts/signal_telemetry.py
-          python scripts/hero_sweep.py
+          OUT_PATH=assets/signal_barcode.svg python scripts/signal_telemetry.py
+          OUT_PATH=assets/hero_sweep.svg python scripts/hero_sweep.py
 
       - name: Cache-bust README image URLs
         run: |
