@@ -120,11 +120,12 @@ def compute_window(days: int, tz_offset_minutes: int):
 def main():
     from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
-    # IMPORTANT: do NOT use includePrivateContributions (your Actions run rejects it)
+    INCLUDE_PRIVATE = os.environ.get("INCLUDE_PRIVATE", "1").strip().lower() not in ("0","false","no","off")
+    
     query = """
-    query($user:String!, $from:DateTime!, $to:DateTime!) {
+    query($user:String!, $from:DateTime!, $to:DateTime!, $priv:Boolean!) {
       user(login: $user) {
-        contributionsCollection(from: $from, to: $to) {
+        contributionsCollection(from: $from, to: $to, includePrivateContributions: $priv) {
           contributionCalendar {
             weeks {
               contributionDays {
@@ -137,6 +138,14 @@ def main():
       }
     }
     """
+
+data = gh_api(query, {
+    "user": USER,
+    "from": from_dt.isoformat() + "Z",
+    "to": to_dt.isoformat() + "Z",
+    "priv": bool(INCLUDE_PRIVATE),
+})
+
 
     data = gh_api(query, {
         "user": USER,
