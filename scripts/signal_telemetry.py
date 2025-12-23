@@ -268,8 +268,8 @@ def main():
 
     # Header: show public+restricted split when available
     total_line = f"{total} contributions · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
-    if restricted_used > 0:
-        total_line = f"{total} contributions (private {restricted_used} not counted) · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
+    if (not include_private) and restricted_raw > 0:
+        total_line = f"{total} contributions (private {restricted_raw} hidden) · peak/day {raw_max} · cap@p85 {int(scale_max)} · mode BARCODE"
 
     header = f"""
     <text x="{PAD_X}" y="30" fill="{FG}" font-size="14" font-weight="600"
