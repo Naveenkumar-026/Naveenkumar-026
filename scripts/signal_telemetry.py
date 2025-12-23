@@ -4,10 +4,10 @@ USER = os.environ.get("GH_USER", "Naveenkumar-026")
 TOKEN = os.environ.get("GH_TOKEN")
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 
-# Number of days to render (default: 365)
+# Render window
 DAYS = int(os.environ.get("DAYS", "365"))
 
-# Match GitHub UI timezone behavior (India = +330). Override in workflow if needed.
+# Match GitHub profile UI day boundaries (India = +330)
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 
 BG = "#0D1117"
@@ -72,7 +72,7 @@ def moving_avg(xs, window=11):
 
 def svg_escape(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") \
-                    .replace('"', "&quot;").replace("'", "&apos;")
+        .replace('"', "&quot;").replace("'", "&apos;")
 
 
 def streak_stats(counts):
@@ -108,35 +108,35 @@ def spaced_top_events(counts, threshold, limit=7, min_gap=7):
 
 def compute_window(days: int, tz_offset_minutes: int):
     """
-    Build a stable [from_dt, to_dt) window aligned to 'local day' boundaries like GitHub UI.
+    Create [from_dt, to_dt) aligned to LOCAL midnight boundaries like GitHub profile UI.
 
-    - We interpret "today" in local time, then set to_dt to tomorrow local midnight.
-    - Convert those boundaries back to UTC for GraphQL.
+    Example (IST):
+      local_to = tomorrow 00:00 IST
+      local_from = local_to - 365 days
+      then convert both to UTC timestamps for GraphQL.
     """
     now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     local_now = now_utc + datetime.timedelta(minutes=tz_offset_minutes)
 
     local_midnight = local_now.replace(hour=0, minute=0, second=0, microsecond=0)
-    # to_dt includes today => tomorrow local midnight
     local_to = local_midnight + datetime.timedelta(days=1)
     local_from = local_to - datetime.timedelta(days=days)
 
-    # convert back to UTC, then drop tzinfo for isoformat + "Z"
-    to_dt_utc = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
-    from_dt_utc = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
-    return from_dt_utc, to_dt_utc
+    # Convert back to UTC, drop tzinfo for isoformat+"Z"
+    to_dt = (local_to - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    from_dt = (local_from - datetime.timedelta(minutes=tz_offset_minutes)).replace(tzinfo=None)
+    return from_dt, to_dt
 
 
 def main():
     from_dt, to_dt = compute_window(DAYS, TZ_OFFSET_MINUTES)
 
-    # IMPORTANT: do NOT use includePrivateContributions here; GitHub rejects it in your workflow.
+    # IMPORTANT: do NOT use includePrivateContributions here (your Actions run rejects it)
     query = """
     query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
         contributionsCollection(from: $from, to: $to) {
           contributionCalendar {
-            totalContributions
             weeks {
               contributionDays {
                 date
@@ -157,26 +157,24 @@ def main():
 
     weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
 
-    # Map date -> count from API
+    # date -> count
     by_date = {}
     for w in weeks:
         for d in w["contributionDays"]:
             by_date[d["date"]] = int(d["contributionCount"])
 
-    # Build exact day range [from_dt, to_dt) to avoid “weeks padding” mismatches
+    # Build exact day range [from_dt, to_dt)
     dates = []
     counts = []
-
     cur = from_dt.date()
-    end = (to_dt - datetime.timedelta(days=1)).date()  # inclusive last day
+    end = (to_dt - datetime.timedelta(days=1)).date()
     while cur <= end:
         ds = cur.isoformat()
         dates.append(cur)
         counts.append(by_date.get(ds, 0))
         cur += datetime.timedelta(days=1)
 
-    # Total should match what is plotted
-    total = sum(counts)
+    total = sum(counts)  # EXACT plotted total
     raw_max = max(counts) if counts else 1
 
     nonzero = [v for v in counts if v > 0]
@@ -203,7 +201,6 @@ def main():
         t = max(0.0, min(1.0, t))
         return PLOT_BOTTOM - (t * PLOT_H)
 
-    # horizontal grid
     grid_lines = []
     for k in range(5):
         y = PLOT_TOP + (PLOT_H * k / 4.0)
@@ -212,13 +209,12 @@ def main():
             f'stroke="{GRID}" stroke-width="1" opacity="0.55"/>'
         )
 
-    # week & month markers
     week_lines = []
     month_lines = []
     month_labels = []
     for i, dt in enumerate(dates):
         x_mid = x0 + i * bw + (bw * 0.5)
-        if dt.weekday() == 0:  # Monday
+        if dt.weekday() == 0:
             week_lines.append(
                 f'<line x1="{x_mid:.2f}" y1="{PLOT_TOP:.2f}" x2="{x_mid:.2f}" y2="{PLOT_BOTTOM:.2f}" '
                 f'stroke="{GRID}" stroke-width="1" opacity="0.10"/>'
@@ -234,7 +230,6 @@ def main():
                 f'font-size="10">{dt.strftime("%b")}</text>'
             )
 
-    # streak band
     streak_band = ""
     if cur_streak >= 5:
         start_i = max(0, n - cur_streak)
@@ -245,7 +240,6 @@ def main():
             f'fill="{ACCENT}" opacity="0.035"/>'
         )
 
-    # barcode pulses
     pulses = []
     for i, v_raw in enumerate(counts):
         v = min(v_raw, scale_max)
@@ -266,7 +260,6 @@ def main():
                 f'stroke="{ACCENT}" stroke-width="1.9" opacity="{op_burst:.3f}"/>'
             )
 
-    # moving average path
     path = []
     for i, v in enumerate(ma):
         x = x0 + i * bw + (bw * 0.41)
@@ -274,7 +267,6 @@ def main():
         path.append((x, y))
     d = "M " + " L ".join([f"{x:.2f} {y:.2f}" for x, y in path]) if path else ""
 
-    # event pips
     pips = []
     for v, i in events:
         x_mid = x0 + i * bw + (bw * 0.5)
@@ -287,7 +279,6 @@ def main():
             f'</g>'
         )
 
-    # HUD
     hud_lines = [
         f"Streak {cur_streak}d  ·  Best {best_streak}d",
         f"Last 7d {last7}  ·  30d {last30}",
@@ -313,9 +304,8 @@ def main():
 
     title = "SIGNAL // 365D"
     subtitle = f"{total} contributions · peak/day {raw_max} · cap@p85 {scale_max} · mode BARCODE"
-    now = datetime.datetime.utcnow().strftime("%S%M%H %Y-%m-%d UTC")[-14:]  # "YYYY-MM-DD UTC" stable length
+    now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
-    # area fill under moving avg
     area = ""
     if path:
         area = (
