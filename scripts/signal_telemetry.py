@@ -214,6 +214,13 @@ def main():
             )
             month_labels.append((x_mid + 4, dt.strftime("%b")))
 
+    # Month labels rendered separately to avoid backslashes inside f-string expressions (Actions SyntaxError fix)
+    month_label_svg = "".join(
+        f'<text x="{x:.2f}" y="{HEIGHT-14}" fill="{MUTED}" font-size="10" '
+        f'font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace">{m}</text>'
+        for x, m in month_labels
+    )
+
     bars = []
     for i, v in enumerate(counts):
         x = x0 + i * bw
@@ -282,7 +289,7 @@ def main():
     {line}
     {"".join(event_marks)}
   </g>
-  {"".join([f'<text x="{x:.2f}" y="{HEIGHT-14}" fill="{MUTED}" font-size="10" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace">{m}</text>' for x, m in month_labels])}
+  {month_label_svg}
   {hud}
 </svg>
 """
