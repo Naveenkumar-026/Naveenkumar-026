@@ -156,7 +156,26 @@ def main():
     cal = coll["contributionCalendar"]
     restricted_raw = int(coll.get("restrictedContributionsCount", 0) or 0)
     restricted_used = restricted_raw if include_private else 0
-    
+
+    # Build date list for the local rolling 365-day window
+    dates = []
+    counts = []
+
+    cur = start_date
+    while cur <= end_date:
+        dates.append(cur)
+        cur += datetime.timedelta(days=1)
+
+    # Pull contribution counts by date from GraphQL calendar
+    by_date = {}
+    for w in cal["weeks"]:
+        for d in w["contributionDays"]:
+            by_date[d["date"]] = int(d["contributionCount"] or 0)
+
+    # Build counts aligned to our local rolling window
+    for dt in dates:
+        counts.append(by_date.get(dt.isoformat(), 0))
+
     total_visible = sum(counts)
     total = total_visible
 
