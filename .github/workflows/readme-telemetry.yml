@@ -31,10 +31,12 @@ jobs:
           OUT_PATH=assets/hero_sweep.svg python scripts/hero_sweep.py
 
       - name: Cache-bust README image URLs
+        env:
+          RUN_ID: ${{ github.run_id }}
         run: |
           python - << 'PY'
-          import time, re, pathlib
-          v = str(int(time.time()))
+          import os, re, pathlib
+          v = os.environ.get("RUN_ID") or "0"
           p = pathlib.Path("README.md")
           s = p.read_text(encoding="utf-8")
           s = re.sub(r'(\./assets/signal_barcode\.svg)(\?v=\d+)?', r'\1?v='+v, s)
