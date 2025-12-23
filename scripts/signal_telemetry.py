@@ -105,7 +105,7 @@ def compute_window(days: int, tz_offset_minutes: int):
     now_utc = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     local_now = now_utc + datetime.timedelta(minutes=tz_offset_minutes)
 
-    end_date_local = local_now.date()                     # "today" in local time
+    end_date_local = (local_now.date() - datetime.timedelta(days=1))
     start_date_local = end_date_local - datetime.timedelta(days=days - 1)
 
     # Local midnight boundaries for query
