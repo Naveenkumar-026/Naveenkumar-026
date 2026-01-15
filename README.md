@@ -1,7 +1,9 @@
 <div align="left">
 
-<p align="center">
-  <img src="./assets/operator_id.svg?v=21050376992" alt="Operator ID" width="100%" />
+<p align="left">
+  <samp>
+    OPERATOR // SILENCIO &nbsp;·&nbsp; HANDLE: Naveenkumar-026 &nbsp;·&nbsp; MODE: PUBLIC &nbsp;·&nbsp; STATUS: ONLINE
+  </samp>
 </p>
 
 <!-- Stealth motion header (italic via font variant) -->
@@ -17,17 +19,15 @@
   </samp>
 </p>
 
-<!-- Operator panel -->
-<table width="100%">
-  <tr>
-    <td width="42%" valign="top">
-      <img src="./assets/hero_sweep.svg?v=21050376992" alt="Signal Sweep" width="100%" />
-    </td>
-    <td width="58%" valign="top">
-      <img src="./assets/signal_stack.svg?v=21050376992" alt="Signal Stack" width="100%" />
-    </td>
-  </tr>
-</table>
+<!-- SPECTRUM CAPTURE // LIVE (first) -->
+<p align="center">
+  <img src="./assets/hero_sweep.svg?v=21042671030" alt="SPECTRUM CAPTURE // LIVE" width="100%" />
+</p>
+
+<!-- Operating Stack (second) -->
+<p align="center">
+  <img src="./assets/signal_stack.svg" alt="Operating Stack" width="100%" />
+</p>
 
 <p>
 At the confluence of<br/>
@@ -57,7 +57,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=21050376992" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=21042671030" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
