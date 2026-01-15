@@ -11,6 +11,8 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Kolkata
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,6 +28,7 @@ jobs:
           GH_TOKEN: ${{ secrets.SIGNAL_TOKEN }}
           INCLUDE_PRIVATE: "0"
           TZ_OFFSET_MINUTES: "330"
+          TZ: Asia/Kolkata
         run: |
           OUT_PATH=assets/signal_barcode.svg python scripts/signal_telemetry.py
           OUT_PATH=assets/hero_sweep.svg python scripts/hero_sweep.py
