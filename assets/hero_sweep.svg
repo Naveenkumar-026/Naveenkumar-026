@@ -8,6 +8,16 @@
       </feMerge>
     </filter>
 
+      <!-- Dark watermark background texture (subtle) -->
+    <filter id="wmNoise" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+
+    <pattern id="wmHatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+      <line x1="0" y1="0" x2="0" y2="14" stroke="#172033" stroke-width="1" opacity="0.35"/>
+    </pattern>
+
     <linearGradient id="panelGrad" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="#0B1220" stop-opacity="0.95"/>
       <stop offset="1" stop-color="#0D1117" stop-opacity="1"/>
@@ -20,6 +30,9 @@
   </defs>
 
   <rect width="980" height="240" fill="#0D1117"/>
+  <!-- Watermark texture overlays (kept extremely low-contrast) -->
+  <rect width="980" height="240" fill="#0D1117" filter="url(#wmNoise)" opacity="0.06"/>
+  <rect width="980" height="240" fill="url(#wmHatch)" opacity="0.05"/>
 
   <!-- Intro / Title -->
   <text x="26" y="28" fill="#9CA3AF" font-size="14"
