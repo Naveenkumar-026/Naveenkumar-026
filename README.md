@@ -17,26 +17,40 @@ At the confluence of<br/>
 
 <hr/>
 
-<p><strong>Domains of focus</strong></p>
+<!-- Black Ledger blocks -->
 
-<p>⟡ Cybersecurity & defensive architectures</p>
-<p>⟡ Artificial intelligence, agent systems, and ASI research</p>
-<p>⟡ Privacy-preserving, low-infrastructure computing</p>
-<p>⟡ Quantum computing & firearms systems — foundations, safety, analysis</p>
-<p>⟡ Long-horizon system foundations</p>
+<div style="background:#0B1220;border:1px solid #1F2937;border-radius:12px;padding:14px 16px;margin:14px 0;">
+  <div style="font-family:JetBrains Mono,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;letter-spacing:0.8px;color:#9CA3AF;">
+    // DOMAINS
+  </div>
+  <div style="margin-top:10px;">
+    ⟡ Cybersecurity & defensive architectures<br/>
+    ⟡ Artificial intelligence, agent systems, and ASI research<br/>
+    ⟡ Privacy-preserving, low-infrastructure computing<br/>
+    ⟡ Quantum computing & firearms systems — foundations, safety, analysis<br/>
+    ⟡ Long-horizon system foundations
+  </div>
+</div>
 
-<hr/>
+<div style="background:#0B1220;border:1px solid #1F2937;border-radius:12px;padding:14px 16px;margin:14px 0;">
+  <div style="font-family:JetBrains Mono,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;letter-spacing:0.8px;color:#9CA3AF;">
+    // OPERATING POSTURE
+  </div>
+  <div style="margin-top:10px;">
+    Most work is exploratory. Some is operational.<br/>
+    Almost none is announced.
+  </div>
+</div>
 
-<p>
-Most work is exploratory. Some is operational.<br/>
-Almost none is announced.
-</p>
+<div style="background:#0B1220;border:1px solid #1F2937;border-radius:12px;padding:14px 16px;margin:14px 0;">
+  <div style="font-family:JetBrains Mono,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;letter-spacing:0.8px;color:#9CA3AF;">
+    // DOCTRINE
+  </div>
+  <div style="margin-top:10px;">
+    <em>Structure precedes implementation.</em>
+  </div>
+</div>
 
-<table>
-  <tr>
-    <td><em>Structure precedes implementation.</em></td>
-  </tr>
-</table>
 
 <p align="center">
   <span>──────── ⧉ ────────</span>
