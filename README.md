@@ -1,7 +1,7 @@
 <div align="left">
 
 <p align="center">
-  <img src="./assets/hero_sweep.svg?v=21050082958" alt="Signal Sweep" width="100%" />
+  <img src="./assets/hero_sweep.svg?v=21042671030" alt="Signal Sweep" width="100%" />
 </p>
 
 <!-- Stealth motion header (italic via font variant) -->
@@ -21,10 +21,10 @@
 <table width="100%">
   <tr>
     <td width="42%" valign="top">
-      <img src="./assets/operator_id.svg?v=21050082958" alt="Operator ID" width="100%" />
+      <img src="./assets/hero_sweep.svg?v=21042671030" alt="Signal Sweep" width="100%" />
     </td>
     <td width="58%" valign="top">
-      <img src="./assets/signal_stack.svg?v=21050082958" alt="Signal Stack" width="100%" />
+      <img src="./assets/signal_stack.svg" alt="Signal Stack" width="100%" />
     </td>
   </tr>
 </table>
@@ -36,16 +36,28 @@ At the confluence of<br/>
 
 <hr/>
 
-<p><strong>Operating Stack</strong></p>
+<!-- Stack + Meter (side-by-side) -->
+<table width="100%">
+  <tr>
+    <td width="58%" valign="top">
+      <p><strong>Operating Stack</strong></p>
 
-<p>⟡ <strong>Cyber Defense</strong> — defensive architectures, response automation, hardening</p>
-<p>⟡ <strong>Agent Systems</strong> — orchestration, evaluation harnesses, safety rails</p>
-<p>⟡ <strong>Low-Infra Computing</strong> — privacy-first, edge/off-grid constraints</p>
-<p>⟡ <strong>Quantum Foundations</strong> — practical integration paths, disciplined learning</p>
-<p>⟡ <strong>Long-Horizon Systems</strong> — durable primitives before scale</p>
+      <p>⟡ <strong>Cyber Defense</strong> — defensive architectures, response automation, hardening</p>
+      <p>⟡ <strong>Agent Systems</strong> — orchestration, evaluation harnesses, safety rails</p>
+      <p>⟡ <strong>Low-Infra Computing</strong> — privacy-first, edge/off-grid constraints</p>
+      <p>⟡ <strong>Quantum Foundations</strong> — practical integration paths, disciplined learning</p>
+      <p>⟡ <strong>Long-Horizon Systems</strong> — durable primitives before scale</p>
+    </td>
 
+    <td width="42%" valign="top">
+      <p><strong>Signal Meter</strong></p>
+      <img src="./assets/signal_stack.svg" alt="Signal Stack Meter" width="100%" />
+    </td>
+  </tr>
+</table>
 
 <hr/>
+
 
 <p>
 Most work is exploratory. Some is operational.<br/>
@@ -68,7 +80,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=21050082958" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=21042671030" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
