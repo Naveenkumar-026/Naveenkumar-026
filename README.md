@@ -12,7 +12,7 @@
 <!-- Command Row -->
 <p align="center">
   <samp>
-    [ <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ] ·
+    · [ <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ] ·
     [ <a href="https://github.com/Naveenkumar-026?tab=stars">Signals</a> ] ·
   </samp>
 </p>
