@@ -17,6 +17,17 @@
   </samp>
 </p>
 
+<!-- Operator panel -->
+<table width="100%">
+  <tr>
+    <td width="42%" valign="top">
+      <img src="./assets/operator_id.svg" alt="Operator ID" width="100%" />
+    </td>
+    <td width="58%" valign="top">
+      <img src="./assets/signal_stack.svg" alt="Signal Stack" width="100%" />
+    </td>
+  </tr>
+</table>
 
 <p>
 At the confluence of<br/>
