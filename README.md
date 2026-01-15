@@ -10,11 +10,15 @@
 </p>
 
 <!-- Command Row -->
-<p align="left">
-  <code>
-    <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ·
-  </code>
+<p align="center">
+  <samp>
+    [ <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ] ·
+    [ <a href="https://github.com/Naveenkumar-026?tab=stars">Signals</a> ] ·
+    [ <a href="https://github.com/Naveenkumar-026?tab=projects">Ops</a> ] ·
+    [ <a href="mailto:your-email@domain.com">Contact</a> ]
+  </samp>
 </p>
+
 
 <p>
 At the confluence of<br/>
