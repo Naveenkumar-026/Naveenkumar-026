@@ -34,6 +34,9 @@ def main():
     title = "SPECTRUM CAPTURE // LIVE"
     subtitle = "Security · Intelligence · Autonomy"
 
+    callsign = "CALLSIGN: SILENCIO"
+    build = "BUILD CHANNEL: MAIN · MODE: PUBLIC"
+
     # Plot frame
     frame_y = PAD + 62
     frame_h = H - frame_y - PAD
@@ -144,16 +147,6 @@ def main():
       </feMerge>
     </filter>
 
-      <!-- Dark watermark background texture (subtle) -->
-    <filter id="wmNoise" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
-      <feColorMatrix type="saturate" values="0"/>
-    </filter>
-
-    <pattern id="wmHatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
-      <line x1="0" y1="0" x2="0" y2="14" stroke="{GRID_SOFT}" stroke-width="1" opacity="0.35"/>
-    </pattern>
-
     <linearGradient id="panelGrad" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="{PANEL}" stop-opacity="0.95"/>
       <stop offset="1" stop-color="{BG}" stop-opacity="1"/>
@@ -166,9 +159,6 @@ def main():
   </defs>
 
   <rect width="{W}" height="{H}" fill="{BG}"/>
-  <!-- Watermark texture overlays (kept extremely low-contrast) -->
-  <rect width="{W}" height="{H}" fill="{BG}" filter="url(#wmNoise)" opacity="0.06"/>
-  <rect width="{W}" height="{H}" fill="url(#wmHatch)" opacity="0.05"/>
 
   <!-- Intro / Title -->
   <text x="{PAD}" y="28" fill="{TEXT}" font-size="14"
@@ -246,6 +236,13 @@ def main():
       Peak {peak_db:.1f} dB   Noise {noise_db:.1f} dB   SNR {snr:.1f} dB
     </text>
   </g>
+
+  <!-- Footer identity (subtle, personal) -->
+  <text x="{PAD}" y="{H-12}" fill="{MUTED}" font-size="11"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(callsign)}</text>
+
+  <text x="{W-PAD}" y="{H-12}" text-anchor="end" fill="{MUTED}" font-size="11"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(build)}</text>
 
 </svg>
 '''
