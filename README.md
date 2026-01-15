@@ -13,9 +13,6 @@
 <p align="left">
   <code>
     <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ·
-    <a href="https://github.com/Naveenkumar-026?tab=stars">Signals</a> ·
-    <a href="https://github.com/Naveenkumar-026?tab=projects">Ops</a> ·
-    <a href="https://github.com/Naveenkumar-026">Contact</a>
   </code>
 </p>
 
