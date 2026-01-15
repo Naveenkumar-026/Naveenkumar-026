@@ -29,6 +29,8 @@ jobs:
         run: |
           OUT_PATH=assets/signal_barcode.svg python scripts/signal_telemetry.py
           OUT_PATH=assets/hero_sweep.svg python scripts/hero_sweep.py
+          OUT_PATH=assets/operator_id.svg python scripts/operator_id.py
+          OUT_PATH=assets/signal_stack.svg python scripts/signal_stack_meter.py
 
       - name: Cache-bust README image URLs
         env:
@@ -41,6 +43,8 @@ jobs:
           s = p.read_text(encoding="utf-8")
           s = re.sub(r'(\./assets/signal_barcode\.svg)(\?v=\d+)?', r'\1?v='+v, s)
           s = re.sub(r'(\./assets/hero_sweep\.svg)(\?v=\d+)?', r'\1?v='+v, s)
+          s = re.sub(r'(\./assets/operator_id\.svg)(\?v=\d+)?', r'\1?v='+v, s)
+          s = re.sub(r'(\./assets/signal_stack\.svg)(\?v=\d+)?', r'\1?v='+v, s)
           p.write_text(s, encoding="utf-8")
           print("README cache-bust:", v)
           PY
