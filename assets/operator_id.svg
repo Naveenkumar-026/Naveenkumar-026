@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="220" viewBox="0 0 980 220">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="1" stop-color="#0D1117"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="980" height="220" fill="#0D1117"/>
+  <rect x="24" y="24" width="932" height="172" rx="14" fill="url(#panel)" stroke="#1F2937" stroke-opacity="0.7" />
+  <rect x="34" y="34" width="912" height="152" rx="8" fill="none" stroke="#1F2937" stroke-opacity="0.35" />
+
+  <!-- Accent spine -->
+  <rect x="24" y="24" width="3" height="172" fill="#22C55E" filter="url(#glow)" />
+
+  <!-- Grid -->
+  <line x1="117" y1="24" x2="117" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="210" y1="24" x2="210" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="303" y1="24" x2="303" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="396" y1="24" x2="396" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="490" y1="24" x2="490" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="583" y1="24" x2="583" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="676" y1="24" x2="676" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="769" y1="24" x2="769" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="862" y1="24" x2="862" y2="196" stroke="#1F2937" stroke-opacity="0.35" stroke-width="1" /><line x1="24" y1="52" x2="956" y2="52" stroke="#1F2937" stroke-opacity="0.28" stroke-width="1" /><line x1="24" y1="81" x2="956" y2="81" stroke="#1F2937" stroke-opacity="0.28" stroke-width="1" /><line x1="24" y1="110" x2="956" y2="110" stroke="#1F2937" stroke-opacity="0.28" stroke-width="1" /><line x1="24" y1="138" x2="956" y2="138" stroke="#1F2937" stroke-opacity="0.28" stroke-width="1" /><line x1="24" y1="167" x2="956" y2="167" stroke="#1F2937" stroke-opacity="0.28" stroke-width="1" />
+
+  <!-- Header -->
+  <text x="52" y="58" fill="#9CA3AF" font-size="12"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">OPERATOR ID // ACTIVE</text>
+
+  <text x="928" y="58" text-anchor="end" fill="#6B7280" font-size="12"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-15 23:33 UTC</text>
+
+  <!-- Status pill -->
+  <rect x="746" y="74" width="182" height="24" rx="12" fill="none" stroke="#1F2937" stroke-opacity="0.65" />
+  <circle cx="762" cy="86" r="4" fill="#22C55E" filter="url(#glow)" />
+  <text x="772" y="90" fill="#9CA3AF" font-size="12"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">STATUS: ONLINE</text>
+
+  <!-- Callsign -->
+  <text x="52" y="94" fill="#22C55E" font-size="18" filter="url(#glow)"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">SILENCIO</text>
+
+  <!-- Fields -->
+  <text x="52" y="102" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">HANDLE:</text>
+<text x="172" y="102" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Naveenkumar-026</text>
+  <text x="52" y="128" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">ROLE:</text>
+<text x="172" y="128" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Systems security · intelligence · autonomy</text>
+  <text x="52" y="154" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">BUILD:</text>
+<text x="172" y="154" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">MAIN</text>
+
+  <text x="527" y="102" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">MODE:</text>
+<text x="647" y="102" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">PUBLIC</text>
+  <text x="527" y="128" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">CHECKSUM:</text>
+<text x="647" y="128" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">5C817D7D3D</text>
+  <text x="527" y="154" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">TIMEBASE:</text>
+<text x="647" y="154" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">UTC</text>
+
+  <!-- Footer microtext -->
+  <text x="52" y="180" fill="#6B7280" font-size="11"
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Structure precedes implementation.</text>
+</svg>
