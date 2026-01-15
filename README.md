@@ -9,6 +9,13 @@
   <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono+Italic&size=18&duration=2600&pause=900&color=22C55E&width=620&lines=%E2%88%B4+%F0%9D%93%97(x)+%E2%86%92+%E2%88%9E;Security+%C2%B7+Intelligence+%C2%B7+Autonomy;Signal+Over+Noise" />
 </p>
 
+<p align="left">
+  <a href="https://github.com/Naveenkumar-026">GitHub</a> ·
+  <a href="https://www.linkedin.com/">LinkedIn</a> ·
+  <a href="mailto:you@example.com">Email</a> ·
+  <a href="https://github.com/Naveenkumar-026?tab=repositories">Repos</a>
+</p>
+
 <p>
 At the confluence of<br/>
 <strong><em>Security</em></strong>, <strong><em>Intelligence</em></strong>, and <strong><em>Autonomy</em></strong>.
@@ -17,12 +24,13 @@ At the confluence of<br/>
 <hr/>
 
 <p><strong>Domains of focus</strong></p>
-
-<p>⟡ Cybersecurity & defensive architectures</p>
-<p>⟡ Artificial intelligence, agent systems, and ASI research</p>
-<p>⟡ Privacy-preserving, low-infrastructure computing</p>
-<p>⟡ Quantum computing & firearms systems — foundations, safety, analysis</p>
-<p>⟡ Long-horizon system foundations</p>
+<ul>
+  <li>⟡ Cybersecurity & defensive architectures</li>
+  <li>⟡ Artificial intelligence, agent systems, and ASI research</li>
+  <li>⟡ Privacy-preserving, low-infrastructure computing</li>
+  <li>⟡ Quantum computing & firearms systems — foundations, safety, analysis</li>
+  <li>⟡ Long-horizon system foundations</li>
+</ul>
 
 <hr/>
 
@@ -31,14 +39,14 @@ Most work is exploratory. Some is operational.<br/>
 Almost none is announced.
 </p>
 
-<table>
-  <tr>
-    <td><em>Structure precedes implementation.</em></td>
-  </tr>
-</table>
+<p><em><strong>Structure precedes implementation.</strong></em></p>
 
 <p align="center">
   <span>──────── ⧉ ────────</span>
+</p>
+
+<p align="left">
+  <strong>Legend:</strong> GREEN = active · GOLD = classified · WHITE = baseline · ⧉ = checkpoint
 </p>
 
 <p align="center">
