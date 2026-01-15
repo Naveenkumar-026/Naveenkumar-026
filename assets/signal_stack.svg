@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="220" viewBox="0 0 980 220">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260">
   <defs>
-    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0B1220"/>
-      <stop offset="1" stop-color="#0D1117"/>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b0f14"/>
+      <stop offset="1" stop-color="#070b10"/>
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="b"/>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
       <feMerge>
         <feMergeNode in="b"/>
         <feMergeNode in="SourceGraphic"/>
@@ -13,26 +13,67 @@
     </filter>
   </defs>
 
-  <rect x="0" y="0" width="980" height="220" fill="#0D1117"/>
-  <rect x="24" y="24" width="932" height="172" rx="14" fill="url(#panel)" stroke="#1F2937" stroke-opacity="0.7"/>
-  <rect x="34" y="34" width="912" height="152" rx="8" fill="none" stroke="#1F2937" stroke-opacity="0.35"/>
+  <rect x="0" y="0" width="1200" height="260" fill="url(#bg)"/>
+  <rect x="26" y="26" width="1148" height="208" rx="14" fill="#0f1622" stroke="#243244" opacity="0.98"/>
 
-  <text x="52" y="58" fill="#9CA3AF" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">SIGNAL STACK // METER</text>
-  <text x="928" y="58" text-anchor="end" fill="#6B7280" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-15 23:33 UTC</text>
+  <!-- Header -->
+  <text x="44" y="56" fill="#c9d4e5" font-size="14" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">OPERATING STACK // METER</text>
+  <text x="44" y="74" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+    Cyber Defense · Agent Systems · Low-Infra · Quantum · Long-Horizon
+  </text>
+  <text x="1156" y="56" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-15 23:47 UTC</text>
+  <text x="1156" y="74" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">user: Naveenkumar-026</text>
 
-  <text x="52" y="78" fill="#6B7280" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Focus intensity · stable daily hash · user: Naveenkumar-026</text>
+  <!-- Rows -->
 
-  <!-- Plot -->
-  <line x1="131" y1="88" x2="131" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="221" y1="88" x2="221" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="310" y1="88" x2="310" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="400" y1="88" x2="400" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="490" y1="88" x2="490" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="579" y1="88" x2="579" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="669" y1="88" x2="669" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="758" y1="88" x2="758" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="848" y1="88" x2="848" y2="168" stroke="#1F2937" stroke-opacity="0.30" stroke-width="1" /><line x1="42" y1="104" x2="938" y2="104" stroke="#1F2937" stroke-opacity="0.24" stroke-width="1" /><line x1="42" y1="120" x2="938" y2="120" stroke="#1F2937" stroke-opacity="0.24" stroke-width="1" /><line x1="42" y1="136" x2="938" y2="136" stroke="#1F2937" stroke-opacity="0.24" stroke-width="1" /><line x1="42" y1="152" x2="938" y2="152" stroke="#1F2937" stroke-opacity="0.24" stroke-width="1" />
-  <rect x="42" y="88" width="164" height="80" rx="10" fill="none" stroke="#1F2937" stroke-opacity="0.65" /><rect x="44" y="111" width="160" height="55" rx="9" fill="#16A34A" fill-opacity="0.35" /><rect x="45" y="112" width="158" height="53" rx="8" fill="#22C55E" fill-opacity="0.80" /><text x="124.0" y="101" text-anchor="middle" fill="#9CA3AF" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text><text x="124.0" y="186" text-anchor="middle" fill="#6B7280" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Cyber Defense</text><rect x="224" y="88" width="164" height="80" rx="10" fill="none" stroke="#1F2937" stroke-opacity="0.65" /><rect x="226" y="114" width="160" height="52" rx="9" fill="#16A34A" fill-opacity="0.35" /><rect x="227" y="115" width="158" height="50" rx="8" fill="#22C55E" fill-opacity="0.80" /><text x="306.0" y="104" text-anchor="middle" fill="#9CA3AF" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">70</text><text x="306.0" y="186" text-anchor="middle" fill="#6B7280" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Agent Systems</text><rect x="406" y="88" width="164" height="80" rx="10" fill="none" stroke="#1F2937" stroke-opacity="0.65" /><rect x="408" y="111" width="160" height="55" rx="9" fill="#16A34A" fill-opacity="0.35" /><rect x="409" y="112" width="158" height="53" rx="8" fill="#22C55E" fill-opacity="0.80" /><text x="488.0" y="101" text-anchor="middle" fill="#9CA3AF" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text><text x="488.0" y="186" text-anchor="middle" fill="#6B7280" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Low-Infra</text><rect x="588" y="88" width="164" height="80" rx="10" fill="none" stroke="#1F2937" stroke-opacity="0.65" /><rect x="590" y="114" width="160" height="52" rx="9" fill="#16A34A" fill-opacity="0.35" /><rect x="591" y="115" width="158" height="50" rx="8" fill="#22C55E" fill-opacity="0.80" /><text x="670.0" y="104" text-anchor="middle" fill="#9CA3AF" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">70</text><text x="670.0" y="186" text-anchor="middle" fill="#6B7280" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Quantum</text><rect x="770" y="88" width="164" height="80" rx="10" fill="none" stroke="#1F2937" stroke-opacity="0.65" /><rect x="772" y="112" width="160" height="54" rx="9" fill="#16A34A" fill-opacity="0.35" /><rect x="773" y="113" width="158" height="52" rx="8" fill="#22C55E" fill-opacity="0.80" /><text x="852.0" y="102" text-anchor="middle" fill="#9CA3AF" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">73</text><text x="852.0" y="186" text-anchor="middle" fill="#6B7280" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Long-Horizon</text>
+  <rect x="44" y="80" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <text x="60" y="104" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Cyber Defense</text>
+  <text x="246" y="104" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— defensive architectures, response automation, hardening</text>
 
-  <!-- Axis hints -->
-  <text x="38" y="100" text-anchor="end" fill="#6B7280" font-size="10"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">100</text>
-  <text x="38" y="168" text-anchor="end" fill="#6B7280" font-size="10"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">0</text>
+  <!-- Vertical level meter -->
+  <rect x="1156" y="84" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+
+  <rect x="1158" y="93" width="14" height="19" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
+  <text x="1146" y="104" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text>
+
+  <rect x="44" y="128" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <text x="60" y="152" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Agent Systems</text>
+  <text x="246" y="152" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— orchestration, evaluation harnesses, safety rails</text>
+
+  <!-- Vertical level meter -->
+  <rect x="1156" y="132" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+
+  <rect x="1158" y="140" width="14" height="20" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
+  <text x="1146" y="152" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">78</text>
+
+  <rect x="44" y="176" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <text x="60" y="200" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Low-Infra</text>
+  <text x="246" y="200" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— privacy-first, edge/off-grid constraints</text>
+
+  <!-- Vertical level meter -->
+  <rect x="1156" y="180" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+
+  <rect x="1158" y="189" width="14" height="19" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
+  <text x="1146" y="200" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text>
+
+  <rect x="44" y="224" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <text x="60" y="248" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Quantum</text>
+  <text x="246" y="248" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— practical integration paths, disciplined learning</text>
+
+  <!-- Vertical level meter -->
+  <rect x="1156" y="228" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+
+  <rect x="1158" y="238" width="14" height="18" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
+  <text x="1146" y="248" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">70</text>
+
+  <rect x="44" y="272" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <text x="60" y="296" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Long-Horizon</text>
+  <text x="246" y="296" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— durable primitives before scale</text>
+
+  <!-- Vertical level meter -->
+  <rect x="1156" y="276" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+
+  <rect x="1158" y="286" width="14" height="18" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
+  <text x="1146" y="296" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">73</text>
 
 </svg>
