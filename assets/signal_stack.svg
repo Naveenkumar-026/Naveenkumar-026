@@ -40,7 +40,7 @@
   <text x="44" y="58" fill="#c9d4e5" font-size="14" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">OPERATOR STACK // HEAT BARS</text>
   <text x="44" y="76" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Focus intensity · described primitives + measured levels</text>
 
-  <text x="1156" y="58" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-16 00:26 UTC</text>
+  <text x="1156" y="58" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-16 00:37 UTC</text>
   <text x="1156" y="76" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">user: Naveenkumar-026</text>
 
   <rect x="44" y="82" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
@@ -49,13 +49,11 @@
   <text x="270" y="101" dominant-baseline="middle" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— defensive architectures, response automation, hardening</text>
 
   <!-- Horizontal track -->
-  <rect x="822" y="94" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="866" y="94" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
   <!-- Heat fill -->
-  <rect x="824" y="96" width="211" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="868" y="96" width="251" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="1156" y="101" dominant-baseline="middle" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">74</text>
 
   <rect x="44" y="130" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
@@ -63,13 +61,11 @@
   <text x="270" y="149" dominant-baseline="middle" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— orchestration, evaluation harnesses, safety rails</text>
 
   <!-- Horizontal track -->
-  <rect x="822" y="142" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="866" y="142" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
   <!-- Heat fill -->
-  <rect x="824" y="144" width="223" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="868" y="144" width="234" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="1156" y="149" dominant-baseline="middle" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">78</text>
 
   <rect x="44" y="178" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
@@ -77,13 +73,11 @@
   <text x="270" y="197" dominant-baseline="middle" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— privacy-first, edge/off-grid constraints</text>
 
   <!-- Horizontal track -->
-  <rect x="822" y="190" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="866" y="190" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
   <!-- Heat fill -->
-  <rect x="824" y="192" width="211" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="868" y="192" width="217" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="1156" y="197" dominant-baseline="middle" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">74</text>
 
   <rect x="44" y="226" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
@@ -91,13 +85,11 @@
   <text x="270" y="245" dominant-baseline="middle" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— practical integration paths, disciplined learning</text>
 
   <!-- Horizontal track -->
-  <rect x="822" y="238" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="866" y="238" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
   <!-- Heat fill -->
-  <rect x="824" y="240" width="200" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="868" y="240" width="194" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="1156" y="245" dominant-baseline="middle" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">70</text>
 
   <rect x="44" y="274" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
@@ -105,12 +97,10 @@
   <text x="270" y="293" dominant-baseline="middle" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— durable primitives before scale</text>
 
   <!-- Horizontal track -->
-  <rect x="822" y="286" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="866" y="286" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
   <!-- Heat fill -->
-  <rect x="824" y="288" width="208" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="868" y="288" width="240" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="1156" y="293" dominant-baseline="middle" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">73</text>
 
 </svg>
