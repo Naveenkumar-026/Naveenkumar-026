@@ -59,9 +59,9 @@ def main():
     desc_x = name_x + name_w
     # Right side bar area
     bar_w = 290
-    num_w = 44
-    bar_x = W - PAD - 18 - num_w - bar_w
-    num_x = W - PAD - 18
+    num_w = 0
+    bar_x = W - PAD - 18 - bar_w
+
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
   <defs>
@@ -135,8 +135,6 @@ def main():
   <!-- Heat fill -->
   <rect x="{bar_x+2}" y="{fill_y}" width="{fill_w}" height="{track_h-4}" rx="{track_r-2}" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Value -->
-  <text x="{num_x}" y="{y_mid}" dominant-baseline="middle" text-anchor="end" fill="{TEXT}" font-size="12.5" font-family="{FONT}" font-weight="700">{lvl}</text>
 '''
 
     svg += "\n</svg>\n"
