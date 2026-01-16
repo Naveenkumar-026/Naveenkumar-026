@@ -45,7 +45,7 @@
   </text>
 
   <text x="958" y="52" text-anchor="end" fill="#94A3B8" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-    2026-01-16 02:03 UTC
+    2026-01-16 10:55 UTC
   </text>
   <text x="958" y="70" text-anchor="end" fill="#64748B" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
     BUILD MAIN  ·  MODE PUBLIC  ·  STATUS ONLINE
@@ -112,19 +112,19 @@
       <text x="636" y="132" fill="#64748B">CALLSIGN</text>
       <text x="728" y="132" fill="#C7D2FE">SILENCIO</text>
 
-      <text x="826" y="132" fill="#64748B">HANDLE</text>
-      <text x="950" y="132" text-anchor="end" fill="#C7D2FE">Naveenkumar-026</text>
+      <text x="799" y="132" fill="#64748B">HANDLE</text>
+      <text x="950" y="132" text-anchor="end" fill="#C7D2FE" textLength="90" lengthAdjust="spacingAndGlyphs"> Naveenkumar-026 </text>
 
       <text x="636" y="150" fill="#64748B">MODE</text>
       <text x="728" y="150" fill="#C7D2FE">PUBLIC</text>
 
-      <text x="826" y="150" fill="#64748B">STATUS</text>
+      <text x="799" y="150" fill="#64748B">STATUS</text>
       <text x="950" y="150" text-anchor="end" fill="#C7D2FE">ONLINE</text>
 
       <text x="636" y="168" fill="#64748B">BUILD</text>
       <text x="728" y="168" fill="#C7D2FE">MAIN</text>
 
-      <text x="826" y="168" fill="#64748B">MARKER</text>
+      <text x="799" y="168" fill="#64748B">MARKER</text>
       <text x="950" y="168" text-anchor="end" fill="#C7D2FE">38.2 kHz</text>
     </g>
 
@@ -134,12 +134,7 @@
     <text x="636" y="198" fill="#64748B" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">DIRECTIVE</text>
     <text x="636" y="216" fill="#C7D2FE" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="600">Build durable systems. Release deliberately.</text>
     <text x="636" y="234" fill="#94A3B8" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"></text>
-
-    <!-- Active signals -->
-    <text x="636" y="240" fill="#64748B" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">ACTIVE</text>
-    <text x="636" y="258" fill="#94A3B8" font-size="11" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-      CurtainDrop · Cytoguard · WhisperNet
-    </text>
+>
   </g>
 
 </svg>
