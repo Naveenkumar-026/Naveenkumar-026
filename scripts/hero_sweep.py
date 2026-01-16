@@ -33,6 +33,12 @@ TIMEBASE = os.environ.get("TIMEBASE", "UTC")
 # One-line directive; keep it short (fits in one line).
 DIRECTIVE = os.environ.get("DIRECTIVE", "Build durable systems. Release deliberately.")
 
+# Comma-separated list shown as an aligned mini-list.
+ACTIVE_SIGNALS = os.environ.get(
+    "ACTIVE_SIGNALS",
+    "CurtainDrop, Cytoguard, WhisperNet",
+)
+
 # Optional: override marker frequency label and delta-f display
 MARKER_FREQ = os.environ.get("MARKER_FREQ", "38.2 kHz")
 DF_LABEL = os.environ.get("DF_LABEL", "+0.4 kHz")
@@ -88,7 +94,7 @@ def wrap_mono(text: str, max_chars: int) -> list[str]:
 
 def main() -> None:
     # Canvas (slightly taller than before to comfortably fit the snapshot)
-    W, H = 980, 320
+    W, H = 1000, 320
     PAD = 24
 
     now = datetime.datetime.utcnow()
