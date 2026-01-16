@@ -1,79 +1,116 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="290" viewBox="0 0 1200 290">
   <defs>
     <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="#0b0f14"/>
       <stop offset="1" stop-color="#070b10"/>
     </linearGradient>
-    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="3" result="b"/>
+
+    <!-- Heat fill -->
+    <linearGradient id="heat" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="55%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+
+    <!-- Subtle scanline texture -->
+    <pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="transparent"/>
+      <rect y="0" width="6" height="1" fill="#0a1220" opacity="0.35"/>
+    </pattern>
+
+    <filter id="heatGlow" x="-40%" y="-80%" width="200%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1 0 0 0 0
+                0 0.55 0 0 0
+                0 0 0.2 0 0
+                0 0 0 0.85 0" result="c"/>
       <feMerge>
-        <feMergeNode in="b"/>
+        <feMergeNode in="c"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
   </defs>
 
-  <rect x="0" y="0" width="1200" height="260" fill="url(#bg)"/>
-  <rect x="26" y="26" width="1148" height="208" rx="14" fill="#0f1622" stroke="#243244" opacity="0.98"/>
+  <rect x="0" y="0" width="1200" height="290" fill="url(#bg)"/>
+  <rect x="26" y="26" width="1148" height="238" rx="14" fill="#0f1622" stroke="#243244" opacity="0.98"/>
+  <rect x="26" y="26" width="1148" height="238" rx="14" fill="url(#scan)" opacity="0.35"/>
 
   <!-- Header -->
-  <text x="44" y="56" fill="#c9d4e5" font-size="14" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">OPERATING STACK // METER</text>
-  <text x="44" y="74" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-    Cyber Defense · Agent Systems · Low-Infra · Quantum · Long-Horizon
-  </text>
-  <text x="1156" y="56" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-15 23:54 UTC</text>
-  <text x="1156" y="74" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">user: Naveenkumar-026</text>
+  <text x="44" y="58" fill="#c9d4e5" font-size="14" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">OPERATOR STACK // HEAT BARS</text>
+  <text x="44" y="76" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Focus intensity · described primitives + measured levels</text>
 
-  <!-- Rows -->
+  <text x="1156" y="58" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-16 00:00 UTC</text>
+  <text x="1156" y="76" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">user: Naveenkumar-026</text>
 
-  <rect x="44" y="80" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="60" y="104" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Cyber Defense</text>
-  <text x="246" y="104" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— defensive architectures, response automation, hardening</text>
+  <rect x="44" y="82" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
-  <!-- Vertical level meter -->
-  <rect x="1156" y="84" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+  <text x="60" y="106" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Cyber Defense</text>
+  <text x="270" y="106" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— defensive architectures, response automation, hardening</text>
 
-  <rect x="1158" y="93" width="14" height="19" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
-  <text x="1146" y="104" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text>
+  <!-- Horizontal track -->
+  <rect x="822" y="94" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
-  <rect x="44" y="128" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="60" y="152" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Agent Systems</text>
-  <text x="246" y="152" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— orchestration, evaluation harnesses, safety rails</text>
+  <!-- Heat fill -->
+  <rect x="824" y="96" width="211" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <!-- Vertical level meter -->
-  <rect x="1156" y="132" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+  <!-- Value -->
+  <text x="1156" y="106" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">74</text>
 
-  <rect x="1158" y="140" width="14" height="20" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
-  <text x="1146" y="152" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">78</text>
+  <rect x="44" y="130" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
-  <rect x="44" y="176" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="60" y="200" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Low-Infra</text>
-  <text x="246" y="200" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— privacy-first, edge/off-grid constraints</text>
+  <text x="60" y="154" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Agent Systems</text>
+  <text x="270" y="154" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— orchestration, evaluation harnesses, safety rails</text>
 
-  <!-- Vertical level meter -->
-  <rect x="1156" y="180" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+  <!-- Horizontal track -->
+  <rect x="822" y="142" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
-  <rect x="1158" y="189" width="14" height="19" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
-  <text x="1146" y="200" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">74</text>
+  <!-- Heat fill -->
+  <rect x="824" y="144" width="223" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <rect x="44" y="224" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="60" y="248" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Quantum</text>
-  <text x="246" y="248" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— practical integration paths, disciplined learning</text>
+  <!-- Value -->
+  <text x="1156" y="154" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">78</text>
 
-  <!-- Vertical level meter -->
-  <rect x="1156" y="228" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+  <rect x="44" y="178" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
-  <rect x="1158" y="238" width="14" height="18" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
-  <text x="1146" y="248" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">70</text>
+  <text x="60" y="202" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Low-Infra</text>
+  <text x="270" y="202" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— privacy-first, edge/off-grid constraints</text>
 
-  <rect x="44" y="272" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="60" y="296" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Long-Horizon</text>
-  <text x="246" y="296" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— durable primitives before scale</text>
+  <!-- Horizontal track -->
+  <rect x="822" y="190" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
 
-  <!-- Vertical level meter -->
-  <rect x="1156" y="276" width="18" height="30" rx="5" fill="#0a111b" stroke="#1a2a3e"/>
+  <!-- Heat fill -->
+  <rect x="824" y="192" width="211" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
 
-  <rect x="1158" y="286" width="14" height="18" rx="3" fill="#22c55e" filter="url(#softGlow)"/>
-  <text x="1146" y="296" text-anchor="end" fill="#7f8ea3" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">73</text>
+  <!-- Value -->
+  <text x="1156" y="202" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">74</text>
+
+  <rect x="44" y="226" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+
+  <text x="60" y="250" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Quantum</text>
+  <text x="270" y="250" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— practical integration paths, disciplined learning</text>
+
+  <!-- Horizontal track -->
+  <rect x="822" y="238" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+
+  <!-- Heat fill -->
+  <rect x="824" y="240" width="200" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+
+  <!-- Value -->
+  <text x="1156" y="250" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">70</text>
+
+  <rect x="44" y="274" width="1112" height="38" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+
+  <text x="60" y="298" fill="#c9d4e5" font-size="13" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">Long-Horizon</text>
+  <text x="270" y="298" fill="#7f8ea3" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">— durable primitives before scale</text>
+
+  <!-- Horizontal track -->
+  <rect x="822" y="286" width="290" height="14" rx="7" fill="#08101a" stroke="#1a2a3e"/>
+
+  <!-- Heat fill -->
+  <rect x="824" y="288" width="208" height="10" rx="5" fill="url(#heat)" filter="url(#heatGlow)"/>
+
+  <!-- Value -->
+  <text x="1156" y="298" text-anchor="end" fill="#c9d4e5" font-size="12.5" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-weight="700">73</text>
 
 </svg>

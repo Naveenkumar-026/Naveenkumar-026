@@ -32,7 +32,7 @@
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">Security · Intelligence · Autonomy</text>
 
   <text x="954" y="70" text-anchor="end" fill="#6B7280" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-15 UTC</text>
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-01-16 UTC</text>
 
   <!-- Panel -->
   <rect x="26" y="88" width="928" height="126" rx="12" fill="url(#panelGrad)" stroke="#1F2937" stroke-width="1"/>
