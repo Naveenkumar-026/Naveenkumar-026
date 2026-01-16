@@ -158,12 +158,12 @@ def main() -> None:
 
     # Info layout helpers
     kv_left = info_x + 12
-    kv_mid = info_x + int(info_w * 0.60)
+    kv_mid = info_x + int(info_w * 0.52)
     kv_val_dx = 92
     kv_right_val_x = info_x + info_w - 12
     kv_row_h = 18
-
-    active_items = [s.strip() for s in (ACTIVE_SIGNALS or "").split(",") if s.strip()][:3]
+    kv_right_min_x = kv_mid + 72 
+    kv_right_fit = max(90, kv_right_val_x - kv_right_min_x)
 
     # Build a compact “signal packet” line derived from the stats
     packet = f"Peak {peak_db:.1f} dB · Noise {noise_db:.1f} dB · SNR {snr:.1f} dB"
@@ -286,7 +286,7 @@ def main() -> None:
       <text x="{kv_left + kv_val_dx}" y="{body_y + 46}" fill="{TEXT}">{esc(CALLSIGN)}</text>
 
       <text x="{kv_mid}" y="{body_y + 46}" fill="{DIM}">HANDLE</text>
-      <text x="{kv_right_val_x}" y="{body_y + 46}" text-anchor="end" fill="{TEXT}">{esc(HANDLE)}</text>
+      <text x="{kv_right_val_x}" y="{body_y + 46}" text-anchor="end" fill="{TEXT}" textLength="{kv_right_fit}" lengthAdjust="spacingAndGlyphs"> {esc(HANDLE)} </text>
 
       <text x="{kv_left}" y="{body_y + 46 + kv_row_h}" fill="{DIM}">MODE</text>
       <text x="{kv_left + kv_val_dx}" y="{body_y + 46 + kv_row_h}" fill="{TEXT}">{esc(MODE)}</text>
@@ -307,12 +307,7 @@ def main() -> None:
     <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 30}" fill="{DIM}" font-size="11" font-family="{FONT}">DIRECTIVE</text>
     <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 48}" fill="{TEXT}" font-size="12" font-family="{FONT}" font-weight="600">{esc(directive_lines[0])}</text>
     <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 66}" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc(directive_lines[1] if len(directive_lines) > 1 else "")}</text>
-
-    <!-- Active signals -->
-    <text x="{info_x + 12}" y="{body_y + body_h - 44}" fill="{DIM}" font-size="11" font-family="{FONT}">ACTIVE</text>
-    <text x="{info_x + 12}" y="{body_y + body_h - 26}" fill="{MUTED}" font-size="11" font-family="{FONT}">
-      {esc(" · ".join(active_items) if active_items else "—")}
-    </text>
+>
   </g>
 
 </svg>
