@@ -33,12 +33,6 @@ TIMEBASE = os.environ.get("TIMEBASE", "UTC")
 # One-line directive; keep it short (fits in one line).
 DIRECTIVE = os.environ.get("DIRECTIVE", "Build durable systems. Release deliberately.")
 
-# Comma-separated list shown as an aligned mini-list.
-ACTIVE_SIGNALS = os.environ.get(
-    "ACTIVE_SIGNALS",
-    "CurtainDrop, Cytoguard, WhisperNet",
-)
-
 # Optional: override marker frequency label and delta-f display
 MARKER_FREQ = os.environ.get("MARKER_FREQ", "38.2 kHz")
 DF_LABEL = os.environ.get("DF_LABEL", "+0.4 kHz")
