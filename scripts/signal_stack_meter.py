@@ -42,12 +42,16 @@ def main():
         ("Long-Horizon", "durable primitives before scale"),
     ]
 
-    # Canvas
-    W, H = 1200, 290
+    # Canvas (auto-sized so rows never clip)
+    W = 1200
     PAD = 26
     HEADER_H = 56
     ROW_H = 38
     ROW_GAP = 10
+    INNER_BOTTOM = 18
+
+    N = len(rows)
+    H = PAD * 2 + HEADER_H + (N * ROW_H) + ((N - 1) * ROW_GAP) + INNER_BOTTOM
 
     # Layout columns
     name_x = PAD + 34
@@ -111,25 +115,28 @@ def main():
 
     for i, ((name, desc), lvl) in enumerate(zip(rows, levels)):
         y = y0 + i * (ROW_H + ROW_GAP)
+        y_mid = y + (ROW_H // 2)
+        track_y = y_mid - (track_h // 2)
+        fill_y = track_y + 2
 
         # Row background
         svg += f'''
   <rect x="{PAD+18}" y="{y}" width="{W-2*PAD-36}" height="{ROW_H}" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
 
-  <text x="{name_x}" y="{y+24}" fill="{TEXT}" font-size="13" font-family="{FONT}" font-weight="700">{esc(name)}</text>
-  <text x="{desc_x}" y="{y+24}" fill="{MUTED}" font-size="12.5" font-family="{FONT}">— {esc(desc)}</text>
+  <text x="{name_x}" y="{y_mid}" dominant-baseline="middle" fill="{TEXT}" font-size="13" font-family="{FONT}" font-weight="700">{esc(name)}</text>
+  <text x="{desc_x}" y="{y_mid}" dominant-baseline="middle" fill="{MUTED}" font-size="12.5" font-family="{FONT}">— {esc(desc)}</text>
 
   <!-- Horizontal track -->
-  <rect x="{bar_x}" y="{y+12}" width="{bar_w}" height="{track_h}" rx="{track_r}" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="{bar_x}" y="{track_y}" width="{bar_w}" height="{track_h}" rx="{track_r}" fill="#08101a" stroke="#1a2a3e"/>
 '''
 
         fill_w = int((lvl / 100.0) * (bar_w - 4))
         svg += f'''
   <!-- Heat fill -->
-  <rect x="{bar_x+2}" y="{y+14}" width="{fill_w}" height="{track_h-4}" rx="{track_r-2}" fill="url(#heat)" filter="url(#heatGlow)"/>
+  <rect x="{bar_x+2}" y="{fill_y}" width="{fill_w}" height="{track_h-4}" rx="{track_r-2}" fill="url(#heat)" filter="url(#heatGlow)"/>
 
   <!-- Value -->
-  <text x="{num_x}" y="{y+24}" text-anchor="end" fill="{TEXT}" font-size="12.5" font-family="{FONT}" font-weight="700">{lvl}</text>
+  <text x="{num_x}" y="{y_mid}" dominant-baseline="middle" text-anchor="end" fill="{TEXT}" font-size="12.5" font-family="{FONT}" font-weight="700">{lvl}</text>
 '''
 
     svg += "\n</svg>\n"
