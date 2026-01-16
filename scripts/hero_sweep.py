@@ -1,254 +1,326 @@
-import os, math, datetime
+"""hero_sweep.py
 
+Generates assets/hero_sweep.svg for your GitHub profile README.
+
+Design goal:
+  "SPECTRUM CAPTURE // LIVE" should be *useful*, not just aesthetic.
+  This renders a two-column HUD card:
+    - Left: spectrum trace (synthetic but consistent)
+    - Right: aligned Live Ops Snapshot (operator, focus, build, computed signal stats)
+
+Customise via environment variables (see CONFIG section).
+"""
+
+from __future__ import annotations
+
+import datetime
+import math
+import os
+
+
+# =============================
+# CONFIG (set via env vars)
+# =============================
 OUT_PATH = os.environ.get("OUT_PATH", "assets/hero_sweep.svg")
 
-# GitHub dark canvas + your neon green
-BG = "#0D1117"
-PANEL = "#0B1220"
+CALLSIGN = os.environ.get("CALLSIGN", "SILENCIO")
+HANDLE = os.environ.get("HANDLE", os.environ.get("GH_USER", "Naveenkumar-026"))
+MODE = os.environ.get("MODE", "PUBLIC")
+STATUS = os.environ.get("STATUS", "ONLINE")
+BUILD_CHANNEL = os.environ.get("BUILD_CHANNEL", "MAIN")
+TIMEBASE = os.environ.get("TIMEBASE", "UTC")
+
+# One-line directive; keep it short (fits in one line).
+DIRECTIVE = os.environ.get("DIRECTIVE", "Build durable systems. Release deliberately.")
+
+# Comma-separated list shown as an aligned mini-list.
+ACTIVE_SIGNALS = os.environ.get(
+    "ACTIVE_SIGNALS",
+    "CurtainDrop, Cytoguard, WhisperNet",
+)
+
+# Optional: override marker frequency label and delta-f display
+MARKER_FREQ = os.environ.get("MARKER_FREQ", "38.2 kHz")
+DF_LABEL = os.environ.get("DF_LABEL", "+0.4 kHz")
+
+
+# =============================
+# THEME
+# =============================
+BG = "#0D1117"          # GitHub dark
+PANEL = "#0B1220"       # deep blue-black
+PANEL_2 = "#09101D"
 GRID = "#1F2937"
 GRID_SOFT = "#172033"
-TEXT = "#9CA3AF"
-MUTED = "#6B7280"
-ACCENT = "#22C55E"
+TEXT = "#C7D2FE"        # cool ink
+MUTED = "#94A3B8"       # slate
+DIM = "#64748B"         # dim slate
+ACCENT = "#22C55E"      # neon green
 ACCENT_DIM = "#16A34A"
 
-W, H = 980, 240
-PAD = 26
+FONT = "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+
 
 def esc(s: str) -> str:
-    return (s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
-             .replace('"',"&quot;").replace("'","&#39;"))
+    return (
+        str(s)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
 
-def clamp(x, a, b):
-    return a if x < a else b if x > b else x
 
-def pseudo(i: float) -> float:
-    # deterministic pseudo-noise in [0,1)
-    return math.fmod(math.sin(i * 12.9898 + 78.233) * 43758.5453, 1.0)
+def clamp(v: float, lo: float, hi: float) -> float:
+    return lo if v < lo else hi if v > hi else v
 
-def main():
-    now = datetime.datetime.utcnow().strftime("%Y-%m-%d UTC")
 
-    # Header text (professional intro line)
-    intro = "Signal acquired. Operator online."
-    title = "SPECTRUM CAPTURE // LIVE"
-    subtitle = "Security · Intelligence · Autonomy"
+def wrap_mono(text: str, max_chars: int) -> list[str]:
+    """Simple wrap tuned for monospace HUD lines."""
+    words = (text or "").split()
+    if not words:
+        return [""]
+    lines: list[str] = []
+    cur = words[0]
+    for w in words[1:]:
+        if len(cur) + 1 + len(w) <= max_chars:
+            cur += " " + w
+        else:
+            lines.append(cur)
+            cur = w
+    lines.append(cur)
+    return lines
 
-    callsign = "CALLSIGN: SILENCIO"
-    build = "BUILD CHANNEL: MAIN · MODE: PUBLIC"
 
-    # Plot frame
-    frame_y = PAD + 62
-    frame_h = H - frame_y - PAD
-    frame_x = PAD
-    frame_w = W - PAD * 2
+def main() -> None:
+    # Canvas (slightly taller than before to comfortably fit the snapshot)
+    W, H = 980, 280
+    PAD = 24
 
-    # Spectrum parameters (feel free to change labels)
-    f_left = "0 kHz"
-    f_mid = "24 kHz"
-    f_right = "48 kHz"
+    now = datetime.datetime.utcnow()
+    stamp = now.strftime("%Y-%m-%d %H:%M UTC")
 
-    db_top = "0 dB"
-    db_mid = "-45 dB"
-    db_bot = "-90 dB"
+    # Deterministic pseudo-spectrum (consistent shape; reads as a live sweep)
+    n = 160
+    xs = [i / (n - 1) for i in range(n)]
+    base = []
+    for x in xs:
+        # 3 peaks
+        p1 = math.exp(-((x - 0.18) / 0.045) ** 2)
+        p2 = 0.72 * math.exp(-((x - 0.56) / 0.055) ** 2)
+        p3 = 1.05 * math.exp(-((x - 0.83) / 0.030) ** 2)
+        # subtle floor ripple
+        ripple = 0.07 * math.sin(18.0 * x) + 0.04 * math.sin(43.0 * x)
+        v = 0.14 + 0.62 * (0.55 * p1 + 0.65 * p2 + 0.9 * p3) + ripple
+        base.append(clamp(v, 0.06, 0.98))
 
-    # Generate a realistic noise floor + peaks (deterministic)
-    N = 220
-    xs = []
-    ys = []
-    # baseline noise floor (in dB, negative)
-    base = -72.0
-    for i in range(N):
-        t = i / (N - 1)
-        x = frame_x + t * frame_w
+    peak_i = max(range(n), key=lambda i: base[i])
+    peak_v = base[peak_i]
 
-        # shaped noise floor + slight slope + ripple
-        nf = base + (t - 0.5) * 6.0
-        nf += math.sin(t * 9.0) * 1.6
-        nf += (pseudo(i * 0.45) - 0.5) * 1.2
+    # Synthetic dB stats (stable + plausible)
+    peak_db = -28.0 + (peak_v - 0.6) * 8.0
+    noise_db = -72.0 + 1.4 * math.sin(3.0)
+    snr = peak_db - noise_db
 
-        # add a few narrowband peaks like an FFT capture
-        def peak(center, width, height):
-            return height * math.exp(-((t - center) ** 2) / (2 * width ** 2))
+    # Panel geometry
+    panel_x, panel_y = PAD, PAD
+    panel_w, panel_h = W - 2 * PAD, H - 2 * PAD
+    header_h = 52
+    body_x = panel_x + 14
+    body_y = panel_y + header_h + 10
+    body_w = panel_w - 28
+    body_h = panel_h - header_h - 22
 
-        p = 0.0
-        p += peak(0.18, 0.016, 22.0)
-        p += peak(0.52, 0.022, 15.0)
-        p += peak(0.80, 0.014, 26.0)
+    # Two-column split
+    gap = 14
+    chart_w = int(body_w * 0.62)
+    info_w = body_w - chart_w - gap
+    chart_x = body_x
+    info_x = body_x + chart_w + gap
 
-        db = nf + p  # still negative but with peaks lifting
+    # Chart frame inside the left column
+    frame_x, frame_y = chart_x, body_y
+    frame_w, frame_h = chart_w, body_h
+    # Reserve a little space at the bottom for freq labels
+    label_pad = 22
+    plot_h = frame_h - label_pad
 
-        # map dB (-90..0) to y (bottom..top)
-        db = clamp(db, -90.0, 0.0)
-        y = frame_y + (1.0 - ((db + 90.0) / 90.0)) * frame_h
+    # Map to points
+    pts = []
+    for i, v in enumerate(base):
+        px = frame_x + xs[i] * frame_w
+        py = frame_y + (1.0 - v) * (plot_h - 12) + 6
+        pts.append(f"{px:.2f},{py:.2f}")
+    pts_str = " ".join(pts)
 
-        xs.append(x)
-        ys.append(y)
+    peak_x = frame_x + xs[peak_i] * frame_w
+    peak_y = frame_y + (1.0 - peak_v) * (plot_h - 12) + 6
 
-    # Light smoothing to reduce harsh jaggedness (keeps peaks sharp)
-    ys2 = ys[:]
-    for i in range(2, N - 2):
-        ys2[i] = (ys[i-2]*0.08 + ys[i-1]*0.22 + ys[i]*0.40 + ys[i+1]*0.22 + ys[i+2]*0.08)
-    ys = ys2
-    pts = " ".join(f"{xs[i]:.2f},{ys[i]:.2f}" for i in range(N))
+    # Info layout helpers
+    kv_left = info_x + 10
+    kv_mid = info_x + int(info_w * 0.48)
+    kv_val_dx = 98
+    kv_row_h = 18
 
-    # Compute a simple peak marker (for readout)
-    min_y = min(ys)
-    peak_idx = ys.index(min_y)
-    peak_x = xs[peak_idx]
-    peak_y = ys[peak_idx]
+    active_items = [s.strip() for s in (ACTIVE_SIGNALS or "").split(",") if s.strip()][:3]
 
-    # Readout values (synthetic but plausible)
-    peak_db = -28.0
-    noise_db = -72.0
-    snr = 44.0
-    marker_freq = "38.2 kHz"
-    df = "+0.4 kHz"
+    # Build a compact “signal packet” line derived from the stats
+    packet = f"Peak {peak_db:.1f} dB · Noise {noise_db:.1f} dB · SNR {snr:.1f} dB"
 
-    # Waterfall: render stripes and animate vertical translation
-    # (This is the main “realism” cue.)
-    wf_h = 48
-    wf_y = frame_y + frame_h - wf_h
-    rows = 18
-    cols = 120
-
-    # Precompute small rectangles for waterfall intensity
-    wf_cells = []
-    cell_w = frame_w / cols
-    cell_h = wf_h / rows
-
-    for r in range(rows):
-        for c in range(cols):
-            t = c / (cols - 1)
-            # intensity derived from spectrum peaks + noise
-            intensity = 0.06
-            intensity += 0.25 * math.exp(-((t - 0.18) ** 2) / (2 * 0.020 ** 2))
-            intensity += 0.18 * math.exp(-((t - 0.52) ** 2) / (2 * 0.028 ** 2))
-            intensity += 0.30 * math.exp(-((t - 0.80) ** 2) / (2 * 0.018 ** 2))
-            # time variation per row (deterministic)
-            intensity += (pseudo(r * 9.1 + c * 0.17) - 0.5) * 0.06
-            intensity = clamp(intensity, 0.02, 0.32)
-
-            x = frame_x + c * cell_w
-            y = wf_y + r * cell_h
-
-            wf_cells.append(
-                f'<rect x="{x:.2f}" y="{y:.2f}" width="{cell_w+0.10:.2f}" height="{cell_h+0.10:.2f}" '
-                f'fill="{ACCENT}" opacity="{intensity:.3f}"/>'
-            )
+    # Wrap directive and keep it clean
+    directive_lines = wrap_mono(DIRECTIVE, 44)[:2]
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
   <defs>
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="1.6" result="b"/>
+    <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="{PANEL}"/>
+      <stop offset="1" stop-color="{PANEL_2}"/>
+    </linearGradient>
+    <linearGradient id="specFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="{ACCENT}" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="{ACCENT}" stop-opacity="0.00"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
       <feMerge>
         <feMergeNode in="b"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-
-    <linearGradient id="panelGrad" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="{PANEL}" stop-opacity="0.95"/>
-      <stop offset="1" stop-color="{BG}" stop-opacity="1"/>
-    </linearGradient>
-
-    <linearGradient id="specFill" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="{ACCENT}" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="{ACCENT}" stop-opacity="0.00"/>
-    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="g"/>
+      <feMerge>
+        <feMergeNode in="g"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
-  <rect width="{W}" height="{H}" fill="{BG}"/>
+  <!-- Background -->
+  <rect x="0" y="0" width="{W}" height="{H}" fill="{BG}"/>
 
-  <!-- Intro / Title -->
-  <text x="{PAD}" y="28" fill="{TEXT}" font-size="14"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(intro)}</text>
+  <!-- Soft outer aura -->
+  <rect x="{panel_x}" y="{panel_y}" width="{panel_w}" height="{panel_h}" rx="18" fill="{PANEL}" opacity="0.0" filter="url(#soft)"/>
 
-  <text x="{PAD}" y="52" fill="{ACCENT}" font-size="18" letter-spacing="1.2"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(title)}</text>
+  <!-- Main card -->
+  <rect x="{panel_x}" y="{panel_y}" width="{panel_w}" height="{panel_h}" rx="18" fill="url(#panelGrad)" stroke="{GRID}" stroke-width="1"/>
 
-  <text x="{PAD}" y="70" fill="{TEXT}" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(subtitle)}</text>
+  <!-- Header -->
+  <text x="{panel_x + 18}" y="{panel_y + 26}" fill="{DIM}" font-size="12" font-family="{FONT}">
+    Signal acquired. Operator online.
+  </text>
+  <text x="{panel_x + 18}" y="{panel_y + 46}" fill="{ACCENT}" font-size="18" font-family="{FONT}" font-weight="700" letter-spacing="1">
+    SPECTRUM CAPTURE // LIVE
+  </text>
+  <text x="{panel_x + 18}" y="{panel_y + 66}" fill="{MUTED}" font-size="12" font-family="{FONT}">
+    Security · Intelligence · Autonomy
+  </text>
 
-  <text x="{W-PAD}" y="70" text-anchor="end" fill="{MUTED}" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(now)}</text>
+  <text x="{panel_x + panel_w - 18}" y="{panel_y + 28}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">
+    {esc(stamp)}
+  </text>
+  <text x="{panel_x + panel_w - 18}" y="{panel_y + 46}" text-anchor="end" fill="{DIM}" font-size="11" font-family="{FONT}">
+    BUILD {esc(BUILD_CHANNEL)}  ·  MODE {esc(MODE)}  ·  STATUS {esc(STATUS)}
+  </text>
 
-  <!-- Panel -->
-  <rect x="{frame_x}" y="{frame_y}" width="{frame_w}" height="{frame_h}" rx="12" fill="url(#panelGrad)" stroke="{GRID}" stroke-width="1"/>
+  <!-- Divider under header -->
+  <line x1="{panel_x + 14}" y1="{panel_y + header_h}" x2="{panel_x + panel_w - 14}" y2="{panel_y + header_h}" stroke="{GRID_SOFT}" stroke-width="1"/>
 
-  <!-- Grid (vertical freq, horizontal dB) -->
-  {"".join([f'<line x1="{frame_x + frame_w*k/8:.2f}" y1="{frame_y}" x2="{frame_x + frame_w*k/8:.2f}" y2="{frame_y + frame_h}" stroke="{GRID_SOFT}" stroke-width="1" opacity="0.55"/>'
-            for k in range(1, 8)])}
+  <!-- LEFT: Spectrum frame -->
+  <g>
+    <rect x="{frame_x}" y="{frame_y}" width="{frame_w}" height="{frame_h}" rx="14" fill="{BG}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
 
-  {"".join([f'<line x1="{frame_x}" y1="{frame_y + frame_h*k/6:.2f}" x2="{frame_x + frame_w}" y2="{frame_y + frame_h*k/6:.2f}" stroke="{GRID_SOFT}" stroke-width="1" opacity="0.55"/>'
-            for k in range(1, 6)])}
+    <!-- grid -->
+    <g opacity="0.60">
+      {''.join([f'<line x1="{frame_x + (frame_w/10)*i:.2f}" y1="{frame_y}" x2="{frame_x + (frame_w/10)*i:.2f}" y2="{frame_y + plot_h:.2f}" stroke="{GRID_SOFT}" stroke-width="1"/>' for i in range(1,10)])}
+      {''.join([f'<line x1="{frame_x}" y1="{frame_y + (plot_h/5)*j:.2f}" x2="{frame_x + frame_w}" y2="{frame_y + (plot_h/5)*j:.2f}" stroke="{GRID_SOFT}" stroke-width="1"/>' for j in range(1,5)])}
+    </g>
 
-  <!-- Axis labels -->
-  <!-- dB labels (kept inside plot area, aligned) -->
-  <text x="{frame_x + 8}" y="{frame_y + 14}" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_top)}</text>
-  <text x="{frame_x + 8}" y="{frame_y + frame_h/2 + 4:.2f}" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_mid)}</text>
-  <text x="{frame_x + 8}" y="{frame_y + frame_h - 8:.2f}" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(db_bot)}</text>
+    <!-- axis labels -->
+    <text x="{frame_x + 10}" y="{frame_y + 16}" fill="{DIM}" font-size="11" font-family="{FONT}">0 dB</text>
+    <text x="{frame_x + 10}" y="{frame_y + plot_h/2:.2f}" fill="{DIM}" font-size="11" font-family="{FONT}">-45 dB</text>
+    <text x="{frame_x + 10}" y="{frame_y + plot_h - 6:.2f}" fill="{DIM}" font-size="11" font-family="{FONT}">-90 dB</text>
 
-  <text x="{frame_x}" y="{frame_y + frame_h + 18}" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(f_left)}</text>
-  <text x="{frame_x + frame_w/2:.2f}" y="{frame_y + frame_h + 18}" text-anchor="middle" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(f_mid)}</text>
-  <text x="{frame_x + frame_w}" y="{frame_y + frame_h + 18}" text-anchor="end" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(f_right)}</text>
+    <!-- spectrum fill + trace -->
+    <polygon points="{frame_x:.2f},{frame_y + plot_h:.2f} {pts_str} {frame_x + frame_w:.2f},{frame_y + plot_h:.2f}" fill="url(#specFill)" opacity="0.75"/>
+    <polyline points="{pts_str}" fill="none" stroke="{ACCENT}" stroke-width="2.3" filter="url(#glow)" opacity="0.78"/>
 
-  <!-- Waterfall (animated scroll) -->
-  <clipPath id="wfClip">
-    <rect x="{frame_x}" y="{wf_y}" width="{frame_w}" height="{wf_h}" rx="10"/>
-  </clipPath>
+    <!-- peak marker -->
+    <line x1="{peak_x:.2f}" y1="{frame_y}" x2="{peak_x:.2f}" y2="{frame_y + plot_h:.2f}" stroke="{ACCENT_DIM}" stroke-width="1.4" opacity="0.60" stroke-dasharray="4 6"/>
+    <circle cx="{peak_x:.2f}" cy="{peak_y:.2f}" r="3.4" fill="{ACCENT}" opacity="0.92"/>
 
-  <g clip-path="url(#wfClip)" opacity="0.78">
-    <g>
-      {"".join(wf_cells)}
-      <animateTransform attributeName="transform" type="translate"
-                        from="0 0" to="0 {cell_h:.2f}"
-                        dur="1.2s" repeatCount="indefinite"/>
+    <!-- frequency ticks (bottom) -->
+    <text x="{frame_x + 6}" y="{frame_y + frame_h - 6}" fill="{DIM}" font-size="11" font-family="{FONT}">0 kHz</text>
+    <text x="{frame_x + frame_w/2:.2f}" y="{frame_y + frame_h - 6}" text-anchor="middle" fill="{DIM}" font-size="11" font-family="{FONT}">24 kHz</text>
+    <text x="{frame_x + frame_w - 6}" y="{frame_y + frame_h - 6}" text-anchor="end" fill="{DIM}" font-size="11" font-family="{FONT}">48 kHz</text>
+
+    <!-- marker readout pill (top-right inside chart) -->
+    <g opacity="0.94">
+      <rect x="{frame_x + frame_w - 300}" y="{frame_y + 10}" width="{286}" height="{44}" rx="10" fill="{BG}" opacity="0.55" stroke="{GRID_SOFT}" stroke-width="1"/>
+      <text x="{frame_x + frame_w - 18}" y="{frame_y + 28}" text-anchor="end" fill="{TEXT}" font-size="11" font-family="{FONT}">
+        MKR {esc(MARKER_FREQ)}  Δf {esc(DF_LABEL)}
+      </text>
+      <text x="{frame_x + frame_w - 18}" y="{frame_y + 44}" text-anchor="end" fill="{MUTED}" font-size="11" font-family="{FONT}">
+        {esc(packet)}
+      </text>
     </g>
   </g>
 
-  <!-- Spectrum fill + trace -->
-  <polygon points="{frame_x:.2f},{frame_y + frame_h:.2f} {pts} {frame_x + frame_w:.2f},{frame_y + frame_h:.2f}"
-           fill="url(#specFill)" opacity="0.55"/>
+  <!-- RIGHT: Live Ops Snapshot -->
+  <g>
+    <rect x="{info_x}" y="{body_y}" width="{info_w}" height="{body_h}" rx="14" fill="{BG}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
 
-  <polyline points="{pts}" fill="none" stroke="{ACCENT}" stroke-width="2.2" filter="url(#glow)" opacity="0.62"/>
-
-  <!-- Peak marker -->
-  <line x1="{peak_x:.2f}" y1="{frame_y}" x2="{peak_x:.2f}" y2="{frame_y + frame_h}" stroke="{ACCENT_DIM}" stroke-width="1.4" opacity="0.65" stroke-dasharray="4 6"/>
-  <circle cx="{peak_x:.2f}" cy="{peak_y:.2f}" r="3.2" fill="{ACCENT}" opacity="0.85"/>
-
-  <!-- HUD box (top-right) -->
-  <g opacity="0.92">
-    <rect x="{frame_x + frame_w - 290}" y="{frame_y + 10}" width="276" height="44"
-          rx="8" fill="{BG}" opacity="0.55" stroke="{GRID}" stroke-width="1"/>
-    <text x="{frame_x + frame_w - 18}" y="{frame_y + 28}" text-anchor="end" fill="{TEXT}" font-size="11"
-          font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-      MKR {esc(marker_freq)}  Δf {esc(df)}
+    <text x="{info_x + 12}" y="{body_y + 20}" fill="{TEXT}" font-size="12" font-family="{FONT}" font-weight="700" letter-spacing="1">
+      LIVE OPS SNAPSHOT
     </text>
-    <text x="{frame_x + frame_w - 18}" y="{frame_y + 44}" text-anchor="end" fill="{MUTED}" font-size="11"
-          font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
-      Peak {peak_db:.1f} dB   Noise {noise_db:.1f} dB   SNR {snr:.1f} dB
+    <text x="{info_x + info_w - 12}" y="{body_y + 20}" text-anchor="end" fill="{DIM}" font-size="11" font-family="{FONT}">
+      {esc(TIMEBASE)}
+    </text>
+
+    <line x1="{info_x + 10}" y1="{body_y + 28}" x2="{info_x + info_w - 10}" y2="{body_y + 28}" stroke="{GRID_SOFT}" stroke-width="1"/>
+
+    <!-- key/values (two columns) -->
+    <g font-family="{FONT}" font-size="11">
+      <text x="{kv_left}" y="{body_y + 46}" fill="{DIM}">CALLSIGN</text>
+      <text x="{kv_left + kv_val_dx}" y="{body_y + 46}" fill="{TEXT}">{esc(CALLSIGN)}</text>
+
+      <text x="{kv_mid}" y="{body_y + 46}" fill="{DIM}">HANDLE</text>
+      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46}" fill="{TEXT}">{esc(HANDLE)}</text>
+
+      <text x="{kv_left}" y="{body_y + 46 + kv_row_h}" fill="{DIM}">MODE</text>
+      <text x="{kv_left + kv_val_dx}" y="{body_y + 46 + kv_row_h}" fill="{TEXT}">{esc(MODE)}</text>
+
+      <text x="{kv_mid}" y="{body_y + 46 + kv_row_h}" fill="{DIM}">STATUS</text>
+      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46 + kv_row_h}" fill="{TEXT}">{esc(STATUS)}</text>
+
+      <text x="{kv_left}" y="{body_y + 46 + 2*kv_row_h}" fill="{DIM}">BUILD</text>
+      <text x="{kv_left + kv_val_dx}" y="{body_y + 46 + 2*kv_row_h}" fill="{TEXT}">{esc(BUILD_CHANNEL)}</text>
+
+      <text x="{kv_mid}" y="{body_y + 46 + 2*kv_row_h}" fill="{DIM}">MARKER</text>
+      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46 + 2*kv_row_h}" fill="{TEXT}">{esc(MARKER_FREQ)}</text>
+    </g>
+
+    <line x1="{info_x + 10}" y1="{body_y + 46 + 2*kv_row_h + 10}" x2="{info_x + info_w - 10}" y2="{body_y + 46 + 2*kv_row_h + 10}" stroke="{GRID_SOFT}" stroke-width="1"/>
+
+    <!-- Directive -->
+    <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 30}" fill="{DIM}" font-size="11" font-family="{FONT}">DIRECTIVE</text>
+    <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 48}" fill="{TEXT}" font-size="12" font-family="{FONT}" font-weight="600">{esc(directive_lines[0])}</text>
+    <text x="{info_x + 12}" y="{body_y + 46 + 2*kv_row_h + 66}" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc(directive_lines[1] if len(directive_lines) > 1 else "")}</text>
+
+    <!-- Active signals -->
+    <text x="{info_x + 12}" y="{body_y + body_h - 44}" fill="{DIM}" font-size="11" font-family="{FONT}">ACTIVE</text>
+    <text x="{info_x + 12}" y="{body_y + body_h - 26}" fill="{MUTED}" font-size="11" font-family="{FONT}">
+      {esc(" · ".join(active_items) if active_items else "—")}
     </text>
   </g>
 
-  <!-- Footer identity (subtle, personal) -->
-  <text x="{PAD}" y="{H-12}" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(callsign)}</text>
-
-  <text x="{W-PAD}" y="{H-12}" text-anchor="end" fill="{MUTED}" font-size="11"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">{esc(build)}</text>
-
 </svg>
 '''
+
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(svg)
+
 
 if __name__ == "__main__":
     main()
