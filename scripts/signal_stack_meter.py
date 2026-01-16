@@ -3,14 +3,17 @@ import os
 import datetime as dt
 from html import escape as esc
 
-# Palette tuned to your existing HUD style
+# Theme palette (dark HUD + heat bars)
 BG = "#0b0f14"
 PANEL = "#0f1622"
 STROKE = "#243244"
 MUTED = "#7f8ea3"
 TEXT = "#c9d4e5"
-GREEN = "#22c55e"
-GLOW = "#1faa55"
+
+# Heat gradient (orange -> red) tuned to your theme
+HEAT_L = "#f59e0b"  # amber
+HEAT_M = "#f97316"  # orange
+HEAT_R = "#ef4444"  # red
 
 FONT = "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
 
@@ -39,23 +42,22 @@ def main():
         ("Long-Horizon", "durable primitives before scale"),
     ]
 
-    W, H = 1200, 260
+    # Canvas
+    W, H = 1200, 290
     PAD = 26
-    HEADER_H = 54
+    HEADER_H = 56
     ROW_H = 38
     ROW_GAP = 10
 
-    # Meter geometry
-    meter_w = 18
-    meter_h = 30
-    meter_r = 5
-
-    # Text column widths
-    name_w = 220
-    # description uses remaining width
-    right_pad = PAD
-    meter_x = W - PAD - meter_w
-    desc_x = PAD + name_w
+    # Layout columns
+    name_x = PAD + 34
+    name_w = 210
+    desc_x = name_x + name_w
+    # Right side bar area
+    bar_w = 290
+    num_w = 44
+    bar_x = W - PAD - 18 - num_w - bar_w
+    num_x = W - PAD - 18
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
   <defs>
@@ -63,10 +65,29 @@ def main():
       <stop offset="0" stop-color="{BG}"/>
       <stop offset="1" stop-color="#070b10"/>
     </linearGradient>
-    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="3" result="b"/>
+
+    <!-- Heat fill -->
+    <linearGradient id="heat" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="{HEAT_L}"/>
+      <stop offset="55%" stop-color="{HEAT_M}"/>
+      <stop offset="100%" stop-color="{HEAT_R}"/>
+    </linearGradient>
+
+    <!-- Subtle scanline texture -->
+    <pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="transparent"/>
+      <rect y="0" width="6" height="1" fill="#0a1220" opacity="0.35"/>
+    </pattern>
+
+    <filter id="heatGlow" x="-40%" y="-80%" width="200%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="1 0 0 0 0
+                0 0.55 0 0 0
+                0 0 0.2 0 0
+                0 0 0 0.85 0" result="c"/>
       <feMerge>
-        <feMergeNode in="b"/>
+        <feMergeNode in="c"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
@@ -74,39 +95,41 @@ def main():
 
   <rect x="0" y="0" width="{W}" height="{H}" fill="url(#bg)"/>
   <rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" rx="14" fill="{PANEL}" stroke="{STROKE}" opacity="0.98"/>
+  <rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" rx="14" fill="url(#scan)" opacity="0.35"/>
 
   <!-- Header -->
-  <text x="{PAD+18}" y="{PAD+30}" fill="{TEXT}" font-size="14" font-family="{FONT}" font-weight="700">OPERATING STACK // METER</text>
-  <text x="{PAD+18}" y="{PAD+48}" fill="{MUTED}" font-size="12" font-family="{FONT}">
-    {esc("Cyber Defense · Agent Systems · Low-Infra · Quantum · Long-Horizon")}
-  </text>
-  <text x="{W-PAD-18}" y="{PAD+30}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc(now_utc())}</text>
-  <text x="{W-PAD-18}" y="{PAD+48}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">user: {esc(user)}</text>
+  <text x="{PAD+18}" y="{PAD+32}" fill="{TEXT}" font-size="14" font-family="{FONT}" font-weight="700">OPERATOR STACK // HEAT BARS</text>
+  <text x="{PAD+18}" y="{PAD+50}" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc("Focus intensity · described primitives + measured levels")}</text>
 
-  <!-- Rows -->
+  <text x="{W-PAD-18}" y="{PAD+32}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc(now_utc())}</text>
+  <text x="{W-PAD-18}" y="{PAD+50}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">user: {esc(user)}</text>
 '''
 
     y0 = PAD + HEADER_H
+    track_h = 14
+    track_r = 7
+
     for i, ((name, desc), lvl) in enumerate(zip(rows, levels)):
         y = y0 + i * (ROW_H + ROW_GAP)
 
-        # Row container (subtle)
+        # Row background
         svg += f'''
   <rect x="{PAD+18}" y="{y}" width="{W-2*PAD-36}" height="{ROW_H}" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
-  <text x="{PAD+34}" y="{y+24}" fill="{TEXT}" font-size="13" font-family="{FONT}" font-weight="700">{esc(name)}</text>
+
+  <text x="{name_x}" y="{y+24}" fill="{TEXT}" font-size="13" font-family="{FONT}" font-weight="700">{esc(name)}</text>
   <text x="{desc_x}" y="{y+24}" fill="{MUTED}" font-size="12.5" font-family="{FONT}">— {esc(desc)}</text>
 
-  <!-- Vertical level meter -->
-  <rect x="{meter_x}" y="{y+4}" width="{meter_w}" height="{meter_h}" rx="{meter_r}" fill="#0a111b" stroke="#1a2a3e"/>
+  <!-- Horizontal track -->
+  <rect x="{bar_x}" y="{y+12}" width="{bar_w}" height="{track_h}" rx="{track_r}" fill="#08101a" stroke="#1a2a3e"/>
 '''
 
-        # Fill height
-        fill_h = int((lvl / 100.0) * (meter_h - 4))
-        fill_y = (y + 4) + (meter_h - 2) - fill_h
-
+        fill_w = int((lvl / 100.0) * (bar_w - 4))
         svg += f'''
-  <rect x="{meter_x+2}" y="{fill_y}" width="{meter_w-4}" height="{fill_h}" rx="{meter_r-2}" fill="{GREEN}" filter="url(#softGlow)"/>
-  <text x="{meter_x-10}" y="{y+24}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">{lvl}</text>
+  <!-- Heat fill -->
+  <rect x="{bar_x+2}" y="{y+14}" width="{fill_w}" height="{track_h-4}" rx="{track_r-2}" fill="url(#heat)" filter="url(#heatGlow)"/>
+
+  <!-- Value -->
+  <text x="{num_x}" y="{y+24}" text-anchor="end" fill="{TEXT}" font-size="12.5" font-family="{FONT}" font-weight="700">{lvl}</text>
 '''
 
     svg += "\n</svg>\n"
