@@ -94,7 +94,7 @@ def wrap_mono(text: str, max_chars: int) -> list[str]:
 
 def main() -> None:
     # Canvas (slightly taller than before to comfortably fit the snapshot)
-    W, H = 980, 280
+    W, H = 980, 320
     PAD = 24
 
     now = datetime.datetime.utcnow()
@@ -157,9 +157,10 @@ def main() -> None:
     peak_y = frame_y + (1.0 - peak_v) * (plot_h - 12) + 6
 
     # Info layout helpers
-    kv_left = info_x + 10
-    kv_mid = info_x + int(info_w * 0.48)
-    kv_val_dx = 98
+    kv_left = info_x + 12
+    kv_mid = info_x + int(info_w * 0.60)
+    kv_val_dx = 92
+    kv_right_val_x = info_x + info_w - 12
     kv_row_h = 18
 
     active_items = [s.strip() for s in (ACTIVE_SIGNALS or "").split(",") if s.strip()][:3]
@@ -169,7 +170,7 @@ def main() -> None:
 
     # Wrap directive and keep it clean
     directive_lines = wrap_mono(DIRECTIVE, 44)[:2]
-
+    
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
   <defs>
     <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
@@ -285,19 +286,19 @@ def main() -> None:
       <text x="{kv_left + kv_val_dx}" y="{body_y + 46}" fill="{TEXT}">{esc(CALLSIGN)}</text>
 
       <text x="{kv_mid}" y="{body_y + 46}" fill="{DIM}">HANDLE</text>
-      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46}" fill="{TEXT}">{esc(HANDLE)}</text>
+      <text x="{kv_right_val_x}" y="{body_y + 46}" text-anchor="end" fill="{TEXT}">{esc(HANDLE)}</text>
 
       <text x="{kv_left}" y="{body_y + 46 + kv_row_h}" fill="{DIM}">MODE</text>
       <text x="{kv_left + kv_val_dx}" y="{body_y + 46 + kv_row_h}" fill="{TEXT}">{esc(MODE)}</text>
 
       <text x="{kv_mid}" y="{body_y + 46 + kv_row_h}" fill="{DIM}">STATUS</text>
-      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46 + kv_row_h}" fill="{TEXT}">{esc(STATUS)}</text>
+      <text x="{kv_right_val_x}" y="{body_y + 46 + kv_row_h}" text-anchor="end" fill="{TEXT}">{esc(STATUS)}</text>
 
       <text x="{kv_left}" y="{body_y + 46 + 2*kv_row_h}" fill="{DIM}">BUILD</text>
       <text x="{kv_left + kv_val_dx}" y="{body_y + 46 + 2*kv_row_h}" fill="{TEXT}">{esc(BUILD_CHANNEL)}</text>
 
       <text x="{kv_mid}" y="{body_y + 46 + 2*kv_row_h}" fill="{DIM}">MARKER</text>
-      <text x="{kv_mid + kv_val_dx}" y="{body_y + 46 + 2*kv_row_h}" fill="{TEXT}">{esc(MARKER_FREQ)}</text>
+      <text x="{kv_right_val_x}" y="{body_y + 46 + 2*kv_row_h}" text-anchor="end" fill="{TEXT}">{esc(MARKER_FREQ)}</text>
     </g>
 
     <line x1="{info_x + 10}" y1="{body_y + 46 + 2*kv_row_h + 10}" x2="{info_x + info_w - 10}" y2="{body_y + 46 + 2*kv_row_h + 10}" stroke="{GRID_SOFT}" stroke-width="1"/>
