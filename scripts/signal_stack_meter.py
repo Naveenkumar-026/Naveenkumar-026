@@ -98,14 +98,12 @@ def main():
   </defs>
 
   <rect x="0" y="0" width="{W}" height="{H}" fill="url(#bg)"/>
-  <rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" rx="14" fill="{PANEL}" stroke="{STROKE}" opacity="0.98"/>
-  <rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" rx="14" fill="url(#scan)" opacity="0.35"/>
+  <rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" rx="14" fill="{PANEL}" opacity="0.98"/>
 
   <!-- Header -->
   <text x="{PAD+18}" y="{PAD+32}" fill="{TEXT}" font-size="14" font-family="{FONT}" font-weight="700">OPERATOR STACK // HEAT BARS</text>
   <text x="{PAD+18}" y="{PAD+50}" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc("Focus intensity · described primitives + measured levels")}</text>
 
-  <text x="{W-PAD-18}" y="{PAD+32}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">{esc(now_utc())}</text>
   <text x="{W-PAD-18}" y="{PAD+50}" text-anchor="end" fill="{MUTED}" font-size="12" font-family="{FONT}">user: {esc(user)}</text>
 '''
 
