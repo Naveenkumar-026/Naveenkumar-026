@@ -67,7 +67,7 @@ def main():
   <defs>
     <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="{BG}"/>
-      <stop offset="1" stop-color="#070b10"/>
+      <stop offset="1" stop-color="#000000"/>
     </linearGradient>
 
     <!-- Heat fill -->
