@@ -1,11 +1,4 @@
 <img src="./assets/eye1.gif" width="900" alt="Eye animation" />
-<div align="left">
-
-<p align="left">
-  <samp>
-    OPERATOR // SILENCIO &nbsp;·&nbsp; HANDLE: Naveenkumar-026 &nbsp;·&nbsp; MODE: PUBLIC &nbsp;·&nbsp; STATUS: ONLINE
-  </samp>
-</p>
 
 <!-- Stealth motion header (italic via font variant) -->
 <p align="left">
