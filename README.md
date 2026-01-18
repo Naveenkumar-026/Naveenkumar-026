@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="./assets/eye.gif" width="600" alt="Eye animation" style="border-radius:18px; display:block;" />
+  <span style="display:inline-block; border-radius:18px; overflow:hidden;">
+    <img src="./assets/eye.gif" width="600" alt="Eye animation" style="display:block;" />
+  </span>
 </p>
 
 <!-- Stealth motion header (italic via font variant) -->
