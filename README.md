@@ -1,4 +1,4 @@
-<img src="assets/aeterna_eye_hq.gif" width="900" />
+<img src="assets/eye.gif" width="900" />
 
 <div align="left">
 
