@@ -1,3 +1,5 @@
+<img src="assets/aeterna_eye_hq.gif" width="900" />
+
 <div align="left">
 
 <p align="left">
