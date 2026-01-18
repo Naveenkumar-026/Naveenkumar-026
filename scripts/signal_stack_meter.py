@@ -80,7 +80,7 @@ def main():
     <!-- Subtle scanline texture -->
     <pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse">
       <rect width="6" height="6" fill="transparent"/>
-      <rect y="0" width="6" height="1" fill="#0a1220" opacity="0.35"/>
+      <rect y="0" width="6" height="1" fill="#000000" opacity="0.35"/>
     </pattern>
 
     <filter id="heatGlow" x="-40%" y="-80%" width="200%" height="260%">
@@ -121,13 +121,13 @@ def main():
 
         # Row background
         svg += f'''
-  <rect x="{PAD+18}" y="{y}" width="{W-2*PAD-36}" height="{ROW_H}" rx="10" fill="#0b1220" stroke="#162233" opacity="0.95"/>
+  <rect x="{PAD+18}" y="{y}" width="{W-2*PAD-36}" height="{ROW_H}" rx="10" fill="#000000" stroke="#1f1f1f" opacity="0.95"/>
 
   <text x="{name_x}" y="{y_mid}" dominant-baseline="middle" fill="{TEXT}" font-size="13" font-family="{FONT}" font-weight="700">{esc(name)}</text>
   <text x="{desc_x}" y="{y_mid}" dominant-baseline="middle" fill="{MUTED}" font-size="12.5" font-family="{FONT}">— {esc(desc)}</text>
 
   <!-- Horizontal track -->
-  <rect x="{bar_x}" y="{track_y}" width="{bar_w}" height="{track_h}" rx="{track_r}" fill="#08101a" stroke="#1a2a3e"/>
+  <rect x="{bar_x}" y="{track_y}" width="{bar_w}" height="{track_h}" rx="{track_r}" fill="#000000" stroke="#1f1f1f"/>
 '''
 
         fill_w = int((lvl / 100.0) * (bar_w - 4))
