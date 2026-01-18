@@ -4,9 +4,9 @@ import datetime as dt
 from html import escape as esc
 
 # Theme palette (dark HUD + heat bars)
-BG = "#0b0f14"
-PANEL = "#0f1622"
-STROKE = "#243244"
+BG = "#000000"
+PANEL = "#000000"
+STROKE = "#1f1f1f"
 MUTED = "#7f8ea3"
 TEXT = "#c9d4e5"
 
