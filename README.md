@@ -1,11 +1,7 @@
-<p align="center">
-  <span style="display:inline-block; border-radius:18px; overflow:hidden;">
-    <img src="./assets/eye.gif" width="600" alt="Eye animation" style="display:block;" />
-  </span>
-</p>
+<p align="center"> <img src="./assets/eye.gif" width="400" alt="Eye animation" /> </p>
 
 <!-- Stealth motion header (italic via font variant) -->
-<p align="left">
+<p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono+Italic&size=18&duration=2600&pause=900&color=22C55E&width=620&lines=%E2%88%B4+%F0%9D%93%97(x)+%E2%86%92+%E2%88%9E;Security+%C2%B7+Intelligence+%C2%B7+Autonomy;Signal+Over+Noise" />
 </p>
 
@@ -24,11 +20,7 @@
 
 <!-- Operating Stack (second) -->
 <p align="center">
-  <span style="display:block; width:100%; border-radius:18px; overflow:hidden;">
-    <img src="./assets/signal_stack.svg?v=21116756499" alt="Operating Stack" style="display:block; width:100%; height:auto;" />
-  </span>
-</p>
-
+  <img src="./assets/signal_stack.svg?v=21116756499" alt="Operating Stack" width="100%" /> </p>
 <p>
 At the confluence of<br/>
 <strong><em>Security</em></strong>, <strong><em>Intelligence</em></strong>, and <strong><em>Autonomy</em></strong>.
