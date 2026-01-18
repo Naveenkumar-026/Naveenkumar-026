@@ -1,5 +1,3 @@
-<img src="assets/eye.gif" width="900" />
-
 <div align="left">
 
 <p align="left">
