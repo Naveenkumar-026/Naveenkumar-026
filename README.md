@@ -1,4 +1,4 @@
-<p align="center"> <img src="./assets/eye1.gif" width="600" alt="Eye animation" /> </p>
+<p align="center"> <img src="./assets/eye1.gif" width="900" alt="Eye animation" /> </p>
 
 <!-- Stealth motion header (italic via font variant) -->
 <p align="left">
