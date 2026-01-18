@@ -17,12 +17,12 @@
 
 <!-- SPECTRUM CAPTURE // LIVE (first) -->
 <p align="center">
-  <img src="./assets/hero_sweep.svg?v=21116722355" alt="SPECTRUM CAPTURE // LIVE" width="100%" />
+  <img src="./assets/hero_sweep.svg?v=21116756499" alt="SPECTRUM CAPTURE // LIVE" width="100%" />
 </p>
 
 <!-- Operating Stack (second) -->
 <p align="center">
-  <img src="./assets/signal_stack.svg?v=21116722355" alt="Operating Stack" width="100%" />
+  <img src="./assets/signal_stack.svg?v=21116756499" alt="Operating Stack" width="100%" />
 </p>
 
 <p>
@@ -53,7 +53,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=21116722355" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=21116756499" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
