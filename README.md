@@ -1,4 +1,4 @@
-<img src="./assets/eye.gif" width="900" alt="Eye animation" />
+<img src="./assets/eye1.gif" width="900" alt="Eye animation" />
 <div align="left">
 
 <p align="left">
