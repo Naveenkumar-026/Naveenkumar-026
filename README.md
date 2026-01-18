@@ -1,4 +1,4 @@
-<img src="assets/eye.gif" width="900" />
+<img src="assets/eye.gif"/>
 <div align="left">
 
 <p align="left">
