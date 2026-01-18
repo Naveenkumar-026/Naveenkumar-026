@@ -24,7 +24,9 @@
 
 <!-- Operating Stack (second) -->
 <p align="center">
-  <img src="./assets/signal_stack.svg?v=21116756499" alt="Operating Stack" width="100%" />
+  <span style="display:block; width:100%; border-radius:18px; overflow:hidden;">
+    <img src="./assets/signal_stack.svg?v=21116756499" alt="Operating Stack" style="display:block; width:100%; height:auto;" />
+  </span>
 </p>
 
 <p>
