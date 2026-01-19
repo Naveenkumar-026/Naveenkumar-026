@@ -48,8 +48,8 @@ DF_LABEL = os.environ.get("DF_LABEL", "+0.4 kHz")
 # THEME
 # =============================
 BG = "#0D1117"          # GitHub dark
-PANEL = "#0B1220"       # deep blue-black
-PANEL_2 = "#09101D"
+PANEL = "#000000"       # pure black
+PANEL_2 = "#000000"     # pure black (keeps panelGrad solid)
 GRID = "#1F2937"
 GRID_SOFT = "#172033"
 TEXT = "#C7D2FE"        # cool ink
@@ -229,7 +229,7 @@ def main() -> None:
 
   <!-- LEFT: Spectrum frame -->
   <g>
-    <rect x="{frame_x}" y="{frame_y}" width="{frame_w}" height="{frame_h}" rx="14" fill="{BG}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
+    <rect x="{frame_x}" y="{frame_y}" width="{frame_w}" height="{frame_h}" rx="14" fill="{PANEL}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
 
     <!-- grid -->
     <g opacity="0.60">
@@ -257,7 +257,7 @@ def main() -> None:
 
     <!-- marker readout pill (top-right inside chart) -->
     <g opacity="0.94">
-      <rect x="{frame_x + frame_w - 300}" y="{frame_y + 10}" width="{286}" height="{44}" rx="10" fill="{BG}" opacity="0.55" stroke="{GRID_SOFT}" stroke-width="1"/>
+      <rect x="{frame_x + frame_w - 300}" y="{frame_y + 10}" width="{286}" height="{44}" rx="10" fill="{PANEL}" opacity="0.55" stroke="{GRID_SOFT}" stroke-width="1"/>
       <text x="{frame_x + frame_w - 18}" y="{frame_y + 28}" text-anchor="end" fill="{TEXT}" font-size="11" font-family="{FONT}">
         MKR {esc(MARKER_FREQ)}  Δf {esc(DF_LABEL)}
       </text>
@@ -269,7 +269,7 @@ def main() -> None:
 
   <!-- RIGHT: Live Ops Snapshot -->
   <g>
-    <rect x="{info_x}" y="{body_y}" width="{info_w}" height="{body_h}" rx="14" fill="{BG}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
+    <rect x="{info_x}" y="{body_y}" width="{info_w}" height="{body_h}" rx="14" fill="{PANEL}" opacity="0.18" stroke="{GRID_SOFT}" stroke-width="1"/>
 
     <text x="{info_x + 12}" y="{body_y + 20}" fill="{TEXT}" font-size="12" font-family="{FONT}" font-weight="700" letter-spacing="1">
       LIVE OPS SNAPSHOT
