@@ -25,8 +25,6 @@ FG = "#9CA3AF"
 MUTED = "#6B7280"
 ACCENT = "#22C55E"
 GRID = "#1F2937"
-PANEL_BG = "#000000"      # pure black panel
-PANEL_STROKE = "#1F2937"  # dark neutral border (no blue)
 
 WIDTH = 980
 HEIGHT = 220
@@ -241,8 +239,8 @@ def main():
         svg += f'  <rect x="{x - bar_w/2:.2f}" y="{y:.2f}" width="{bar_w:.2f}" height="{h:.2f}" fill="{ACCENT}" opacity="0.18"/>\n'
 
     svg += f'''
-  <g>
-    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10" fill="{PANEL_BG}" stroke="{PANEL_STROKE}" opacity="1"/>
+  <g opacity="0.92">
+    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10" fill="#0B1220" stroke="#223047"/>
     <text x="{tooltip_x+14}" y="{tooltip_y+22}" fill="{FG}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="11">
       <tspan x="{tooltip_x+14}" dy="0">{svg_escape(tooltip_lines[0])}</tspan>
       <tspan x="{tooltip_x+14}" dy="16">{svg_escape(tooltip_lines[1])}</tspan>
