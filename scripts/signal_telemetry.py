@@ -26,6 +26,11 @@ MUTED = "#6B7280"
 ACCENT = "#22C55E"
 GRID = "#1F2937"
 
+# Panel styling (tooltip)
+PANEL_BG = "#000000"         # pure black
+PANEL_STROKE = "#1F2937"     # neutral border (no blue)
+PANEL_GLOW = ACCENT          # reuse your accent for glow
+
 WIDTH = 980
 HEIGHT = 220
 PAD_X = 24
@@ -219,6 +224,30 @@ def main():
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
   <rect width="100%" height="100%" fill="{BG}"/>
+<defs>
+    <!-- Soft shadow/backplate for tooltip -->
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+    <feOffset dx="0" dy="2" result="off"/>
+    <feComponentTransfer>
+        <feFuncA type="linear" slope="0.45"/>
+    </feComponentTransfer>
+    <feMerge>
+        <feMergeNode in="off"/>
+        <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+    </filter>
+
+    <!-- Subtle neon glow for tooltip border -->
+    <filter id="panelGlow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="3.5" result="g"/>
+    <feMerge>
+        <feMergeNode in="g"/>
+        <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+    </filter>
+</defs>
+
   <line x1="{PAD_X}" y1="{PLOT_BOTTOM}" x2="{WIDTH-PAD_X}" y2="{PLOT_BOTTOM}" stroke="{GRID}" stroke-width="1"/>
   <line x1="{PAD_X}" y1="{PLOT_TOP}" x2="{WIDTH-PAD_X}" y2="{PLOT_TOP}" stroke="{GRID}" stroke-width="1" opacity="0.6"/>
 
@@ -236,18 +265,34 @@ def main():
         x = PAD_X + i * sx
         h = (min(v, scale_max) / scale_max) * (PLOT_H - 6)
         y = PLOT_BOTTOM - h
-        svg += f'  <rect x="{x - bar_w/2:.2f}" y="{y:.2f}" width="{bar_w:.2f}" height="{h:.2f}" fill="{ACCENT}" opacity="0.18"/>\n'
+        svg += f'  <rect x="{x - bar_w/2:.2f}" y="{y:.2f}" width="{bar_w:.2f}" height="{h:.2f}" fill="{ACCENT}" opacity="0.22"/>\n'
 
     svg += f'''
-  <g opacity="0.92">
-    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10" fill="#0B1220" stroke="#223047"/>
-    <text x="{tooltip_x+14}" y="{tooltip_y+22}" fill="{FG}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="11">
+  <!-- Tooltip -->
+  <g>
+    <!-- shadow/backplate -->
+    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10"
+          fill="{PANEL_BG}" opacity="0.92" filter="url(#softShadow)"/>
+
+    <!-- glow stroke -->
+    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10"
+          fill="none" stroke="{PANEL_GLOW}" stroke-width="1.2" opacity="0.22"
+          filter="url(#panelGlow)"/>
+
+    <!-- crisp stroke + solid fill -->
+    <rect x="{tooltip_x}" y="{tooltip_y}" width="230" height="64" rx="10"
+          fill="{PANEL_BG}" stroke="{PANEL_STROKE}" stroke-width="1" opacity="0.98"/>
+
+    <text x="{tooltip_x+14}" y="{tooltip_y+22}" fill="{FG}"
+          font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+          font-size="11">
       <tspan x="{tooltip_x+14}" dy="0">{svg_escape(tooltip_lines[0])}</tspan>
       <tspan x="{tooltip_x+14}" dy="16">{svg_escape(tooltip_lines[1])}</tspan>
       <tspan x="{tooltip_x+14}" dy="16" fill="{MUTED}">{svg_escape(tooltip_lines[2])}</tspan>
     </text>
   </g>
 </svg>
+
 '''
 
     os.makedirs(os.path.dirname(OUT_PATH) or ".", exist_ok=True)
