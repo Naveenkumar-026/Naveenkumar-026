@@ -15,12 +15,12 @@
 
 <!-- SPECTRUM CAPTURE // LIVE (first) -->
 <p align="center">
-  <img src="./assets/hero_sweep.svg?v=21297479373" alt="SPECTRUM CAPTURE // LIVE" width="100%" />
+  <img src="./assets/hero_sweep.svg?v=21319825805" alt="SPECTRUM CAPTURE // LIVE" width="100%" />
 </p>
 
 <!-- Operating Stack (second) -->
 <p align="center">
-  <img src="./assets/signal_stack.svg?v=21297479373" alt="Operating Stack" width="100%" /> </p>
+  <img src="./assets/signal_stack.svg?v=21319825805" alt="Operating Stack" width="100%" /> </p>
 <p>
 At the confluence of<br/>
 <strong><em>Security</em></strong>, <strong><em>Intelligence</em></strong>, and <strong><em>Autonomy</em></strong>.
@@ -49,7 +49,7 @@ Almost none is announced.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=21297479373" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=21319825805" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
