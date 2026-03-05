@@ -3,7 +3,7 @@
 </p>
 
 <p align="left">
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=18&duration=2400&pause=700&color=22C55E&width=900&cursor=true&lines=Initializing+Operator+Environment...;Security+·+Intelligence+·+Autonomy;Signal+over+Noise;Defense-first.+Build+durable+systems." />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=18&duration=2200&pause=900&color=22C55E&width=820&lines=Initializing+Operator+Environment...;Loading+Security+Modules...;Security+·+Intelligence+·+Autonomy;Signal+over+Noise;Defense-first.+Build+durable+systems." />
 </p>
 
 <p align="center">
