@@ -43,7 +43,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=22684757127" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=22727114668" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
