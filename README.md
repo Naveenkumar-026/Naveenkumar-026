@@ -1,4 +1,8 @@
 <p align="center">
+<img src="assets/operator_capabilities.svg">
+</p>
+
+<p align="center">
   <img src="./assets/eye.gif" width="900" alt="Eye animation" />
 </p>
 
