@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=12&duration=1&pause=1000&color=22C55E&width=800&lines=────────────────────────────────────────────────────────────────────────────────────────" />
+  <img src="./assets/wave-divider.svg" width="100%">
 </p>
 
 <p align="center">
@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=12&duration=1&pause=1000&color=22C55E&width=800&lines=────────────────────────────────────────────────────────────────────────────────────────" />
+  <img src="./assets/wave-divider.svg" width="100%">
 </p>
 
 <p align="center">
