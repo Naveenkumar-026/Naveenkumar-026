@@ -11,13 +11,13 @@
 </p>
 
 <p align="center">
+⟡
 <a href="https://github.com/Naveenkumar-026?tab=repositories">
 <img src="https://img.shields.io/badge/%E2%97%88%20PROJECTS-050507?style=for-the-badge&color=050507&labelColor=050507">
-</a>
-&nbsp;⟡&nbsp;
-<a href="https://github.com/Naveenkumar-026?tab=stars">
+</a>⟡<a href="https://github.com/Naveenkumar-026?tab=stars">
 <img src="https://img.shields.io/badge/%E2%97%88%20STARRED-050507?style=for-the-badge&color=050507&labelColor=050507">
 </a>
+⟡
 </p>
 
 <p align="center">
