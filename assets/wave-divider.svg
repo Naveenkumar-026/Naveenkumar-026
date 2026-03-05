@@ -1,38 +1,63 @@
-<svg width="100%" height="110" viewBox="0 0 1200 110" xmlns="http://www.w3.org/2000/svg">
+<svg width="100%" height="120" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
 
-<g stroke="white" stroke-width="1.2" fill="none" opacity="0.55">
+<defs>
 
-<path d="M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55">
-<animate attributeName="d" dur="3s" repeatCount="indefinite"
+<filter id="glow">
+  <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+  <feMerge>
+    <feMergeNode in="coloredBlur"/>
+    <feMergeNode in="SourceGraphic"/>
+  </feMerge>
+</filter>
+
+</defs>
+
+<g stroke="#ff2a2a" fill="none" filter="url(#glow)">
+
+<!-- layer set 1 -->
+<path stroke-width="1.4" opacity="0.65"
+d="M0 60 Q80 20 160 60 T320 60 T480 60 T640 60 T800 60 T960 60 T1120 60 T1200 60">
+<animate attributeName="d" dur="2.4s" repeatCount="indefinite"
 values="
-M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55;
-M0 55 Q60 85 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55;
-M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55"/>
+M0 60 Q80 20 160 60 T320 60 T480 60 T640 60 T800 60 T960 60 T1120 60 T1200 60;
+M0 60 Q80 95 160 60 T320 60 T480 60 T640 60 T800 60 T960 60 T1120 60 T1200 60;
+M0 60 Q80 20 160 60 T320 60 T480 60 T640 60 T800 60 T960 60 T1120 60 T1200 60"/>
 </path>
 
-</g>
-
-<g stroke="white" stroke-width="0.8" fill="none" opacity="0.35">
-
-<path d="M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55">
-<animate attributeName="d" dur="2.6s" repeatCount="indefinite"
+<!-- layer set 2 -->
+<path stroke-width="1.1" opacity="0.55"
+d="M0 60 Q60 35 120 60 T240 60 T360 60 T480 60 T600 60 T720 60 T840 60 T960 60 T1080 60 T1200 60">
+<animate attributeName="d" dur="1.9s" repeatCount="indefinite"
 values="
-M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55;
-M0 55 Q50 80 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55;
-M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55"/>
+M0 60 Q60 35 120 60 T240 60 T360 60 T480 60 T600 60 T720 60 T840 60 T960 60 T1080 60 T1200 60;
+M0 60 Q60 85 120 60 T240 60 T360 60 T480 60 T600 60 T720 60 T840 60 T960 60 T1080 60 T1200 60;
+M0 60 Q60 35 120 60 T240 60 T360 60 T480 60 T600 60 T720 60 T840 60 T960 60 T1080 60 T1200 60"/>
 </path>
 
-</g>
-
-<g stroke="white" stroke-width="0.6" fill="none" opacity="0.25">
-
-<path d="M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55">
-<animate attributeName="d" dur="2.2s" repeatCount="indefinite"
+<!-- layer set 3 -->
+<path stroke-width="0.9" opacity="0.40"
+d="M0 60 Q70 45 140 60 T280 60 T420 60 T560 60 T700 60 T840 60 T980 60 T1120 60 T1200 60">
+<animate attributeName="d" dur="1.6s" repeatCount="indefinite"
 values="
-M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55;
-M0 55 Q70 70 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55;
-M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55"/>
+M0 60 Q70 45 140 60 T280 60 T420 60 T560 60 T700 60 T840 60 T980 60 T1120 60 T1200 60;
+M0 60 Q70 90 140 60 T280 60 T420 60 T560 60 T700 60 T840 60 T980 60 T1120 60 T1200 60;
+M0 60 Q70 45 140 60 T280 60 T420 60 T560 60 T700 60 T840 60 T980 60 T1120 60 T1200 60"/>
 </path>
+
+<!-- layer set 4 -->
+<path stroke-width="0.7" opacity="0.30"
+d="M0 60 Q90 50 180 60 T360 60 T540 60 T720 60 T900 60 T1080 60 T1200 60">
+<animate attributeName="d" dur="1.4s" repeatCount="indefinite"
+values="
+M0 60 Q90 50 180 60 T360 60 T540 60 T720 60 T900 60 T1080 60 T1200 60;
+M0 60 Q90 100 180 60 T360 60 T540 60 T720 60 T900 60 T1080 60 T1200 60;
+M0 60 Q90 50 180 60 T360 60 T540 60 T720 60 T900 60 T1080 60 T1200 60"/>
+</path>
+
+<!-- duplicate jitter layers to create dense chaos -->
+
+<use href="#"/>
+<use href="#"/>
 
 </g>
 
