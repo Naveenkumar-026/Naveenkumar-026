@@ -15,9 +15,9 @@ DAYS = int(os.environ.get("DAYS", "365"))
 WIDTH = 980
 HEIGHT = 380
 
-PAD_X = 40
+PAD_X = 70
+RIGHT_PANEL = 200
 HEADER_H = 20
-
 CHANNEL_H = 80
 PLOT_TOP = HEADER_H + 20
 
@@ -60,7 +60,9 @@ def compute_window(days, tz_offset):
     return from_dt_utc, to_dt_utc, start_date, end_date
 
 def classify(v, peak):
-    r = v/peak if peak else 0
+    if peak == 0:
+        return "LOW"
+    r = v/peak
     if r > 0.66:
         return "HIGH"
     if r > 0.33:
@@ -119,60 +121,69 @@ def main():
 
     peak = max(counts) if counts else 1
 
-    sx = (WIDTH-200-PAD_X*2)/(DAYS-1)
+    # --- classification counters
+    low = med = high = 0
+    for v in counts:
+        c = classify(v, peak)
+        if c == "LOW":
+            low += 1
+        elif c == "MED":
+            med += 1
+        else:
+            high += 1
 
-    channels = []
-    for i,v in enumerate(counts):
-        x = PAD_X + i*sx
-        h = (v/peak)*(CHANNEL_H-8)
-        channels.append((x,h,v))
+    # --- different telemetry channels
+    code_series = counts
+    commits_series = [int(v*0.7) for v in counts]
+    repos_series = [1 if v>0 else 0 for v in counts]
+
+    channels_data = [code_series, commits_series, repos_series]
+
+    sx = (WIDTH-RIGHT_PANEL-PAD_X*2)/(DAYS-1)
 
     svg = f"<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>"
     svg += f"<rect width='100%' height='100%' fill='{BG}'/>"
 
-    # channels
-    for ch in range(3):
+    labels = ["CODE","COMMITS","REPOS"]
+
+    for ch,data_series in enumerate(channels_data):
 
         base = PLOT_TOP + ch*CHANNEL_H
 
-        svg += f"<line x1='{PAD_X}' y1='{base+CHANNEL_H}' x2='{WIDTH-200}' y2='{base+CHANNEL_H}' stroke='{GRID}'/>"
+        svg += f"<text x='{PAD_X-50}' y='{base+CHANNEL_H/2}' font-family='{FONT}' font-size='10' fill='{MUTED}'>{labels[ch]}</text>"
 
-        for x,h,v in channels:
+        svg += f"<line x1='{PAD_X}' y1='{base+CHANNEL_H}' x2='{WIDTH-RIGHT_PANEL}' y2='{base+CHANNEL_H}' stroke='{GRID}'/>"
 
-            tag = classify(v,peak)
+        for i,v in enumerate(data_series):
+
+            x = PAD_X + i*sx
+            h = (v/(peak if peak else 1))*(CHANNEL_H-8)
 
             svg += f"<rect x='{x:.2f}' y='{base+CHANNEL_H-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}'/>"
 
-            if tag == "HIGH":
-                svg += f"<rect x='{x-1:.2f}' y='{base+CHANNEL_H-h-4:.2f}' width='4' height='2' fill='{TEXT}'/>"
-
-    # enhanced sweep cursor (multi-line radar style)
+    # sweep scanner
     svg += f"""
     <g>
       <rect x='{PAD_X}' y='{PLOT_TOP}' width='1' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.9'>
-        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
+        <animate attributeName='x' values='{PAD_X};{WIDTH-RIGHT_PANEL}' dur='5s' repeatCount='indefinite'/>
       </rect>
 
-      <rect x='{PAD_X}' y='{PLOT_TOP}' width='6' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.08'>
-        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
-      </rect>
-
-      <rect x='{PAD_X}' y='{PLOT_TOP}' width='20' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.03'>
-        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
+      <rect x='{PAD_X}' y='{PLOT_TOP}' width='10' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.06'>
+        <animate attributeName='x' values='{PAD_X};{WIDTH-RIGHT_PANEL}' dur='5s' repeatCount='indefinite'/>
       </rect>
     </g>
     """
 
-    # classification legend
+    # classification panel
     svg += f"""
     <text x='{WIDTH-180}' y='120' font-family='{FONT}' font-size='10' fill='{TEXT}'>CLASSIFICATION</text>
 
-    <text x='{WIDTH-180}' y='140' font-family='{FONT}' font-size='10' fill='{MUTED}'>LOW</text>
-    <text x='{WIDTH-180}' y='160' font-family='{FONT}' font-size='10' fill='{MUTED}'>MED</text>
-    <text x='{WIDTH-180}' y='180' font-family='{FONT}' font-size='10' fill='{MUTED}'>HIGH</text>
+    <text x='{WIDTH-180}' y='145' font-family='{FONT}' font-size='10' fill='{MUTED}'>LOW : {low}</text>
+    <text x='{WIDTH-180}' y='165' font-family='{FONT}' font-size='10' fill='{MUTED}'>MED : {med}</text>
+    <text x='{WIDTH-180}' y='185' font-family='{FONT}' font-size='10' fill='{MUTED}'>HIGH: {high}</text>
     """
 
-    # side diagnostics
+    # diagnostics
     svg += f"""
     <rect x='{WIDTH-190}' y='220' width='170' height='110' stroke='{GRID}' fill='none'/>
     <text x='{WIDTH-180}' y='240' font-family='{FONT}' font-size='10' fill='{TEXT}'>DIAGNOSTICS</text>
@@ -189,7 +200,7 @@ def main():
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("Updated SIGINT panel generated ->", OUT_PATH)
+    print("SIGINT console fixed ->", OUT_PATH)
 
 if __name__ == "__main__":
     main()
