@@ -4,9 +4,8 @@ import json
 import datetime
 import urllib.request
 from pathlib import Path
-# -------------------------------------------------
-# Config
-# -------------------------------------------------
+
+# ---------------- CONFIG ----------------
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
 TOKEN = os.environ.get("GH_TOKEN") or ""
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
@@ -14,19 +13,13 @@ OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 DAYS = int(os.environ.get("DAYS", "365"))
 
-INCLUDE_PRIVATE = os.environ.get("INCLUDE_PRIVATE", "0").strip().lower() not in ("0","false","no","off")
-
-# -------------------------------------------------
-# Theme
-# -------------------------------------------------
 BG = "#030000"
 ACCENT = "#ef4444"
 ACCENT_LIGHT = "#fca5a5"
 GRID = "#2d1010"
-TEXT = "#e2e8f0"
 MUTED = "#6b7280"
 
-FONT = "JetBrains Mono, ui-monospace, monospace"
+FONT = "JetBrains Mono, monospace"
 
 WIDTH = 980
 HEIGHT = 260
@@ -37,9 +30,7 @@ PLOT_TOP = HEADER_H + 8
 PLOT_H = 140
 PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
-# -------------------------------------------------
-# Helpers
-# -------------------------------------------------
+# ---------------- HELPERS ----------------
 def iso_z(dt):
     return dt.replace(microsecond=0).isoformat() + "Z"
 
@@ -47,7 +38,6 @@ def gh_api(query, variables):
     req = urllib.request.Request("https://api.github.com/graphql", method="POST")
     req.add_header("Authorization", f"bearer {TOKEN}")
     req.add_header("Content-Type", "application/json")
-
     payload = json.dumps({"query": query, "variables": variables}).encode()
 
     with urllib.request.urlopen(req, data=payload, timeout=30) as r:
@@ -79,9 +69,7 @@ def moving_avg(series, window=11):
         out.append(sum(series[lo:hi])/(hi-lo))
     return out
 
-# -------------------------------------------------
-# Main
-# -------------------------------------------------
+# ---------------- MAIN ----------------
 def main():
     if not USER:
         raise SystemExit("GH_USER missing")
@@ -92,9 +80,7 @@ def main():
     query($user:String!, $from:DateTime!, $to:DateTime!) {
       user(login: $user) {
         contributionsCollection(from: $from, to: $to) {
-          restrictedContributionsCount
           contributionCalendar {
-            totalContributions
             weeks {
               contributionDays {
                 date
@@ -113,8 +99,7 @@ def main():
         "to": iso_z(to_dt),
     })
 
-    coll = data["user"]["contributionsCollection"]
-    cal = coll["contributionCalendar"]
+    cal = data["user"]["contributionsCollection"]["contributionCalendar"]
 
     by_date = {}
     for w in cal["weeks"]:
@@ -158,56 +143,51 @@ def main():
 </linearGradient>
 
 <filter id='glow'>
-<feGaussianBlur stdDeviation='3.5' result='b'/>
-<feMerge>
-<feMergeNode in='b'/>
-<feMergeNode in='SourceGraphic'/>
-</feMerge>
+<feGaussianBlur stdDeviation='4'/>
 </filter>
 
 <filter id='noise'>
-<feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/>
-<feColorMatrix type='saturate' values='0'/>
+<feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/>
 </filter>
 
 </defs>
 
 <rect width='100%' height='100%' fill='url(#bgGrad)'/>
-<rect width='100%' height='100%' filter='url(#noise)' opacity='0.03'/>
 
-<text x='{PAD_X}' y='26'
-font-family='{FONT}'
-font-size='13'
-fill='{ACCENT}'
-letter-spacing='0.6'
->SIGNAL // 365D</text>
+<!-- RF noise floor -->
+<rect width='100%' height='100%' filter='url(#noise)' opacity='0.035'/>
 
-<text x='{PAD_X}' y='42'
-font-family='{FONT}'
-font-size='10'
-fill='{MUTED}'
->{total} contributions · peak/day {peak}</text>
+<!-- header -->
+<text x='{PAD_X}' y='26' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
+SIGNAL // 365D
+</text>
 
-<line x1='{PAD_X}' y1='{PLOT_BOTTOM}' x2='{WIDTH-PAD_X}' y2='{PLOT_BOTTOM}'
-stroke='{GRID}' stroke-width='1'/>
+<text x='{PAD_X}' y='42' font-family='{FONT}' font-size='10' fill='{MUTED}'>
+{total} contributions · peak/day {peak}
+</text>
 
-<line x1='{PAD_X}' y1='{PLOT_TOP}' x2='{WIDTH-PAD_X}' y2='{PLOT_TOP}'
-stroke='{GRID}' stroke-width='0.6'/>
+<!-- scan sweep -->
+<rect x='0' y='0' width='{WIDTH}' height='2' fill='{ACCENT}' opacity='0.4'>
+<animate attributeName='y' from='0' to='{HEIGHT}' dur='6s' repeatCount='indefinite'/>
+</rect>
 
-<path d='{path}'
-stroke='{ACCENT}'
-stroke-width='4'
-opacity='0.08'
-fill='none'/>
+<!-- grid -->
+<line x1='{PAD_X}' y1='{PLOT_BOTTOM}' x2='{WIDTH-PAD_X}' y2='{PLOT_BOTTOM}' stroke='{GRID}'/>
 
-<path d='{path}'
-stroke='url(#signalGrad)'
-stroke-width='2.4'
-fill='none'
-filter='url(#glow)'/>
+<!-- ghost signal -->
+<path d='{path}' stroke='{ACCENT}' stroke-width='5' opacity='0.07' fill='none'/>
 
-<circle cx='{pts[-1][0]:.2f}' cy='{pts[-1][1]:.2f}' r='5'
-fill='{ACCENT_LIGHT}' filter='url(#glow)'/>
+<!-- density glow under spikes -->
+<path d='{path} L {WIDTH-PAD_X},{PLOT_BOTTOM} L {PAD_X},{PLOT_BOTTOM} Z'
+fill='{ACCENT}' opacity='0.08' filter='url(#glow)'/>
+
+<!-- main signal -->
+<path d='{path}' stroke='url(#signalGrad)' stroke-width='2.4' fill='none' filter='url(#glow)'/>
+
+<!-- signal pulse -->
+<circle cx='{pts[-1][0]:.2f}' cy='{pts[-1][1]:.2f}' r='5' fill='{ACCENT_LIGHT}'>
+<animate attributeName='r' values='4;8;4' dur='2s' repeatCount='indefinite'/>
+</circle>
 
 </svg>
 """
