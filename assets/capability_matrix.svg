@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360">
+<defs>
+  <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#060010"/>
+    <stop offset="100%" stop-color="#030003"/>
+  </linearGradient>
+  <linearGradient id="hdr2" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#1a0035" stop-opacity=".9"/>
+    <stop offset="50%"  stop-color="#0d0020" stop-opacity=".7"/>
+    <stop offset="100%" stop-color="#1a0035" stop-opacity=".9"/>
+  </linearGradient>
+  <!-- Cell backgrounds per color -->
+  <linearGradient id="cPurp" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#2e1065" stop-opacity=".25"/>
+    <stop offset="100%" stop-color="#0e0025" stop-opacity=".08"/>
+  </linearGradient>
+  <linearGradient id="cRed" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#450a0a" stop-opacity=".3"/>
+    <stop offset="100%" stop-color="#0e0005" stop-opacity=".08"/>
+  </linearGradient>
+  <linearGradient id="cGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#052e16" stop-opacity=".25"/>
+    <stop offset="100%" stop-color="#020a04" stop-opacity=".08"/>
+  </linearGradient>
+  <linearGradient id="barC" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#ef4444"/>
+    <stop offset="45%"  stop-color="#a855f7"/>
+    <stop offset="100%" stop-color="#22c55e"/>
+  </linearGradient>
+  <pattern id="gridP2" width="28" height="28" patternUnits="userSpaceOnUse">
+    <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#a855f7" stroke-width="0.13" opacity="0.12"/>
+  </pattern>
+  <filter id="gP2">
+    <feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feColorMatrix in="b" type="matrix" values=".66 0 0 0 0  0 0 0 0 0  1 0 0 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="gG2">
+    <feGaussianBlur stdDeviation="1.8" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0.3 0 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="gR2">
+    <feGaussianBlur stdDeviation="2" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 .2 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="blob2"><feGaussianBlur stdDeviation="24"/></filter>
+  <clipPath id="c2"><rect width="900" height="360"/></clipPath>
+  <style>
+    @keyframes scan2 { 0%{transform:translateY(-3px);opacity:0} 5%{opacity:.5} 95%{opacity:.12} 100%{transform:translateY(365px);opacity:0} }
+    @keyframes bP2   { 0%,100%{opacity:.3} 50%{opacity:.68} }
+    @keyframes dB2   { 0%,100%{opacity:1}  50%{opacity:.08} }
+    @keyframes gl3   { 0%,88%,100%{transform:translate(0,0);filter:none;opacity:1}
+                       89%{transform:translate(-3px,0);filter:drop-shadow(3px 0 #ef4444) drop-shadow(-1px 0 #a855f7);opacity:.88}
+                       90%{transform:translate(2px,1px);filter:drop-shadow(-2px 0 #4ade80);opacity:.84}
+                       91%{transform:translate(0,0);filter:none;opacity:1} }
+    @keyframes bCell { 0%,100%{opacity:.35} 50%{opacity:.65} }
+    @keyframes bCell2{ 0%,100%{opacity:.3}  50%{opacity:.6} }
+    .sc2{animation:scan2 8s linear infinite 1s}
+    .ob2{animation:bP2 4.5s ease-in-out infinite}
+    .db2{animation:dB2 2s step-end infinite}
+    .g3{animation:gl3 12s ease-in-out infinite 1s}
+    .bc{animation:bCell 4s ease-in-out infinite}
+    .bc2{animation:bCell2 4s ease-in-out infinite 1s}
+    .bc3{animation:bCell2 4s ease-in-out infinite 2s}
+  </style>
+</defs>
+<g clip-path="url(#c2)">
+  <rect width="900" height="360" fill="url(#bg2)"/>
+  <rect width="900" height="360" fill="url(#gridP2)"/>
+  <ellipse cx="220" cy="180" rx="200" ry="130" fill="#a855f7" opacity="0.04" filter="url(#blob2)"/>
+  <ellipse cx="680" cy="200" rx="180" ry="120" fill="#ef4444" opacity="0.03" filter="url(#blob2)"/>
+  <ellipse cx="450" cy="360" rx="260" ry="60"  fill="#22c55e" opacity="0.02" filter="url(#blob2)"/>
+  <rect x="0"   y="0" width="3"   height="360" fill="#a855f7" opacity=".5"/>
+  <rect x="897" y="0" width="3"   height="360" fill="#ef4444" opacity=".35"/>
+  <rect class="ob2" x=".5" y=".5" width="899" height="359" fill="none" stroke="#a855f7" stroke-width=".9"/>
+  <path d="M3,20 L3,3 L20,3"           fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".9"/>
+  <path d="M880,3 L897,3 L897,20"      fill="none" stroke="#ef4444" stroke-width="2.4" opacity=".85"/>
+  <path d="M3,340 L3,357 L20,357"      fill="none" stroke="#22c55e" stroke-width="2.4" opacity=".8"/>
+  <path d="M880,357 L897,357 L897,340" fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".85"/>
+  <rect class="sc2" x="0" y="0" width="900" height="1.5" fill="#a855f7" opacity=".45"/>
+  <rect x="1" y="1" width="898" height="40" fill="url(#hdr2)"/>
+  <line x1="1" y1="41" x2="899" y2="41" stroke="#a855f7" stroke-width=".5" opacity=".4"/>
+  <text x="18" y="25" font-family="'Courier New',monospace" font-size="9.5" fill="#a855f7" opacity=".5" letter-spacing="1">OPERATOR STACK // CAPABILITY MATRIX</text>
+  <g class="g3">
+    <text x="265" y="26" font-family="'Courier New',monospace" font-size="13.5" font-weight="bold" fill="#a855f7" filter="url(#gP2)">DOMAIN ARCHITECTURE // 6 VECTORS</text>
+  </g>
+  <text x="755" y="25" font-family="'Courier New',monospace" font-size="9.5" fill="#6b6880" opacity=".65">user: Naveenkumar-026</text>
+  <circle class="db2" cx="880" cy="21" r="3.5" fill="#22c55e" filter="url(#gG2)"/>
+  <line x1="300" y1="41" x2="300" y2="346" stroke="#a855f7" stroke-width=".4" opacity=".2"/>
+  <line x1="599" y1="41" x2="599" y2="346" stroke="#a855f7" stroke-width=".4" opacity=".2"/>
+  <line x1="8"   y1="196" x2="892" y2="196" stroke="#a855f7" stroke-width=".4" opacity=".2"/>
+
+  <!-- ── CELL 1: Cyber Defense (red — critical) ── -->
+  <rect x="8" y="48" width="286" height="144" rx="3" fill="url(#cRed)" stroke="#ef4444" stroke-width=".9" class="bc"/>
+  <rect x="8" y="48" width="3" height="144" rx="1" fill="#ef4444" opacity=".5"/>
+  <path d="M32,68 L32,60 L50,54 L68,60 L68,68 C68,79 59,86 50,90 C41,86 32,79 32,68 Z" fill="none" stroke="#ef4444" stroke-width="1.5" opacity=".75" filter="url(#gR2)"/>
+  <path d="M43,70 L48,75 L60,63" fill="none" stroke="#ef4444" stroke-width="1.8" opacity=".8"/>
+  <text x="78" y="68" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#f87171" filter="url(#gR2)">Cyber Defense</text>
+  <text x="78" y="82" font-family="'Courier New',monospace" font-size="8.5" fill="#ef4444" opacity=".6">PRIORITY // CRITICAL</text>
+  <text x="20" y="112" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".7">Offensive and defensive architectures.</text>
+  <text x="20" y="126" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".7">Response automation. Hardening.</text>
+  <text x="20" y="140" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".65">Threat modeling. Penetration analysis.</text>
+  <rect x="20" y="158" width="268" height="6" rx="1.5" fill="#ef4444" fill-opacity=".12"/>
+  <rect x="20" y="158" width="255" height="6" rx="1.5" fill="url(#barC)" opacity=".85"/>
+  <text x="290" y="165" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">95%</text>
+  <text x="20" y="182" font-family="'Courier New',monospace" font-size="7.5" fill="#ef4444" opacity=".3">— defensive architectures, response automation, hardening</text>
+
+  <!-- ── CELL 2: Agent Systems (purple) ── -->
+  <rect x="306" y="48" width="286" height="144" rx="3" fill="url(#cPurp)" stroke="#a855f7" stroke-width=".9" class="bc2"/>
+  <rect x="306" y="48" width="3" height="144" rx="1" fill="#a855f7" opacity=".5"/>
+  <circle cx="366" cy="72" r="5"  fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".7" filter="url(#gP2)"/>
+  <circle cx="356" cy="58" r="4"  fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".7"/>
+  <circle cx="378" cy="58" r="4"  fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".7"/>
+  <line x1="366" y1="67" x2="359" y2="62" stroke="#a855f7" stroke-width="1" opacity=".5"/>
+  <line x1="366" y1="67" x2="374" y2="62" stroke="#a855f7" stroke-width="1" opacity=".5"/>
+  <text x="394" y="68" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#c084fc" filter="url(#gP2)">Agent Systems</text>
+  <text x="394" y="82" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".6">PRIORITY // HIGH</text>
+  <text x="318" y="112" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Orchestration frameworks.</text>
+  <text x="318" y="126" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Evaluation harnesses. Safety rails.</text>
+  <text x="318" y="140" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".65">Autonomous pipeline design.</text>
+  <rect x="318" y="158" width="268" height="6" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="318" y="158" width="241" height="6" rx="1.5" fill="url(#barC)" opacity=".8"/>
+  <text x="588" y="165" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
+  <text x="318" y="182" font-family="'Courier New',monospace" font-size="7.5" fill="#a855f7" opacity=".3">— orchestration, evaluation harnesses, safety rails</text>
+
+  <!-- ── CELL 3: OSINT (red + purple mix) ── -->
+  <rect x="604" y="48" width="286" height="144" rx="3" fill="url(#cRed)" stroke="#ef4444" stroke-width=".9" class="bc3"/>
+  <rect x="604" y="48" width="3" height="144" rx="1" fill="#ef4444" opacity=".45"/>
+  <circle cx="634" cy="70" r="13" fill="none" stroke="#ef4444" stroke-width="1.5" opacity=".6" filter="url(#gR2)"/>
+  <circle cx="634" cy="70" r="5"  fill="#ef4444" fill-opacity=".2"/>
+  <circle cx="634" cy="70" r="2.5" fill="#ef4444" opacity=".65"/>
+  <line x1="643" y1="79" x2="652" y2="88" stroke="#ef4444" stroke-width="2" opacity=".6"/>
+  <text x="668" y="66" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#f87171" filter="url(#gR2)">OSINT</text>
+  <text x="668" y="80" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#f87171">&amp; Intelligence</text>
+  <text x="616" y="112" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".7">Open-source intelligence gathering.</text>
+  <text x="616" y="126" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".7">Signal acquisition. Profile mapping.</text>
+  <text x="616" y="140" font-family="'Courier New',monospace" font-size="9" fill="#fca5a5" opacity=".65">Digital footprint analysis.</text>
+  <rect x="616" y="158" width="268" height="6" rx="1.5" fill="#ef4444" fill-opacity=".12"/>
+  <rect x="616" y="158" width="255" height="6" rx="1.5" fill="url(#barC)" opacity=".8"/>
+  <text x="886" y="165" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">95%</text>
+  <text x="616" y="182" font-family="'Courier New',monospace" font-size="7.5" fill="#ef4444" opacity=".3">— signal acquisition, open-source intelligence, profiling</text>
+
+  <!-- ── CELL 4: Privacy Eng (green) ── -->
+  <rect x="8" y="202" width="286" height="144" rx="3" fill="url(#cGreen)" stroke="#22c55e" stroke-width=".9" class="bc2"/>
+  <rect x="8" y="202" width="3" height="144" rx="1" fill="#22c55e" opacity=".45"/>
+  <rect x="34" y="224" width="22" height="17" rx="2" fill="none" stroke="#22c55e" stroke-width="1.5" opacity=".7" filter="url(#gG2)"/>
+  <path d="M37,224 C37,217 52,217 52,224" fill="none" stroke="#22c55e" stroke-width="1.5" opacity=".7"/>
+  <circle cx="45" cy="232" r="2.5" fill="#22c55e" opacity=".6"/>
+  <text x="68" y="228" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#4ade80" filter="url(#gG2)">Privacy Eng.</text>
+  <text x="68" y="242" font-family="'Courier New',monospace" font-size="8.5" fill="#22c55e" opacity=".6">PRIORITY // HIGH</text>
+  <text x="20" y="268" font-family="'Courier New',monospace" font-size="9" fill="#86efac" opacity=".7">Privacy-first design patterns.</text>
+  <text x="20" y="282" font-family="'Courier New',monospace" font-size="9" fill="#86efac" opacity=".7">Edge/off-grid deployment constraints.</text>
+  <text x="20" y="296" font-family="'Courier New',monospace" font-size="9" fill="#86efac" opacity=".65">Zero-knowledge system design.</text>
+  <rect x="20" y="314" width="268" height="6" rx="1.5" fill="#22c55e" fill-opacity=".12"/>
+  <rect x="20" y="314" width="228" height="6" rx="1.5" fill="url(#barC)" opacity=".8"/>
+  <text x="290" y="321" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">85%</text>
+  <text x="20" y="338" font-family="'Courier New',monospace" font-size="7.5" fill="#22c55e" opacity=".3">— privacy-first, edge/off-grid constraints, ZK design</text>
+
+  <!-- ── CELL 5: Automation (purple + green — core) ── -->
+  <rect x="306" y="202" width="286" height="144" rx="3" fill="url(#cPurp)" stroke="#a855f7" stroke-width="1.1" class="bc"/>
+  <rect x="306" y="202" width="3" height="144" rx="1" fill="#a855f7" opacity=".55"/>
+  <circle cx="356" cy="232" r="12" fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".6" filter="url(#gP2)"/>
+  <circle cx="356" cy="232" r="5"  fill="none" stroke="#22c55e" stroke-width="1.5" opacity=".7"/>
+  <line x1="356" y1="216" x2="356" y2="213" stroke="#a855f7" stroke-width="2.5" opacity=".6"/>
+  <line x1="356" y1="251" x2="356" y2="248" stroke="#a855f7" stroke-width="2.5" opacity=".6"/>
+  <line x1="340" y1="232" x2="337" y2="232" stroke="#a855f7" stroke-width="2.5" opacity=".6"/>
+  <line x1="375" y1="232" x2="372" y2="232" stroke="#a855f7" stroke-width="2.5" opacity=".6"/>
+  <line x1="345" y1="221" x2="343" y2="219" stroke="#a855f7" stroke-width="2" opacity=".5"/>
+  <line x1="369" y1="245" x2="367" y2="243" stroke="#a855f7" stroke-width="2" opacity=".5"/>
+  <line x1="369" y1="221" x2="367" y2="219" stroke="#a855f7" stroke-width="2" opacity=".5"/>
+  <line x1="345" y1="245" x2="343" y2="243" stroke="#a855f7" stroke-width="2" opacity=".5"/>
+  <text x="382" y="228" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#c084fc" filter="url(#gP2)">Automation</text>
+  <text x="382" y="242" font-family="'Courier New',monospace" font-size="8.5" fill="#22c55e" opacity=".7">PRIORITY // CORE</text>
+  <text x="318" y="268" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Intelligent workflow pipelines.</text>
+  <text x="318" y="282" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Rapid prototyping with reliability.</text>
+  <text x="318" y="296" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".65">Clean engineering. Real-world bias.</text>
+  <rect x="318" y="314" width="268" height="6" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="318" y="314" width="255" height="6" rx="1.5" fill="url(#barC)" opacity=".85"/>
+  <text x="588" y="321" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">95%</text>
+  <text x="318" y="338" font-family="'Courier New',monospace" font-size="7.5" fill="#a855f7" opacity=".3">— pipelines, rapid prototyping, clean engineering</text>
+
+  <!-- ── CELL 6: Long-Horizon (purple) ── -->
+  <rect x="604" y="202" width="286" height="144" rx="3" fill="url(#cPurp)" stroke="#a855f7" stroke-width=".9" class="bc3"/>
+  <rect x="604" y="202" width="3" height="144" rx="1" fill="#a855f7" opacity=".45"/>
+  <path d="M620,232 C620,226 628,222 636,232 C644,242 652,238 652,232 C652,226 644,222 636,232 C628,242 620,238 620,232 Z" fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".65" filter="url(#gP2)"/>
+  <text x="666" y="228" font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#c084fc" filter="url(#gP2)">Long-Horizon</text>
+  <text x="666" y="242" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".6">PRIORITY // STRATEGIC</text>
+  <text x="616" y="268" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Durable primitives before scale.</text>
+  <text x="616" y="282" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".7">Systems that outlast their context.</text>
+  <text x="616" y="296" font-family="'Courier New',monospace" font-size="9" fill="#d8b4fe" opacity=".65">Disciplined learning. Low noise.</text>
+  <rect x="616" y="314" width="268" height="6" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="616" y="314" width="241" height="6" rx="1.5" fill="url(#barC)" opacity=".78"/>
+  <text x="886" y="321" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
+  <text x="616" y="338" font-family="'Courier New',monospace" font-size="7.5" fill="#a855f7" opacity=".3">— durable primitives, disciplined learning, scale planning</text>
+</g>
+</svg>

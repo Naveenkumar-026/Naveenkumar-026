@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420">
+<defs>
+  <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%"   stop-color="#060010"/>
+    <stop offset="50%"  stop-color="#080008"/>
+    <stop offset="100%" stop-color="#030003"/>
+  </linearGradient>
+  <linearGradient id="hdrBg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#1a0035" stop-opacity="0.9"/>
+    <stop offset="50%"  stop-color="#0d0020" stop-opacity="0.7"/>
+    <stop offset="100%" stop-color="#1a0035" stop-opacity="0.9"/>
+  </linearGradient>
+  <linearGradient id="lPanelBg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0e0025" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#050010" stop-opacity="0.15"/>
+  </linearGradient>
+  <linearGradient id="rPanelBg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#050010" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#100020" stop-opacity="0.5"/>
+  </linearGradient>
+  <linearGradient id="barA" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#ef4444"/>
+    <stop offset="40%"  stop-color="#a855f7"/>
+    <stop offset="100%" stop-color="#22c55e"/>
+  </linearGradient>
+  <linearGradient id="barB" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#dc2626"/>
+    <stop offset="50%"  stop-color="#9333ea"/>
+    <stop offset="100%" stop-color="#4ade80"/>
+  </linearGradient>
+  <pattern id="gridP" width="32" height="32" patternUnits="userSpaceOnUse">
+    <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#a855f7" stroke-width="0.14" opacity="0.14"/>
+  </pattern>
+  <filter id="gP">
+    <feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="0.66 0 0 0 0  0 0 0 0 0  1 0 0 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="gG">
+    <feGaussianBlur stdDeviation="2" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0.3 0 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="gR">
+    <feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0.2 0 0  0 0 0 1 0" result="c"/>
+    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="blob"><feGaussianBlur stdDeviation="28"/></filter>
+  <clipPath id="c1"><rect width="900" height="420"/></clipPath>
+  <style>
+    @keyframes scan1 { 0%{transform:translateY(-4px);opacity:0} 5%{opacity:.55} 95%{opacity:.15} 100%{transform:translateY(426px);opacity:0} }
+    @keyframes bP    { 0%,100%{opacity:.32} 50%{opacity:.7} }
+    @keyframes rP    { 0%,100%{opacity:.55} 50%{opacity:1} }
+    @keyframes dB    { 0%,100%{opacity:1}   50%{opacity:.08} }
+    @keyframes gl1   { 0%,84%,100%{transform:translate(0,0);filter:none;opacity:1}
+                       85%{transform:translate(-3px,0);filter:drop-shadow(3px 0 #ef4444) drop-shadow(-1px 0 #a855f7);opacity:.9}
+                       86%{transform:translate(3px,1px);filter:drop-shadow(-3px 0 #4ade80);opacity:.85}
+                       87%{transform:translate(-1px,0);filter:drop-shadow(2px 0 #a855f7);opacity:.94}
+                       88%{transform:translate(0,0);filter:none;opacity:1}
+                       93%{transform:translate(2px,0);filter:drop-shadow(-1px 0 #ef4444);opacity:.9}
+                       94%{transform:translate(0,0);filter:none;opacity:1} }
+    @keyframes gl2   { 0%,91%,100%{transform:translate(0,0);filter:none}
+                       92%{transform:translate(-2px,0);filter:drop-shadow(2px 0 #a855f7)}
+                       93%{transform:translate(1px,0);filter:drop-shadow(-1px 0 #ef4444)}
+                       94%{transform:translate(0,0);filter:none} }
+    @keyframes tf    { 0%,100%{opacity:.48} 50%{opacity:.88} }
+    .sc{animation:scan1 7s linear infinite}
+    .ob{animation:bP 4.5s ease-in-out infinite}
+    .rp{animation:rP 2.8s ease-in-out infinite}
+    .db{animation:dB 2s step-end infinite}
+    .g1{animation:gl1 10s ease-in-out infinite}
+    .g2{animation:gl2 13s ease-in-out infinite 2s}
+    .t1{animation:tf 3.5s ease-in-out infinite}
+    .t2{animation:tf 3.5s ease-in-out infinite .8s}
+    .t3{animation:tf 3.5s ease-in-out infinite 1.6s}
+  </style>
+</defs>
+<g clip-path="url(#c1)">
+  <rect width="900" height="420" fill="url(#bg1)"/>
+  <rect width="900" height="420" fill="url(#gridP)"/>
+  <ellipse cx="150" cy="210" rx="200" ry="140" fill="#a855f7" opacity="0.04" filter="url(#blob)"/>
+  <ellipse cx="750" cy="260" rx="180" ry="120" fill="#ef4444" opacity="0.035" filter="url(#blob)"/>
+  <ellipse cx="450" cy="410" rx="280" ry="70"  fill="#22c55e" opacity="0.025" filter="url(#blob)"/>
+  <rect x="0"   y="0" width="3"   height="420" fill="#a855f7" opacity="0.5"/>
+  <rect x="897" y="0" width="3"   height="420" fill="#ef4444" opacity="0.35"/>
+  <rect class="ob" x=".5" y=".5" width="899" height="419" fill="none" stroke="#a855f7" stroke-width=".9"/>
+  <path d="M3,22 L3,3 L22,3"           fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".92"/>
+  <path d="M878,3 L897,3 L897,22"      fill="none" stroke="#ef4444" stroke-width="2.4" opacity=".85"/>
+  <path d="M3,398 L3,417 L22,417"      fill="none" stroke="#22c55e" stroke-width="2.4" opacity=".8"/>
+  <path d="M878,417 L897,417 L897,398" fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".85"/>
+  <rect class="sc" x="0" y="0" width="900" height="1.5" fill="#a855f7" opacity=".5"/>
+  <rect x="1" y="1" width="898" height="41" fill="url(#hdrBg)"/>
+  <line x1="1" y1="42" x2="899" y2="42" stroke="#a855f7" stroke-width=".5" opacity=".4"/>
+  <text x="18" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#a855f7" opacity=".5" letter-spacing="1">DOSSIER // ACTIVE</text>
+  <g class="g2">
+    <text x="310" y="27" font-family="'Courier New',monospace" font-size="13.5" font-weight="bold" fill="#a855f7" filter="url(#gP)">OPERATOR PROFILE // SILENCIO</text>
+  </g>
+  <text x="712" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#6b6880" opacity=".7">CALLSIGN · VERIFIED ·</text>
+  <text x="828" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#22c55e" opacity=".9"> ONLINE</text>
+  <circle class="db rp" cx="883" cy="21" r="4" fill="#22c55e" filter="url(#gG)"/>
+  <line x1="548" y1="42" x2="548" y2="420" stroke="#a855f7" stroke-width=".5" opacity=".2"/>
+  <rect x="1" y="42" width="546" height="377" fill="url(#lPanelBg)"/>
+  <g class="g1">
+    <text x="22" y="95" font-family="'Courier New',monospace" font-size="26" font-weight="bold" fill="#22c55e" filter="url(#gG)" letter-spacing="2">NAVEEN KUMAR M</text>
+  </g>
+  <rect x="22" y="103" width="94" height="20" rx="2" fill="#a855f7" fill-opacity=".1" stroke="#a855f7" stroke-width=".9" opacity=".85"/>
+  <text x="69" y="117" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#c084fc">[ SILENCIO ]</text>
+  <text x="22" y="146" font-family="'Courier New',monospace" font-size="11.5" fill="#e8d5ff" opacity=".75">Cybersecurity Specialist  ·  AI Systems Architect</text>
+  <line x1="22" y1="158" x2="524" y2="158" stroke="#a855f7" stroke-width=".35" opacity=".3"/>
+  <text x="22" y="177" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">Defense-first intelligent systems at the intersection of</text>
+  <text x="22" y="192" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">offensive/defensive security, OSINT, and privacy engineering.</text>
+  <text x="22" y="207" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">Strong systems thinking. Rapid prototyping. High-stakes execution.</text>
+  <line x1="22" y1="220" x2="524" y2="220" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
+  <text x="22" y="238" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45" letter-spacing="1.5">FOCUS AREAS</text>
+  <rect x="22"  y="245" width="136" height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".55"/>
+  <text x="90"  y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t1">Offensive Security</text>
+  <rect x="166" y="245" width="154" height="22" rx="2" fill="none" stroke="#22c55e" stroke-width=".7" opacity=".45"/>
+  <text x="243" y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#4ade80" class="t2">Defensive Architecture</text>
+  <rect x="328" y="245" width="112" height="22" rx="2" fill="none" stroke="#ef4444" stroke-width=".7" opacity=".45"/>
+  <text x="384" y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#f87171" class="t3">Agent Systems</text>
+  <rect x="22"  y="274" width="62"  height="22" rx="2" fill="none" stroke="#ef4444" stroke-width=".7" opacity=".45"/>
+  <text x="53"  y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#f87171" class="t2">OSINT</text>
+  <rect x="92"  y="274" width="138" height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".45"/>
+  <text x="161" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t3">Privacy Engineering</text>
+  <rect x="238" y="274" width="100" height="22" rx="2" fill="#22c55e" fill-opacity=".07" stroke="#22c55e" stroke-width=".8" opacity=".8"/>
+  <text x="288" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#4ade80" class="t1">Automation</text>
+  <rect x="346" y="274" width="82"  height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".4"/>
+  <text x="387" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t2">Low-Infra</text>
+  <rect x="22"  y="303" width="108" height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
+  <text x="76"  y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t3">Rapid Prototyping</text>
+  <rect x="138" y="303" width="152" height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
+  <text x="214" y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t1">Technical Communication</text>
+  <rect x="298" y="303" width="96"  height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
+  <text x="346" y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t2">Research Mindset</text>
+  <line x1="22" y1="344" x2="524" y2="344" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
+  <text x="22" y="361" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".38" letter-spacing="1.5">DIRECTIVE //</text>
+  <text x="22" y="378" font-family="'Courier New',monospace" font-size="10.5" fill="#e8d5ff" opacity=".58" font-style="italic">Structure precedes implementation. Build durable systems.</text>
+  <text x="22" y="408" font-family="'Courier New',monospace" font-size="8" fill="#a855f7" opacity=".22">2026 · MAIN BUILD · NAVEENKUMAR-026 · SILENCIO PROTOCOL ACTIVE</text>
+  <rect x="549" y="42" width="350" height="377" fill="url(#rPanelBg)"/>
+  <text x="568" y="66" font-family="'Courier New',monospace" font-size="9" fill="#ef4444" opacity=".55" letter-spacing="1">SIGNAL METRICS // LIVE OPS SNAPSHOT</text>
+  <line x1="568" y1="73" x2="884" y2="73" stroke="#ef4444" stroke-width=".35" opacity=".35"/>
+  <text x="568" y="98"  font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">CALLSIGN</text>
+  <text x="690" y="98"  font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#22c55e" filter="url(#gG)">SILENCIO</text>
+  <text x="568" y="118" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">MODE</text>
+  <text x="690" y="118" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">PUBLIC</text>
+  <text x="568" y="138" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">STATUS</text>
+  <circle class="db" cx="692" cy="133" r="4.5" fill="#22c55e" filter="url(#gG)"/>
+  <text x="704" y="138" font-family="'Courier New',monospace" font-size="12.5" fill="#22c55e">ONLINE</text>
+  <text x="568" y="158" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">HANDLE</text>
+  <text x="690" y="158" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">Naveenkumar-026</text>
+  <text x="568" y="178" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">BUILD</text>
+  <text x="690" y="178" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">MAIN</text>
+  <text x="568" y="198" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">MARKER</text>
+  <text x="690" y="198" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">SECURITY · AI</text>
+  <line x1="568" y1="212" x2="884" y2="212" stroke="#a855f7" stroke-width=".35" opacity=".25"/>
+  <text x="568" y="230" font-family="'Courier New',monospace" font-size="9" fill="#ef4444" opacity=".5" letter-spacing="1">CAPABILITY SIGNAL STRENGTH</text>
+  <text x="568" y="254" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Systems Thinking</text>
+  <rect x="690" y="244" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="690" y="244" width="171" height="7" rx="1.5" fill="url(#barA)" opacity=".85"/>
+  <text x="874" y="252" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">95%</text>
+  <text x="568" y="274" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Cyber Defense</text>
+  <rect x="690" y="264" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="690" y="264" width="162" height="7" rx="1.5" fill="url(#barB)" opacity=".85"/>
+  <text x="874" y="272" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
+  <text x="568" y="294" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Privacy Engineering</text>
+  <rect x="690" y="284" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="690" y="284" width="153" height="7" rx="1.5" fill="url(#barA)" opacity=".8"/>
+  <text x="874" y="292" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">85%</text>
+  <text x="568" y="314" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Agent Systems</text>
+  <rect x="690" y="304" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="690" y="304" width="144" height="7" rx="1.5" fill="url(#barB)" opacity=".8"/>
+  <text x="874" y="312" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">80%</text>
+  <text x="568" y="334" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">OSINT</text>
+  <rect x="690" y="324" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
+  <rect x="690" y="324" width="162" height="7" rx="1.5" fill="url(#barA)" opacity=".8"/>
+  <text x="874" y="332" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
+  <line x1="568" y1="347" x2="884" y2="347" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
+  <text x="568" y="367" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".25">2026-03-05 UTC · LIVE TELEMETRY · MODE DOSSIER</text>
+  <text x="568" y="386" font-family="'Courier New',monospace" font-size="8.5" fill="#22c55e" opacity=".22" font-style="italic">Build durable systems. Release deliberately.</text>
+</g>
+</svg>
