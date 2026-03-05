@@ -12,22 +12,12 @@
 
 <p align="center">
 
-<a href="https://github.com/Naveenkumar-026?tab=repositories" style="text-decoration:none;">
-<span style="background:#050507;border:1px solid #7c3aed;color:#ffffff;
-padding:10px 24px;font-family:JetBrains Mono,monospace;
-letter-spacing:2px;border-radius:6px;">
-⬢ PROJECTS
-</span>
+<a href="https://github.com/Naveenkumar-026?tab=repositories">
+<img src="https://img.shields.io/badge/PROJECTS-000000?style=for-the-badge&logo=github&logoColor=8B5CF6&labelColor=000000&color=000000">
 </a>
 
-<span style="color:#7c3aed;font-size:18px;margin:0 16px;">◉</span>
-
-<a href="https://github.com/Naveenkumar-026?tab=stars" style="text-decoration:none;">
-<span style="background:#050507;border:1px solid #7c3aed;color:#ffffff;
-padding:10px 24px;font-family:JetBrains Mono,monospace;
-letter-spacing:2px;border-radius:6px;">
-⬢ STARRED
-</span>
+<a href="https://github.com/Naveenkumar-026?tab=stars">
+<img src="https://img.shields.io/badge/STARRED-000000?style=for-the-badge&logo=github&logoColor=8B5CF6&labelColor=000000&color=000000">
 </a>
 
 </p>
