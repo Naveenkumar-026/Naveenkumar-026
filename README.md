@@ -22,15 +22,11 @@
   <img src="./assets/capability_matrix.svg" alt="Capability Matrix" width="100%" />
 </p>
 
----
-
 <p align="center">
   <img src="./assets/protocol_panel.svg" alt="Protocol // 01" width="100%" />
 </p>
 
-<p align="center">
-  <span>──────── ⧉ ────────</span>
-</p>
+---
 
 <p align="center">
   <img src="./assets/signal_barcode.svg?v=22727114668" alt="Signal Telemetry" width="100%" />
