@@ -37,7 +37,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=22729955597" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=22733328774" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center"><em>
