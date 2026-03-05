@@ -1,25 +1,39 @@
-<svg width="100%" height="80" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="80" fill="black"/>
+<svg width="100%" height="110" viewBox="0 0 1200 110" xmlns="http://www.w3.org/2000/svg">
 
-  <path id="wave"
-        d="M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40"
-        stroke="#ff2a2a"
-        stroke-width="2"
-        fill="none"
-        stroke-linecap="round">
+<g stroke="white" stroke-width="1.2" fill="none" opacity="0.55">
 
-    <animate attributeName="d"
-      dur="3s"
-      repeatCount="indefinite"
-      values="
-      M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40;
-      M0 40 Q50 70 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40;
-      M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40"/>
-  </path>
+<path d="M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55">
+<animate attributeName="d" dur="3s" repeatCount="indefinite"
+values="
+M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55;
+M0 55 Q60 85 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55;
+M0 55 Q60 20 120 55 T240 55 T360 55 T480 55 T600 55 T720 55 T840 55 T960 55 T1080 55 T1200 55"/>
+</path>
 
-  <circle r="4" fill="#ff2a2a">
-    <animateMotion dur="3s" repeatCount="indefinite">
-      <mpath href="#wave"/>
-    </animateMotion>
-  </circle>
+</g>
+
+<g stroke="white" stroke-width="0.8" fill="none" opacity="0.35">
+
+<path d="M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55">
+<animate attributeName="d" dur="2.6s" repeatCount="indefinite"
+values="
+M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55;
+M0 55 Q50 80 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55;
+M0 55 Q50 30 100 55 T200 55 T300 55 T400 55 T500 55 T600 55 T700 55 T800 55 T900 55 T1000 55 T1100 55 T1200 55"/>
+</path>
+
+</g>
+
+<g stroke="white" stroke-width="0.6" fill="none" opacity="0.25">
+
+<path d="M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55">
+<animate attributeName="d" dur="2.2s" repeatCount="indefinite"
+values="
+M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55;
+M0 55 Q70 70 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55;
+M0 55 Q70 40 140 55 T280 55 T420 55 T560 55 T700 55 T840 55 T980 55 T1120 55 T1200 55"/>
+</path>
+
+</g>
+
 </svg>
