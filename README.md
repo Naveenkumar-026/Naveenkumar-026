@@ -13,11 +13,13 @@
 <p align="center">
 
 <a href="https://github.com/Naveenkumar-026?tab=repositories">
-<img src="https://img.shields.io/badge/PROJECTS-000000?style=for-the-badge&logo=github&logoColor=8B5CF6&labelColor=000000&color=000000">
+<img src="https://img.shields.io/badge/%E2%8C%81%20PROJECTS-000000?style=for-the-badge&logoColor=8B5CF6&color=000000">
 </a>
 
+◉
+
 <a href="https://github.com/Naveenkumar-026?tab=stars">
-<img src="https://img.shields.io/badge/STARRED-000000?style=for-the-badge&logo=github&logoColor=8B5CF6&labelColor=000000&color=000000">
+<img src="https://img.shields.io/badge/%E2%8C%81%20STARRED-000000?style=for-the-badge&logoColor=8B5CF6&color=000000">
 </a>
 
 </p>
