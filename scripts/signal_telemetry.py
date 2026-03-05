@@ -4,7 +4,6 @@ import json
 import datetime
 import urllib.request
 from pathlib import Path
-import random
 
 # ---------------- CONFIG ----------------
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
@@ -14,21 +13,21 @@ OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 DAYS = int(os.environ.get("DAYS", "365"))
 
-BG = "#020000"
-ACCENT = "#ff2a2a"
-ACCENT_LIGHT = "#ff8080"
-GRID = "#2b0a0a"
-MUTED = "#6b7280"
+BG = "#020203"
+GRID = "#1b1b1d"
+ACCENT = "#ff4040"
+TEXT = "#e5e7eb"
+MUTED = "#9ca3af"
 
 FONT = "JetBrains Mono, monospace"
 
 WIDTH = 980
 HEIGHT = 300
-PAD_X = 28
-HEADER_H = 56
+PAD_X = 40
+HEADER_H = 60
 
 PLOT_TOP = HEADER_H + 10
-PLOT_H = 160
+PLOT_H = 170
 PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
 # ---------------- HELPERS ----------------
@@ -60,15 +59,6 @@ def compute_window(days, tz_offset):
     to_dt_utc = to_dt - datetime.timedelta(minutes=tz_offset)
 
     return from_dt_utc, to_dt_utc, start_date, end_date
-
-def moving_avg(series, window=11):
-    half = window // 2
-    out = []
-    for i in range(len(series)):
-        lo = max(0, i-half)
-        hi = min(len(series), i+half+1)
-        out.append(sum(series[lo:hi])/(hi-lo))
-    return out
 
 # ---------------- MAIN ----------------
 def main():
@@ -116,100 +106,55 @@ def main():
     total = sum(counts)
     peak = max(counts) if counts else 1
 
-    ma = moving_avg(counts, 9)
-
     sx = (WIDTH - 2*PAD_X)/(DAYS-1)
 
-    pts = []
-    hist = []
-    for i,v in enumerate(ma):
+    bars = []
+    markers = []
+
+    for i,v in enumerate(counts):
         x = PAD_X + i*sx
-        y = PLOT_BOTTOM - (v/peak)*(PLOT_H-10)
-        pts.append((x,y))
+        h = (v/peak)*(PLOT_H-10)
 
-        h = (v/peak)*(PLOT_H*0.4)
-        hist.append((x, h))
+        if v > 0:
+            bars.append((x,h))
 
-    path = "M " + " ".join(f"{x:.2f},{y:.2f}" for x,y in pts)
+        if v >= peak*0.6:
+            markers.append((x,h))
 
-    # generate random spectrum spikes
-    spikes = []
-    for _ in range(22):
-        x = random.uniform(PAD_X, WIDTH-PAD_X)
-        h = random.uniform(20,80)
-        spikes.append((x,h))
-
-    # interference bursts
-    bursts = []
-    for _ in range(5):
-        x = random.uniform(PAD_X, WIDTH-PAD_X)
-        bursts.append(x)
+    grid_lines = ""
+    for i in range(5):
+        y = PLOT_TOP + (i*(PLOT_H/4))
+        grid_lines += f"<line x1='{PAD_X}' y1='{y:.1f}' x2='{WIDTH-PAD_X}' y2='{y:.1f}' stroke='{GRID}'/>"
 
     svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>
 
-<defs>
+<rect width='100%' height='100%' fill='{BG}'/>
 
-<linearGradient id='bgGrad' x1='0' x2='0' y1='0' y2='1'>
-<stop offset='0%' stop-color='{BG}'/>
-<stop offset='100%' stop-color='#000000'/>
-</linearGradient>
-
-<linearGradient id='signalGrad' x1='0' x2='1'>
-<stop offset='0%' stop-color='#7f1d1d'/>
-<stop offset='50%' stop-color='{ACCENT}'/>
-<stop offset='100%' stop-color='{ACCENT_LIGHT}'/>
-</linearGradient>
-
-<filter id='glow'>
-<feGaussianBlur stdDeviation='4'/>
-</filter>
-
-<filter id='noise'>
-<feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/>
-</filter>
-
-</defs>
-
-<rect width='100%' height='100%' fill='url(#bgGrad)'/>
-<rect width='100%' height='100%' filter='url(#noise)' opacity='0.03'/>
-
-<!-- header -->
-<text x='{PAD_X}' y='26' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
-SIGNAL // 365D
-</text>
-
-<text x='{PAD_X}' y='42' font-family='{FONT}' font-size='10' fill='{MUTED}'>
-{total} contributions · peak/day {peak}
-</text>
-
-<!-- sweep -->
-<rect x='0' y='0' width='{WIDTH}' height='2' fill='{ACCENT}' opacity='0.4'>
-<animate attributeName='y' from='0' to='{HEIGHT}' dur='7s' repeatCount='indefinite'/>
-</rect>
+<!-- grid -->
+{grid_lines}
 
 <!-- histogram -->
-{"".join(f"<rect x='{x:.2f}' y='{PLOT_BOTTOM-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}' opacity='0.15'/>" for x,h in hist)}
+{"".join(f"<rect x='{x:.2f}' y='{PLOT_BOTTOM-h:.2f}' width='2.4' height='{h:.2f}' fill='{ACCENT}'/>" for x,h in bars)}
 
-<!-- spectrum spikes -->
-{"".join(f"<line x1='{x:.2f}' y1='{PLOT_TOP}' x2='{x:.2f}' y2='{PLOT_TOP+h:.2f}' stroke='{ACCENT_LIGHT}' stroke-width='1' opacity='0.4'/>" for x,h in spikes)}
+<!-- high activity markers -->
+{"".join(f"<circle cx='{x:.2f}' cy='{PLOT_BOTTOM-h:.2f}' r='3' fill='{TEXT}'/>" for x,h in markers)}
 
-<!-- interference bursts -->
-{"".join(f"<circle cx='{x:.2f}' cy='{PLOT_TOP+40}' r='3' fill='{ACCENT_LIGHT}' opacity='0.7'><animate attributeName='r' values='3;12;3' dur='1.6s' repeatCount='indefinite'/></circle>" for x in bursts)}
+<!-- baseline -->
+<line x1='{PAD_X}' y1='{PLOT_BOTTOM}' x2='{WIDTH-PAD_X}' y2='{PLOT_BOTTOM}' stroke='{ACCENT}' stroke-width='1'/>
 
-<!-- ghost signal -->
-<path d='{path}' stroke='{ACCENT}' stroke-width='5' opacity='0.07' fill='none'/>
+<!-- header -->
+<text x='{PAD_X}' y='28' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
+SIGINT TELEMETRY // 365D
+</text>
 
-<!-- glow density -->
-<path d='{path} L {WIDTH-PAD_X},{PLOT_BOTTOM} L {PAD_X},{PLOT_BOTTOM} Z'
-fill='{ACCENT}' opacity='0.08' filter='url(#glow)'/>
+<text x='{PAD_X}' y='46' font-family='{FONT}' font-size='11' fill='{MUTED}'>
+{total} events · peak/day {peak}
+</text>
 
-<!-- main signal -->
-<path d='{path}' stroke='url(#signalGrad)' stroke-width='2.5' fill='none' filter='url(#glow)'/>
-
-<!-- pulse -->
-<circle cx='{pts[-1][0]:.2f}' cy='{pts[-1][1]:.2f}' r='5' fill='{ACCENT_LIGHT}'>
-<animate attributeName='r' values='4;9;4' dur='2s' repeatCount='indefinite'/>
-</circle>
+<!-- axis labels -->
+<text x='{WIDTH-PAD_X}' y='{PLOT_BOTTOM+16}' font-family='{FONT}' font-size='10' fill='{MUTED}' text-anchor='end'>
+timeline →
+</text>
 
 </svg>
 """
@@ -219,7 +164,7 @@ fill='{ACCENT}' opacity='0.08' filter='url(#glow)'/>
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("Advanced cinematic telemetry generated →", OUT_PATH)
+    print("SIGINT telemetry generated →", OUT_PATH)
 
 if __name__ == "__main__":
     main()
