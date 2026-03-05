@@ -11,17 +11,7 @@
 </p>
 
 <p align="center">
-
-<a href="https://github.com/Naveenkumar-026?tab=repositories">
-<img src="https://img.shields.io/badge/%E2%97%88%20PROJECTS-000000?style=for-the-badge&color=000000&labelColor=000000&logoColor=8B5CF6">
-</a>
-
-<img src="https://img.shields.io/badge/%E2%97%89-000000?style=for-the-badge&color=000000&labelColor=000000">
-
-<a href="https://github.com/Naveenkumar-026?tab=stars">
-<img src="https://img.shields.io/badge/%E2%97%88%20STARRED-000000?style=for-the-badge&color=000000&labelColor=000000&logoColor=8B5CF6">
-</a>
-
+<a href="https://github.com/Naveenkumar-026?tab=repositories"><img src="https://img.shields.io/badge/%E2%97%88%20PROJECTS-000000?style=for-the-badge&color=000000&labelColor=000000"></a>&nbsp;<span style="color:#8B5CF6;font-family:JetBrains Mono,monospace;">│</span>&nbsp;<a href="https://github.com/Naveenkumar-026?tab=stars"><img src="https://img.shields.io/badge/%E2%97%88%20STARRED-000000?style=for-the-badge&color=000000&labelColor=000000"></a>
 </p>
 
 <p align="center">
