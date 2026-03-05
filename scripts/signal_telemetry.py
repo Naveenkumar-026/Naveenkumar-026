@@ -4,6 +4,7 @@ import json
 import datetime
 import urllib.request
 from pathlib import Path
+import random
 
 # ---------------- CONFIG ----------------
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
@@ -13,21 +14,21 @@ OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 DAYS = int(os.environ.get("DAYS", "365"))
 
-BG = "#030000"
-ACCENT = "#ef4444"
-ACCENT_LIGHT = "#fca5a5"
-GRID = "#2d1010"
+BG = "#020000"
+ACCENT = "#ff2a2a"
+ACCENT_LIGHT = "#ff8080"
+GRID = "#2b0a0a"
 MUTED = "#6b7280"
 
 FONT = "JetBrains Mono, monospace"
 
 WIDTH = 980
-HEIGHT = 260
+HEIGHT = 300
 PAD_X = 28
 HEADER_H = 56
 
-PLOT_TOP = HEADER_H + 8
-PLOT_H = 140
+PLOT_TOP = HEADER_H + 10
+PLOT_H = 160
 PLOT_BOTTOM = PLOT_TOP + PLOT_H
 
 # ---------------- HELPERS ----------------
@@ -120,12 +121,29 @@ def main():
     sx = (WIDTH - 2*PAD_X)/(DAYS-1)
 
     pts = []
+    hist = []
     for i,v in enumerate(ma):
         x = PAD_X + i*sx
         y = PLOT_BOTTOM - (v/peak)*(PLOT_H-10)
         pts.append((x,y))
 
+        h = (v/peak)*(PLOT_H*0.4)
+        hist.append((x, h))
+
     path = "M " + " ".join(f"{x:.2f},{y:.2f}" for x,y in pts)
+
+    # generate random spectrum spikes
+    spikes = []
+    for _ in range(22):
+        x = random.uniform(PAD_X, WIDTH-PAD_X)
+        h = random.uniform(20,80)
+        spikes.append((x,h))
+
+    # interference bursts
+    bursts = []
+    for _ in range(5):
+        x = random.uniform(PAD_X, WIDTH-PAD_X)
+        bursts.append(x)
 
     svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>
 
@@ -153,9 +171,7 @@ def main():
 </defs>
 
 <rect width='100%' height='100%' fill='url(#bgGrad)'/>
-
-<!-- RF noise floor -->
-<rect width='100%' height='100%' filter='url(#noise)' opacity='0.035'/>
+<rect width='100%' height='100%' filter='url(#noise)' opacity='0.03'/>
 
 <!-- header -->
 <text x='{PAD_X}' y='26' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
@@ -166,27 +182,33 @@ SIGNAL // 365D
 {total} contributions · peak/day {peak}
 </text>
 
-<!-- scan sweep -->
+<!-- sweep -->
 <rect x='0' y='0' width='{WIDTH}' height='2' fill='{ACCENT}' opacity='0.4'>
-<animate attributeName='y' from='0' to='{HEIGHT}' dur='6s' repeatCount='indefinite'/>
+<animate attributeName='y' from='0' to='{HEIGHT}' dur='7s' repeatCount='indefinite'/>
 </rect>
 
-<!-- grid -->
-<line x1='{PAD_X}' y1='{PLOT_BOTTOM}' x2='{WIDTH-PAD_X}' y2='{PLOT_BOTTOM}' stroke='{GRID}'/>
+<!-- histogram -->
+{"".join(f"<rect x='{x:.2f}' y='{PLOT_BOTTOM-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}' opacity='0.15'/>" for x,h in hist)}
+
+<!-- spectrum spikes -->
+{"".join(f"<line x1='{x:.2f}' y1='{PLOT_TOP}' x2='{x:.2f}' y2='{PLOT_TOP+h:.2f}' stroke='{ACCENT_LIGHT}' stroke-width='1' opacity='0.4'/>" for x,h in spikes)}
+
+<!-- interference bursts -->
+{"".join(f"<circle cx='{x:.2f}' cy='{PLOT_TOP+40}' r='3' fill='{ACCENT_LIGHT}' opacity='0.7'><animate attributeName='r' values='3;12;3' dur='1.6s' repeatCount='indefinite'/></circle>" for x in bursts)}
 
 <!-- ghost signal -->
 <path d='{path}' stroke='{ACCENT}' stroke-width='5' opacity='0.07' fill='none'/>
 
-<!-- density glow under spikes -->
+<!-- glow density -->
 <path d='{path} L {WIDTH-PAD_X},{PLOT_BOTTOM} L {PAD_X},{PLOT_BOTTOM} Z'
 fill='{ACCENT}' opacity='0.08' filter='url(#glow)'/>
 
 <!-- main signal -->
-<path d='{path}' stroke='url(#signalGrad)' stroke-width='2.4' fill='none' filter='url(#glow)'/>
+<path d='{path}' stroke='url(#signalGrad)' stroke-width='2.5' fill='none' filter='url(#glow)'/>
 
-<!-- signal pulse -->
+<!-- pulse -->
 <circle cx='{pts[-1][0]:.2f}' cy='{pts[-1][1]:.2f}' r='5' fill='{ACCENT_LIGHT}'>
-<animate attributeName='r' values='4;8;4' dur='2s' repeatCount='indefinite'/>
+<animate attributeName='r' values='4;9;4' dur='2s' repeatCount='indefinite'/>
 </circle>
 
 </svg>
@@ -197,7 +219,7 @@ fill='{ACCENT}' opacity='0.08' filter='url(#glow)'/>
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("Cinematic telemetry SVG generated →", OUT_PATH)
+    print("Advanced cinematic telemetry generated →", OUT_PATH)
 
 if __name__ == "__main__":
     main()
