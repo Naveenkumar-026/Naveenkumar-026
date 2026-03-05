@@ -16,7 +16,9 @@
   </a>
 </p>
 
----
+<p align="center">
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=12&duration=1&pause=1000&color=22C55E&width=800&lines=────────────────────────────────────────────────────────────────────────────────────────" />
+</p>
 
 <p align="center">
   <img src="./assets/dossier_panel.svg" alt="Operator Dossier // Silencio" width="100%" />
@@ -30,7 +32,9 @@
   <img src="./assets/protocol_panel.svg" alt="Protocol // 01" width="100%" />
 </p>
 
----
+<p align="center">
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=12&duration=1&pause=1000&color=22C55E&width=800&lines=────────────────────────────────────────────────────────────────────────────────────────" />
+</p>
 
 <p align="center">
   <img src="./assets/signal_barcode.svg?v=22727114668" alt="Signal Telemetry" width="100%" />
