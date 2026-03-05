@@ -1,0 +1,25 @@
+<svg width="100%" height="80" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="80" fill="black"/>
+
+  <path id="wave"
+        d="M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40"
+        stroke="#ff2a2a"
+        stroke-width="2"
+        fill="none"
+        stroke-linecap="round">
+
+    <animate attributeName="d"
+      dur="3s"
+      repeatCount="indefinite"
+      values="
+      M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40;
+      M0 40 Q50 70 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40;
+      M0 40 Q50 10 100 40 T200 40 T300 40 T400 40 T500 40 T600 40 T700 40 T800 40 T900 40 T1000 40 T1100 40 T1200 40"/>
+  </path>
+
+  <circle r="4" fill="#ff2a2a">
+    <animateMotion dur="3s" repeatCount="indefinite">
+      <mpath href="#wave"/>
+    </animateMotion>
+  </circle>
+</svg>
