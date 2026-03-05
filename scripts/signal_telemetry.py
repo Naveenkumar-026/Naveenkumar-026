@@ -4,7 +4,6 @@ import json
 import datetime
 import urllib.request
 from pathlib import Path
-import random
 
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
 TOKEN = os.environ.get("GH_TOKEN") or ""
@@ -17,10 +16,10 @@ WIDTH = 980
 HEIGHT = 380
 
 PAD_X = 40
-HEADER_H = 60
+HEADER_H = 20
 
 CHANNEL_H = 80
-PLOT_TOP = HEADER_H + 10
+PLOT_TOP = HEADER_H + 20
 
 FONT = "JetBrains Mono, monospace"
 
@@ -123,32 +122,13 @@ def main():
     sx = (WIDTH-200-PAD_X*2)/(DAYS-1)
 
     channels = []
-
     for i,v in enumerate(counts):
         x = PAD_X + i*sx
         h = (v/peak)*(CHANNEL_H-8)
         channels.append((x,h,v))
 
-    # burst clusters
-    bursts = []
-    for i,v in enumerate(counts):
-        if v >= peak*0.7:
-            x = PAD_X + i*sx
-            bursts.append(x)
-
     svg = f"<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>"
-
     svg += f"<rect width='100%' height='100%' fill='{BG}'/>"
-
-    svg += f"""
-    <text x='{PAD_X}' y='28' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
-    SIGINT TELEMETRY
-    </text>
-
-    <text x='{PAD_X}' y='46' font-family='{FONT}' font-size='11' fill='{MUTED}'>
-    COMMITS {commits_total} · PR {prs_total} · REPOS {repos_total}
-    </text>
-    """
 
     # channels
     for ch in range(3):
@@ -164,43 +144,42 @@ def main():
             svg += f"<rect x='{x:.2f}' y='{base+CHANNEL_H-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}'/>"
 
             if tag == "HIGH":
-                svg += f"<circle cx='{x:.2f}' cy='{base+CHANNEL_H-h:.2f}' r='2' fill='{TEXT}'/>"
+                svg += f"<rect x='{x-1:.2f}' y='{base+CHANNEL_H-h-4:.2f}' width='4' height='2' fill='{TEXT}'/>"
 
-    # burst markers
-    for x in bursts:
-        svg += f"""
-        <circle cx='{x:.2f}' cy='{PLOT_TOP-6}' r='3' fill='{ACCENT}'>
-        <animate attributeName='r' values='3;7;3' dur='1.4s' repeatCount='indefinite'/>
-        </circle>
-        """
-
-    # sweep cursor
+    # enhanced sweep cursor (multi-line radar style)
     svg += f"""
-    <rect x='{PAD_X}' y='{PLOT_TOP}' width='2' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.6'>
-    <animate attributeName='x'
-    values='{PAD_X};{WIDTH-200}'
-    dur='5s'
-    repeatCount='indefinite'/>
-    </rect>
+    <g>
+      <rect x='{PAD_X}' y='{PLOT_TOP}' width='1' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.9'>
+        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
+      </rect>
+
+      <rect x='{PAD_X}' y='{PLOT_TOP}' width='6' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.08'>
+        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
+      </rect>
+
+      <rect x='{PAD_X}' y='{PLOT_TOP}' width='20' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.03'>
+        <animate attributeName='x' values='{PAD_X};{WIDTH-200}' dur='5s' repeatCount='indefinite'/>
+      </rect>
+    </g>
     """
 
     # classification legend
     svg += f"""
-    <text x='{WIDTH-180}' y='110' font-family='{FONT}' font-size='10' fill='{TEXT}'>CLASSIFICATION</text>
+    <text x='{WIDTH-180}' y='120' font-family='{FONT}' font-size='10' fill='{TEXT}'>CLASSIFICATION</text>
 
-    <text x='{WIDTH-180}' y='130' font-family='{FONT}' font-size='10' fill='{MUTED}'>LOW</text>
-    <text x='{WIDTH-180}' y='150' font-family='{FONT}' font-size='10' fill='{MUTED}'>MED</text>
-    <text x='{WIDTH-180}' y='170' font-family='{FONT}' font-size='10' fill='{MUTED}'>HIGH</text>
+    <text x='{WIDTH-180}' y='140' font-family='{FONT}' font-size='10' fill='{MUTED}'>LOW</text>
+    <text x='{WIDTH-180}' y='160' font-family='{FONT}' font-size='10' fill='{MUTED}'>MED</text>
+    <text x='{WIDTH-180}' y='180' font-family='{FONT}' font-size='10' fill='{MUTED}'>HIGH</text>
     """
 
     # side diagnostics
     svg += f"""
-    <rect x='{WIDTH-190}' y='200' width='170' height='110' stroke='{GRID}' fill='none'/>
-    <text x='{WIDTH-180}' y='220' font-family='{FONT}' font-size='10' fill='{TEXT}'>DIAGNOSTICS</text>
+    <rect x='{WIDTH-190}' y='220' width='170' height='110' stroke='{GRID}' fill='none'/>
+    <text x='{WIDTH-180}' y='240' font-family='{FONT}' font-size='10' fill='{TEXT}'>DIAGNOSTICS</text>
 
-    <text x='{WIDTH-180}' y='240' font-family='{FONT}' font-size='10' fill='{MUTED}'>events:{sum(counts)}</text>
-    <text x='{WIDTH-180}' y='260' font-family='{FONT}' font-size='10' fill='{MUTED}'>peak:{peak}</text>
-    <text x='{WIDTH-180}' y='280' font-family='{FONT}' font-size='10' fill='{MUTED}'>window:{DAYS}d</text>
+    <text x='{WIDTH-180}' y='260' font-family='{FONT}' font-size='10' fill='{MUTED}'>events:{sum(counts)}</text>
+    <text x='{WIDTH-180}' y='280' font-family='{FONT}' font-size='10' fill='{MUTED}'>peak:{peak}</text>
+    <text x='{WIDTH-180}' y='300' font-family='{FONT}' font-size='10' fill='{MUTED}'>window:{DAYS}d</text>
     """
 
     svg += "</svg>"
@@ -210,7 +189,7 @@ def main():
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("SIGINT panel generated ->", OUT_PATH)
+    print("Updated SIGINT panel generated ->", OUT_PATH)
 
 if __name__ == "__main__":
     main()
