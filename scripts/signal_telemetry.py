@@ -6,7 +6,6 @@ import urllib.request
 from pathlib import Path
 import random
 
-# ---------------- CONFIG ----------------
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
 TOKEN = os.environ.get("GH_TOKEN") or ""
 OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
@@ -14,23 +13,23 @@ OUT_PATH = os.environ.get("OUT_PATH", "assets/signal_barcode.svg")
 TZ_OFFSET_MINUTES = int(os.environ.get("TZ_OFFSET_MINUTES", "330"))
 DAYS = int(os.environ.get("DAYS", "365"))
 
+WIDTH = 980
+HEIGHT = 380
+
+PAD_X = 40
+HEADER_H = 60
+
+CHANNEL_H = 80
+PLOT_TOP = HEADER_H + 10
+
+FONT = "JetBrains Mono, monospace"
+
 BG = "#020203"
 GRID = "#1b1b1d"
 ACCENT = "#ff4040"
 TEXT = "#e5e7eb"
 MUTED = "#9ca3af"
 
-FONT = "JetBrains Mono, monospace"
-
-WIDTH = 980
-HEIGHT = 360
-PAD_X = 40
-HEADER_H = 60
-
-PLOT_TOP = HEADER_H + 10
-CHANNEL_H = 70
-
-# ---------------- HELPERS ----------------
 def iso_z(dt):
     return dt.replace(microsecond=0).isoformat() + "Z"
 
@@ -38,6 +37,7 @@ def gh_api(query, variables):
     req = urllib.request.Request("https://api.github.com/graphql", method="POST")
     req.add_header("Authorization", f"bearer {TOKEN}")
     req.add_header("Content-Type", "application/json")
+
     payload = json.dumps({"query": query, "variables": variables}).encode()
 
     with urllib.request.urlopen(req, data=payload, timeout=30) as r:
@@ -60,8 +60,16 @@ def compute_window(days, tz_offset):
 
     return from_dt_utc, to_dt_utc, start_date, end_date
 
-# ---------------- MAIN ----------------
+def classify(v, peak):
+    r = v/peak if peak else 0
+    if r > 0.66:
+        return "HIGH"
+    if r > 0.33:
+        return "MED"
+    return "LOW"
+
 def main():
+
     if not USER:
         raise SystemExit("GH_USER missing")
 
@@ -112,53 +120,88 @@ def main():
 
     peak = max(counts) if counts else 1
 
-    sx = (WIDTH - 2*PAD_X)/(DAYS-1)
+    sx = (WIDTH-200-PAD_X*2)/(DAYS-1)
 
     channels = []
 
     for i,v in enumerate(counts):
         x = PAD_X + i*sx
         h = (v/peak)*(CHANNEL_H-8)
-        channels.append((x,h))
+        channels.append((x,h,v))
 
-    # glitch lines
-    glitches = []
-    for _ in range(14):
-        x = random.uniform(PAD_X, WIDTH-PAD_X)
-        y = random.uniform(HEADER_H, HEIGHT-20)
-        glitches.append((x,y))
+    # burst clusters
+    bursts = []
+    for i,v in enumerate(counts):
+        if v >= peak*0.7:
+            x = PAD_X + i*sx
+            bursts.append(x)
 
-    svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>
+    svg = f"<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>"
 
-<rect width='100%' height='100%' fill='{BG}'/>
+    svg += f"<rect width='100%' height='100%' fill='{BG}'/>"
 
-<!-- header -->
-<text x='{PAD_X}' y='28' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
-SIGINT TELEMETRY
-</text>
+    svg += f"""
+    <text x='{PAD_X}' y='28' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
+    SIGINT TELEMETRY
+    </text>
 
-<text x='{PAD_X}' y='46' font-family='{FONT}' font-size='11' fill='{MUTED}'>
-COMMITS {commits_total} · PR {prs_total} · REPOS {repos_total}
-</text>
+    <text x='{PAD_X}' y='46' font-family='{FONT}' font-size='11' fill='{MUTED}'>
+    COMMITS {commits_total} · PR {prs_total} · REPOS {repos_total}
+    </text>
+    """
 
-<!-- channel labels -->
-<text x='{PAD_X-28}' y='{PLOT_TOP+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>CODE</text>
-<text x='{PAD_X-28}' y='{PLOT_TOP+CHANNEL_H+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>COMMITS</text>
-<text x='{PAD_X-28}' y='{PLOT_TOP+CHANNEL_H*2+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>REPOS</text>
-
-"""
-
-    # generate 3 telemetry channels
+    # channels
     for ch in range(3):
-        base = PLOT_TOP + ch*CHANNEL_H
-        svg += f"<line x1='{PAD_X}' y1='{base+CHANNEL_H}' x2='{WIDTH-PAD_X}' y2='{base+CHANNEL_H}' stroke='{GRID}'/>"
 
-        for x,h in channels:
+        base = PLOT_TOP + ch*CHANNEL_H
+
+        svg += f"<line x1='{PAD_X}' y1='{base+CHANNEL_H}' x2='{WIDTH-200}' y2='{base+CHANNEL_H}' stroke='{GRID}'/>"
+
+        for x,h,v in channels:
+
+            tag = classify(v,peak)
+
             svg += f"<rect x='{x:.2f}' y='{base+CHANNEL_H-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}'/>"
 
-    # glitch effect
-    for x,y in glitches:
-        svg += f"<rect x='{x:.2f}' y='{y:.2f}' width='14' height='1' fill='{ACCENT}' opacity='0.5'/>"
+            if tag == "HIGH":
+                svg += f"<circle cx='{x:.2f}' cy='{base+CHANNEL_H-h:.2f}' r='2' fill='{TEXT}'/>"
+
+    # burst markers
+    for x in bursts:
+        svg += f"""
+        <circle cx='{x:.2f}' cy='{PLOT_TOP-6}' r='3' fill='{ACCENT}'>
+        <animate attributeName='r' values='3;7;3' dur='1.4s' repeatCount='indefinite'/>
+        </circle>
+        """
+
+    # sweep cursor
+    svg += f"""
+    <rect x='{PAD_X}' y='{PLOT_TOP}' width='2' height='{CHANNEL_H*3}' fill='{TEXT}' opacity='0.6'>
+    <animate attributeName='x'
+    values='{PAD_X};{WIDTH-200}'
+    dur='5s'
+    repeatCount='indefinite'/>
+    </rect>
+    """
+
+    # classification legend
+    svg += f"""
+    <text x='{WIDTH-180}' y='110' font-family='{FONT}' font-size='10' fill='{TEXT}'>CLASSIFICATION</text>
+
+    <text x='{WIDTH-180}' y='130' font-family='{FONT}' font-size='10' fill='{MUTED}'>LOW</text>
+    <text x='{WIDTH-180}' y='150' font-family='{FONT}' font-size='10' fill='{MUTED}'>MED</text>
+    <text x='{WIDTH-180}' y='170' font-family='{FONT}' font-size='10' fill='{MUTED}'>HIGH</text>
+    """
+
+    # side diagnostics
+    svg += f"""
+    <rect x='{WIDTH-190}' y='200' width='170' height='110' stroke='{GRID}' fill='none'/>
+    <text x='{WIDTH-180}' y='220' font-family='{FONT}' font-size='10' fill='{TEXT}'>DIAGNOSTICS</text>
+
+    <text x='{WIDTH-180}' y='240' font-family='{FONT}' font-size='10' fill='{MUTED}'>events:{sum(counts)}</text>
+    <text x='{WIDTH-180}' y='260' font-family='{FONT}' font-size='10' fill='{MUTED}'>peak:{peak}</text>
+    <text x='{WIDTH-180}' y='280' font-family='{FONT}' font-size='10' fill='{MUTED}'>window:{DAYS}d</text>
+    """
 
     svg += "</svg>"
 
@@ -167,8 +210,7 @@ COMMITS {commits_total} · PR {prs_total} · REPOS {repos_total}
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("SIGINT multi-channel telemetry generated →", OUT_PATH)
-
+    print("SIGINT panel generated ->", OUT_PATH)
 
 if __name__ == "__main__":
     main()
