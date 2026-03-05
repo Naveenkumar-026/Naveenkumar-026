@@ -3,7 +3,7 @@
 </p>
 
 <p align="left">
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=18&duration=2500&pause=800&color=22C55E&width=850&lines=∴+f(x)+→+∞;Security+·+Intelligence+·+Autonomy;Noise+filtered.+Signal+retained.;Defense-first.+Build+durable+systems." />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=18&duration=2500&pause=1200&color=22C55E&width=850&height=40&cursor=true&lines=Security+·+Intelligence+·+Autonomy;Signal+over+Noise;Defense-first.+Build+durable+systems.;Operator+Mode:+Active" />
 </p>
 
 <p align="center">
