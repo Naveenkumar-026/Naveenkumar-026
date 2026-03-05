@@ -4,6 +4,7 @@ import json
 import datetime
 import urllib.request
 from pathlib import Path
+import random
 
 # ---------------- CONFIG ----------------
 USER = os.environ.get("GH_USER") or os.environ.get("GITHUB_ACTOR") or ""
@@ -22,13 +23,12 @@ MUTED = "#9ca3af"
 FONT = "JetBrains Mono, monospace"
 
 WIDTH = 980
-HEIGHT = 300
+HEIGHT = 360
 PAD_X = 40
 HEADER_H = 60
 
 PLOT_TOP = HEADER_H + 10
-PLOT_H = 170
-PLOT_BOTTOM = PLOT_TOP + PLOT_H
+CHANNEL_H = 70
 
 # ---------------- HELPERS ----------------
 def iso_z(dt):
@@ -79,6 +79,9 @@ def main():
               }
             }
           }
+          totalCommitContributions
+          totalPullRequestContributions
+          totalRepositoryContributions
         }
       }
     }
@@ -92,6 +95,10 @@ def main():
 
     cal = data["user"]["contributionsCollection"]["contributionCalendar"]
 
+    commits_total = data["user"]["contributionsCollection"]["totalCommitContributions"]
+    repos_total = data["user"]["contributionsCollection"]["totalRepositoryContributions"]
+    prs_total = data["user"]["contributionsCollection"]["totalPullRequestContributions"]
+
     by_date = {}
     for w in cal["weeks"]:
         for d in w["contributionDays"]:
@@ -103,68 +110,65 @@ def main():
         counts.append(by_date.get(cur.isoformat(),0))
         cur += datetime.timedelta(days=1)
 
-    total = sum(counts)
     peak = max(counts) if counts else 1
 
     sx = (WIDTH - 2*PAD_X)/(DAYS-1)
 
-    bars = []
-    markers = []
+    channels = []
 
     for i,v in enumerate(counts):
         x = PAD_X + i*sx
-        h = (v/peak)*(PLOT_H-10)
+        h = (v/peak)*(CHANNEL_H-8)
+        channels.append((x,h))
 
-        if v > 0:
-            bars.append((x,h))
-
-        if v >= peak*0.6:
-            markers.append((x,h))
-
-    grid_lines = ""
-    for i in range(5):
-        y = PLOT_TOP + (i*(PLOT_H/4))
-        grid_lines += f"<line x1='{PAD_X}' y1='{y:.1f}' x2='{WIDTH-PAD_X}' y2='{y:.1f}' stroke='{GRID}'/>"
+    # glitch lines
+    glitches = []
+    for _ in range(14):
+        x = random.uniform(PAD_X, WIDTH-PAD_X)
+        y = random.uniform(HEADER_H, HEIGHT-20)
+        glitches.append((x,y))
 
     svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='{WIDTH}' height='{HEIGHT}'>
 
 <rect width='100%' height='100%' fill='{BG}'/>
 
-<!-- grid -->
-{grid_lines}
-
-<!-- histogram -->
-{"".join(f"<rect x='{x:.2f}' y='{PLOT_BOTTOM-h:.2f}' width='2.4' height='{h:.2f}' fill='{ACCENT}'/>" for x,h in bars)}
-
-<!-- high activity markers -->
-{"".join(f"<circle cx='{x:.2f}' cy='{PLOT_BOTTOM-h:.2f}' r='3' fill='{TEXT}'/>" for x,h in markers)}
-
-<!-- baseline -->
-<line x1='{PAD_X}' y1='{PLOT_BOTTOM}' x2='{WIDTH-PAD_X}' y2='{PLOT_BOTTOM}' stroke='{ACCENT}' stroke-width='1'/>
-
 <!-- header -->
 <text x='{PAD_X}' y='28' font-family='{FONT}' font-size='13' fill='{ACCENT}'>
-SIGINT TELEMETRY // 365D
+SIGINT TELEMETRY
 </text>
 
 <text x='{PAD_X}' y='46' font-family='{FONT}' font-size='11' fill='{MUTED}'>
-{total} events · peak/day {peak}
+COMMITS {commits_total} · PR {prs_total} · REPOS {repos_total}
 </text>
 
-<!-- axis labels -->
-<text x='{WIDTH-PAD_X}' y='{PLOT_BOTTOM+16}' font-family='{FONT}' font-size='10' fill='{MUTED}' text-anchor='end'>
-timeline →
-</text>
+<!-- channel labels -->
+<text x='{PAD_X-28}' y='{PLOT_TOP+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>CODE</text>
+<text x='{PAD_X-28}' y='{PLOT_TOP+CHANNEL_H+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>COMMITS</text>
+<text x='{PAD_X-28}' y='{PLOT_TOP+CHANNEL_H*2+10}' font-family='{FONT}' font-size='9' fill='{MUTED}'>REPOS</text>
 
-</svg>
 """
+
+    # generate 3 telemetry channels
+    for ch in range(3):
+        base = PLOT_TOP + ch*CHANNEL_H
+        svg += f"<line x1='{PAD_X}' y1='{base+CHANNEL_H}' x2='{WIDTH-PAD_X}' y2='{base+CHANNEL_H}' stroke='{GRID}'/>"
+
+        for x,h in channels:
+            svg += f"<rect x='{x:.2f}' y='{base+CHANNEL_H-h:.2f}' width='2' height='{h:.2f}' fill='{ACCENT}'/>"
+
+    # glitch effect
+    for x,y in glitches:
+        svg += f"<rect x='{x:.2f}' y='{y:.2f}' width='14' height='1' fill='{ACCENT}' opacity='0.5'/>"
+
+    svg += "</svg>"
 
     Path(os.path.dirname(OUT_PATH) or ".").mkdir(parents=True, exist_ok=True)
 
     with open(OUT_PATH,"w",encoding="utf-8") as f:
         f.write(svg)
 
-    print("SIGINT telemetry generated →", OUT_PATH)
+    print("SIGINT multi-channel telemetry generated →", OUT_PATH)
+
 
 if __name__ == "__main__":
     main()
