@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/wave-divider.svg" width="100%">
+  <img src="./assets/chaotic_signal_divider.svg" width="100%">
 </p>
 
 <p align="center">
@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/wave-divider.svg" width="100%">
+  <img src="./assets/chaotic_signal_divider.svg" width="100%">
 </p>
 
 <p align="center">
