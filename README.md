@@ -11,8 +11,18 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/Naveenkumar-026?tab=repositories"><img src="https://img.shields.io/badge/%E2%97%88%20PROJECTS-000000?style=for-the-badge&color=000000&labelColor=000000"></a>&nbsp;<span style="color:#8B5CF6;font-family:JetBrains Mono,monospace;">⟡</span>&nbsp;<a href="https://github.com/Naveenkumar-026?tab=stars"><img src="https://img.shields.io/badge/%E2%97%88%20STARRED-000000?style=for-the-badge&color=000000&labelColor=000000"></a>
-</p>
+
+<a href="https://github.com/Naveenkumar-026?tab=repositories">
+<img src="https://img.shields.io/badge/%E2%97%88%20PROJECTS-050507?style=for-the-badge&color=050507&labelColor=050507&logoColor=8B5CF6">
+</a>
+
+&nbsp;<span style="color:#8B5CF6;font-size:18px;">✧</span>&nbsp;
+
+<a href="https://github.com/Naveenkumar-026?tab=stars">
+<img src="https://img.shields.io/badge/%E2%97%88%20STARRED-050507?style=for-the-badge&color=050507&labelColor=050507&logoColor=8B5CF6">
+</a>
+
+</p>>
 
 <p align="center">
   <img src="./assets/chaotic_signal_divider.svg" width="100%">
