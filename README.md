@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
 <img src="assets/operator_capabilities.svg">
 </p>
 
