@@ -8,8 +8,7 @@
 
 <p align="center">
   <samp>
-    · [ <a href="https://github.com/Naveenkumar-026?tab=repositories">Projects</a> ] ·
-    [ <a href="https://github.com/Naveenkumar-026?tab=stars">Signals</a> ] ·
+    ·&nbsp;&nbsp;<a href="https://github.com/Naveenkumar-026?tab=repositories"><kbd>PROJECTS</kbd></a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://github.com/Naveenkumar-026?tab=stars"><kbd>STARRED</kbd></a>&nbsp;&nbsp;·
   </samp>
 </p>
 
@@ -25,18 +24,9 @@
 
 ---
 
-<table width="100%">
-  <tr>
-    <td width="50%">
-      <strong>PROTOCOL // 01</strong><br/>
-      <em>Structure precedes implementation.</em><br/>
-      <sub>Build durable systems. Release deliberately.</sub>
-    </td>
-    <td width="50%" align="right">
-      <sub>Most work is exploratory. Some is operational.<br/>Almost none is announced.</sub>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="./assets/protocol_panel.svg" alt="Protocol // 01" width="100%" />
+</p>
 
 <p align="center">
   <span>──────── ⧉ ────────</span>
