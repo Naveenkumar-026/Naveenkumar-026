@@ -14,9 +14,7 @@
   <img src="./assets/chaotic_signal_divider.svg" width="100%">
 </p>
 
-<p align="center">
-  <img src="./assets/dossier_panel.svg" alt="Operator Dossier // Silencio" width="100%" />
-</p>
+<p align="center"><em>"In the Art of Eternal Discovery."</em></p>
 
 <br>
 
