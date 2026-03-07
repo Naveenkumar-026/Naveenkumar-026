@@ -25,10 +25,6 @@
 </p>
 
 <p align="center">
-  <img src="./assets/capability_matrix.svg" alt="Capability Matrix" width="100%" />
-</p>
-
-<p align="center">
   <img src="./assets/protocol_panel.svg" alt="Protocol // 01" width="100%" />
 </p>
 
