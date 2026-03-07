@@ -57,11 +57,11 @@
 
 <div align="center">
 
-```
+<pre>
 If something here is useful to you — you're welcome to it.
 If something here concerns you — that's intentional.
 If you want to build something serious — reach out.
-```
+</pre>
 
 </div>
 
