@@ -7,7 +7,7 @@
 </p>
 
 <div align="center">
-<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=18&duration=2200&pause=1200&color=FF3B3B&width=900&height=40&cursor=true&lines=%3E+SECURITY%3AINTELLIGENCE%3AAUTONOMY;%3E+SIGNAL_OVER_NOISE;%3E+DEFENSE-FIRST_BUILD_DURABLE_SYSTEMS" />
+<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=18&duration=2200&pause=1200&color=FF3B3B&width=900&height=40&cursor=true&center=true&lines=%3E+SECURITY%3AINTELLIGENCE%3AAUTONOMY;%3E+SIGNAL_OVER_NOISE;%3E+DEFENSE-FIRST_BUILD_DURABLE_SYSTEMS" />
 </div>
 
 <p align="center">
