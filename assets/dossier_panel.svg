@@ -1,182 +1,412 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420">
-<defs>
-  <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%"   stop-color="#060010"/>
-    <stop offset="50%"  stop-color="#080008"/>
-    <stop offset="100%" stop-color="#030003"/>
-  </linearGradient>
-  <linearGradient id="hdrBg" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#1a0035" stop-opacity="0.9"/>
-    <stop offset="50%"  stop-color="#0d0020" stop-opacity="0.7"/>
-    <stop offset="100%" stop-color="#1a0035" stop-opacity="0.9"/>
-  </linearGradient>
-  <linearGradient id="lPanelBg" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#0e0025" stop-opacity="0.55"/>
-    <stop offset="100%" stop-color="#050010" stop-opacity="0.15"/>
-  </linearGradient>
-  <linearGradient id="rPanelBg" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#050010" stop-opacity="0.15"/>
-    <stop offset="100%" stop-color="#100020" stop-opacity="0.5"/>
-  </linearGradient>
-  <linearGradient id="barA" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#ef4444"/>
-    <stop offset="40%"  stop-color="#a855f7"/>
-    <stop offset="100%" stop-color="#22c55e"/>
-  </linearGradient>
-  <linearGradient id="barB" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#dc2626"/>
-    <stop offset="50%"  stop-color="#9333ea"/>
-    <stop offset="100%" stop-color="#4ade80"/>
-  </linearGradient>
-  <pattern id="gridP" width="32" height="32" patternUnits="userSpaceOnUse">
-    <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#a855f7" stroke-width="0.14" opacity="0.14"/>
-  </pattern>
-  <filter id="gP">
-    <feGaussianBlur stdDeviation="2.5" result="b"/>
-    <feColorMatrix in="b" type="matrix" values="0.66 0 0 0 0  0 0 0 0 0  1 0 0 0 0  0 0 0 1 0" result="c"/>
-    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-  <filter id="gG">
-    <feGaussianBlur stdDeviation="2" result="b"/>
-    <feColorMatrix in="b" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0.3 0 0 0  0 0 0 1 0" result="c"/>
-    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-  <filter id="gR">
-    <feGaussianBlur stdDeviation="2.5" result="b"/>
-    <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0.2 0 0  0 0 0 1 0" result="c"/>
-    <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-  <filter id="blob"><feGaussianBlur stdDeviation="28"/></filter>
-  <clipPath id="c1"><rect width="900" height="420"/></clipPath>
-  <style>
-    @keyframes scan1 { 0%{transform:translateY(-4px);opacity:0} 5%{opacity:.55} 95%{opacity:.15} 100%{transform:translateY(426px);opacity:0} }
-    @keyframes bP    { 0%,100%{opacity:.32} 50%{opacity:.7} }
-    @keyframes rP    { 0%,100%{opacity:.55} 50%{opacity:1} }
-    @keyframes dB    { 0%,100%{opacity:1}   50%{opacity:.08} }
-    @keyframes gl1   { 0%,84%,100%{transform:translate(0,0);filter:none;opacity:1}
-                       85%{transform:translate(-3px,0);filter:drop-shadow(3px 0 #ef4444) drop-shadow(-1px 0 #a855f7);opacity:.9}
-                       86%{transform:translate(3px,1px);filter:drop-shadow(-3px 0 #4ade80);opacity:.85}
-                       87%{transform:translate(-1px,0);filter:drop-shadow(2px 0 #a855f7);opacity:.94}
-                       88%{transform:translate(0,0);filter:none;opacity:1}
-                       93%{transform:translate(2px,0);filter:drop-shadow(-1px 0 #ef4444);opacity:.9}
-                       94%{transform:translate(0,0);filter:none;opacity:1} }
-    @keyframes gl2   { 0%,91%,100%{transform:translate(0,0);filter:none}
-                       92%{transform:translate(-2px,0);filter:drop-shadow(2px 0 #a855f7)}
-                       93%{transform:translate(1px,0);filter:drop-shadow(-1px 0 #ef4444)}
-                       94%{transform:translate(0,0);filter:none} }
-    @keyframes tf    { 0%,100%{opacity:.48} 50%{opacity:.88} }
-    .sc{animation:scan1 7s linear infinite}
-    .ob{animation:bP 4.5s ease-in-out infinite}
-    .rp{animation:rP 2.8s ease-in-out infinite}
-    .db{animation:dB 2s step-end infinite}
-    .g1{animation:gl1 10s ease-in-out infinite}
-    .g2{animation:gl2 13s ease-in-out infinite 2s}
-    .t1{animation:tf 3.5s ease-in-out infinite}
-    .t2{animation:tf 3.5s ease-in-out infinite .8s}
-    .t3{animation:tf 3.5s ease-in-out infinite 1.6s}
-  </style>
-</defs>
-<g clip-path="url(#c1)">
-  <rect width="900" height="420" fill="url(#bg1)"/>
-  <rect width="900" height="420" fill="url(#gridP)"/>
-  <ellipse cx="150" cy="210" rx="200" ry="140" fill="#a855f7" opacity="0.04" filter="url(#blob)"/>
-  <ellipse cx="750" cy="260" rx="180" ry="120" fill="#ef4444" opacity="0.035" filter="url(#blob)"/>
-  <ellipse cx="450" cy="410" rx="280" ry="70"  fill="#22c55e" opacity="0.025" filter="url(#blob)"/>
-  <rect x="0"   y="0" width="3"   height="420" fill="#a855f7" opacity="0.5"/>
-  <rect x="897" y="0" width="3"   height="420" fill="#ef4444" opacity="0.35"/>
-  <rect class="ob" x=".5" y=".5" width="899" height="419" fill="none" stroke="#a855f7" stroke-width=".9"/>
-  <path d="M3,22 L3,3 L22,3"           fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".92"/>
-  <path d="M878,3 L897,3 L897,22"      fill="none" stroke="#ef4444" stroke-width="2.4" opacity=".85"/>
-  <path d="M3,398 L3,417 L22,417"      fill="none" stroke="#22c55e" stroke-width="2.4" opacity=".8"/>
-  <path d="M878,417 L897,417 L897,398" fill="none" stroke="#a855f7" stroke-width="2.4" opacity=".85"/>
-  <rect class="sc" x="0" y="0" width="900" height="1.5" fill="#a855f7" opacity=".5"/>
-  <rect x="1" y="1" width="898" height="41" fill="url(#hdrBg)"/>
-  <line x1="1" y1="42" x2="899" y2="42" stroke="#a855f7" stroke-width=".5" opacity=".4"/>
-  <text x="18" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#a855f7" opacity=".5" letter-spacing="1">DOSSIER // ACTIVE</text>
-  <g class="g2">
-    <text x="310" y="27" font-family="'Courier New',monospace" font-size="13.5" font-weight="bold" fill="#a855f7" filter="url(#gP)">OPERATOR PROFILE // SILENCIO</text>
+
+1772896630569_image.png
+
+README (9).md
+46 lines
+
+md
+
+i've attached the cuurent readme.md. I just need the center 3 neon panels to redone to match the dark trait vibe. Redo it with glitch and clean animations to attract visitors and nding up with more followers, appropriate for github. The following is my short info. Either use color themes like purple on black or red on black. I would love to feel like a evil god. 
+
+Naveen Kumar M (Silencio) is a cybersecurity specialist and AI systems architect focused on building practical, defense-first intelligent systems. He works across offensive/defensive security, OSINT, privacy engineering, and automation with a bias for real-world reliability and clean engineering. He combines strong systems thinking with rapid prototyping, clear technical communication, and a research mindset—designed for high-stakes environments where security, integrity, and execution matter.
+
+Show more
+20:51
+
+Architected three animated SVG panels with glitch effects and dark aesthetic
+Architected three animated SVG panels with glitch effects and dark aesthetic
+Now I'll craft all 3 SVG panels with glitch animations, purple-on-black evil god aesthetic — built specifically for GitHub's SVG renderer.
+
+
+Orchestrated SVG exports and documentation updates
+Orchestrated SVG exports and documentation updates
+Now let me update the README to wire them in, then copy everything to outputs:
+
+
+Ran a command, read a file
+Ran a command, read a file
+Here are your 3 panels. Here's what each one contains:
+
+Panel 1 — Dossier (dossier_panel.svg) — Purple theme. Your identity card with a glitching NAVEEN KUMAR M name (red/cyan ghost layers snap in and out), // SILENCIO alias in flickering red, bio fields, skill tags, and a radar chart on the right showing your domain spread.
+
+Panel 2 — Capability Matrix (capability_matrix.svg) — Purple/red split. Animated skill bars that grow in on load (Offensive Sec, Defensive Sys, AI Architecture, OSINT, Privacy Eng, Automation), plus a 6-node threat taxonomy grid with pulsing purple/red nodes and connecting lines that breathe.
+
+Panel 3 — Protocol (protocol_panel.svg) — Red-dominant theme. Your 8-rule operating doctrine with staggered fade-in reveal, a fake terminal on the right running whoami, cat /etc/mission, status --all with a blinking cursor, and animated stat bars.
+
+To deploy:
+
+Drop all 3 SVGs into your repo's /assets/ folder
+Replace the 3 existing panel <img> lines in your README with the snippet from README_panels_snippet.md
+All animations (glitch, scan sweeps, bar grows, pulse, ticker scroll) are pure CSS inside the SVG — GitHub renders them fully.
+
+Dossier panel
+Image · SVG 
+Capability matrix
+Image · SVG 
+Protocol panel
+Image · SVG 
+Readme panels snippet
+Document · MD 
+Forget everything. I just need one panel that's clean and elegant. With effects and 100% readable.
+
+20:58
+
+Architected minimalist panel balancing elegance with subtle visual effects
+Architected minimalist panel balancing elegance with subtle visual effects
+Let me design one clean, elegant panel — no chaos, just precision.
+
+
+Created a file, read a file
+Created a file, read a file
+One panel. Everything in it:
+
+Name — large, readable, with two ghost glitch layers (red + cyan) that snap in briefly every ~6 seconds
+Alias // SILENCIO in red with a slow flicker
+Bio + key-value fields — clean, fully legible at any zoom
+Skill bars on the right — animate in on load, staggered, with alternating purple/red gradients
+Doctrine lines — five principles, concise
+Tags — fade up in sequence on load
+Scrolling ticker at the bottom
+To use: drop silencio_panel.svg into your /assets/ folder and reference it as:
+
+md
+<p align="center">
+  <img src="./assets/silencio_panel.svg" width="100%" />
+</p>
+Silencio panel
+Image · SVG 
+Remove the NAVEEN KUMAR M
+
+21:00
+
+Identified and excised unwanted text element
+Identified and excised unwanted text element
+Now nudge the alias and everything below it up since the name block is gone:
+
+
+Edited 2 files
+Edited 2 files
+Also trim the left accent bar height to match and shrink the viewBox:
+
+
+Edited a file, read a file
+Edited a file, read a file
+Done. Name removed — the panel now opens straight with // SILENCIO as the lead identity, followed by the bio, fields, tags, and skill bars.
+
+Silencio panel
+Image · SVG 
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Silencio panel · SVG
+Copy
+
+<svg viewBox="0 0 860 380" xmlns="http://www.w3.org/2000/svg" width="860">
+  <defs>
+    <style>
+      .mono { font-family: 'Courier New', Courier, monospace; }
+
+      /* --- Glow border pulse --- */
+      @keyframes borderPulse {
+        0%, 100% { opacity: 0.5; }
+        50%       { opacity: 1; }
+      }
+
+      /* --- Name glitch: two ghost layers --- */
+      @keyframes glitchR {
+        0%,88%,100% { opacity:0; transform:translate(0,0); }
+        89%  { opacity:0.75; transform:translate(-4px, 0); }
+        90%  { opacity:0; }
+        92%  { opacity:0.55; transform:translate(3px, 0); }
+        93%  { opacity:0; }
+      }
+      @keyframes glitchC {
+        0%,91%,100% { opacity:0; transform:translate(0,0); }
+        92%  { opacity:0.6; transform:translate(5px, 0); }
+        93%  { opacity:0; }
+      }
+
+      /* --- Alias flicker --- */
+      @keyframes aliasFlicker {
+        0%,94%,100% { opacity:1; }
+        95% { opacity:0.15; }
+        96% { opacity:1; }
+        98% { opacity:0.4; }
+        99% { opacity:1; }
+      }
+
+      /* --- Status dot blink --- */
+      @keyframes dot {
+        0%,100% { opacity:1; }
+        50%      { opacity:0; }
+      }
+
+      /* --- Ticker scroll --- */
+      @keyframes ticker {
+        0%   { transform: translateX(860px); }
+        100% { transform: translateX(-1800px); }
+      }
+
+      /* --- Bar grow on load --- */
+      @keyframes grow { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+
+      /* --- Subtle scanline sweep --- */
+      @keyframes sweep {
+        0%   { transform:translateY(-2px); opacity:0; }
+        5%   { opacity:0.04; }
+        95%  { opacity:0.04; }
+        100% { transform:translateY(380px); opacity:0; }
+      }
+
+      /* --- Tag fade in stagger --- */
+      @keyframes fadeUp {
+        from { opacity:0; transform:translateY(5px); }
+        to   { opacity:1; transform:translateY(0); }
+      }
+    </style>
+
+    <!-- Purple glow -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Soft border glow -->
+    <filter id="borderGlow" x="-4%" y="-4%" width="108%" height="108%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Bar gradients -->
+    <linearGradient id="gradP" x1="0%" x2="100%">
+      <stop offset="0%"   stop-color="#6600CC"/>
+      <stop offset="75%"  stop-color="#AA55FF"/>
+      <stop offset="100%" stop-color="#CC88FF" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="gradR" x1="0%" x2="100%">
+      <stop offset="0%"   stop-color="#880020"/>
+      <stop offset="75%"  stop-color="#EE0033"/>
+      <stop offset="100%" stop-color="#FF5577" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- Clip -->
+    <clipPath id="clip"><rect width="860" height="380" rx="3"/></clipPath>
+  </defs>
+
+  <!-- ─── Base ─── -->
+  <rect width="860" height="380" fill="#070010" rx="3"/>
+
+  <!-- Scanline sweep -->
+  <rect x="0" y="0" width="860" height="2" fill="#9933FF"
+        style="animation: sweep 7s linear infinite; opacity:0;"/>
+
+  <!-- Very subtle dot grid -->
+  <g opacity="0.04" fill="#9933FF">
+    <circle cx="80"  cy="60"  r="1"/><circle cx="160" cy="60"  r="1"/>
+    <circle cx="240" cy="60"  r="1"/><circle cx="320" cy="60"  r="1"/>
+    <circle cx="400" cy="60"  r="1"/><circle cx="480" cy="60"  r="1"/>
+    <circle cx="560" cy="60"  r="1"/><circle cx="640" cy="60"  r="1"/>
+    <circle cx="720" cy="60"  r="1"/><circle cx="800" cy="60"  r="1"/>
+    <circle cx="80"  cy="130" r="1"/><circle cx="160" cy="130" r="1"/>
+    <circle cx="240" cy="130" r="1"/><circle cx="320" cy="130" r="1"/>
+    <circle cx="400" cy="130" r="1"/><circle cx="480" cy="130" r="1"/>
+    <circle cx="560" cy="130" r="1"/><circle cx="640" cy="130" r="1"/>
+    <circle cx="720" cy="130" r="1"/><circle cx="800" cy="130" r="1"/>
+    <circle cx="80"  cy="200" r="1"/><circle cx="160" cy="200" r="1"/>
+    <circle cx="240" cy="200" r="1"/><circle cx="320" cy="200" r="1"/>
+    <circle cx="400" cy="200" r="1"/><circle cx="480" cy="200" r="1"/>
+    <circle cx="560" cy="200" r="1"/><circle cx="640" cy="200" r="1"/>
+    <circle cx="720" cy="200" r="1"/><circle cx="800" cy="200" r="1"/>
+    <circle cx="80"  cy="270" r="1"/><circle cx="160" cy="270" r="1"/>
+    <circle cx="240" cy="270" r="1"/><circle cx="320" cy="270" r="1"/>
+    <circle cx="400" cy="270" r="1"/><circle cx="480" cy="270" r="1"/>
+    <circle cx="560" cy="270" r="1"/><circle cx="640" cy="270" r="1"/>
+    <circle cx="720" cy="270" r="1"/><circle cx="800" cy="270" r="1"/>
   </g>
-  <text x="712" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#6b6880" opacity=".7">CALLSIGN · VERIFIED ·</text>
-  <text x="828" y="26" font-family="'Courier New',monospace" font-size="9.5" fill="#22c55e" opacity=".9"> ONLINE</text>
-  <circle class="db rp" cx="883" cy="21" r="4" fill="#22c55e" filter="url(#gG)"/>
-  <line x1="548" y1="42" x2="548" y2="420" stroke="#a855f7" stroke-width=".5" opacity=".2"/>
-  <rect x="1" y="42" width="546" height="377" fill="url(#lPanelBg)"/>
-  <g class="g1">
-    <text x="22" y="95" font-family="'Courier New',monospace" font-size="26" font-weight="bold" fill="#22c55e" filter="url(#gG)" letter-spacing="2">NAVEEN KUMAR M</text>
+
+  <!-- ─── Outer glow border ─── -->
+  <rect x="1" y="1" width="858" height="378" rx="3" fill="none"
+        stroke="#7700EE" stroke-width="1.5" filter="url(#borderGlow)"
+        style="animation:borderPulse 4s ease-in-out infinite; opacity:0.6;"/>
+
+  <!-- Inner border -->
+  <rect x="5" y="5" width="850" height="370" rx="2" fill="none"
+        stroke="#2A0055" stroke-width="0.5"/>
+
+  <!-- ─── Header strip ─── -->
+  <rect x="0" y="0" width="860" height="26" fill="#0C0018" rx="3"/>
+  <rect x="0" y="23" width="860" height="1" fill="#2A0055"/>
+
+  <!-- Header label left -->
+  <text x="22" y="16" class="mono"
+        font-size="9" fill="#4A0077" letter-spacing="2.5">OPERATOR DOSSIER</text>
+
+  <!-- Live dot + label -->
+  <circle cx="800" cy="13" r="3" fill="#00FF88"
+          style="animation:dot 2s step-end infinite;"/>
+  <text x="808" y="17" class="mono" font-size="8" fill="#00FF88" letter-spacing="1.5">LIVE</text>
+
+  <!-- Classification right -->
+  <text x="630" y="16" class="mono" font-size="9" fill="#330055" letter-spacing="2">CLASSIFICATION :: APEX</text>
+
+  <!-- ─── Left accent bar ─── -->
+  <rect x="18" y="38" width="1.5" height="240" fill="#1E0033"/>
+  <rect x="18" y="38" width="1.5" height="60"  fill="#8800DD" opacity="0.9"/>
+
+  <!-- Alias -->
+  <text x="36" y="68" class="mono" font-size="13"
+        fill="#EE0033" letter-spacing="9"
+        style="animation:aliasFlicker 7s infinite;">
+    // SILENCIO
+  </text>
+
+  <!-- Rule separator -->
+  <line x1="34" y1="80" x2="600" y2="80" stroke="#1E0033" stroke-width="0.8"/>
+  <!-- Accent dash on rule -->
+  <line x1="34" y1="80" x2="220" y2="80" stroke="#7700CC" stroke-width="1" opacity="0.6"/>
+  <polygon points="220,77 234,80 220,83" fill="#7700CC" opacity="0.6"/>
+
+  <!-- ─── Bio ─── -->
+  <text x="34" y="101" class="mono" font-size="9.5"
+        fill="#8855AA" letter-spacing="0.6">
+    Cybersecurity specialist &amp; AI systems architect — defense-first, precision-built.
+  </text>
+  <text x="34" y="117" class="mono" font-size="9.5"
+        fill="#8855AA" letter-spacing="0.6">
+    Offensive / defensive security, OSINT, privacy engineering &amp; intelligent automation.
+  </text>
+  <text x="34" y="133" class="mono" font-size="9.5"
+        fill="#8855AA" letter-spacing="0.6">
+    Built for high-stakes environments where security, integrity, and execution matter.
+  </text>
+
+  <!-- Rule -->
+  <line x1="34" y1="146" x2="600" y2="146" stroke="#150025" stroke-width="0.8"/>
+
+  <!-- ─── Key-value fields ─── -->
+  <text x="34"  y="163" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="1.5">DOMAIN</text>
+  <text x="160" y="163" class="mono" font-size="8.5" fill="#AA77DD" letter-spacing="0.8">Cybersecurity  ·  AI Systems  ·  OSINT  ·  Privacy Engineering</text>
+
+  <text x="34"  y="180" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="1.5">METHOD</text>
+  <text x="160" y="180" class="mono" font-size="8.5" fill="#AA77DD" letter-spacing="0.8">Defense-First  ·  Clean Engineering  ·  Rapid Prototyping</text>
+
+  <text x="34"  y="197" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="1.5">CONTEXT</text>
+  <text x="160" y="197" class="mono" font-size="8.5" fill="#AA77DD" letter-spacing="0.8">Adversarial  ·  Production-Grade  ·  High-Stakes</text>
+
+  <text x="34"  y="214" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="1.5">BIAS</text>
+  <text x="160" y="214" class="mono" font-size="8.5" fill="#AA77DD" letter-spacing="0.8">Signal over noise  ·  Reliability  ·  Execution</text>
+
+  <!-- Rule -->
+  <line x1="34" y1="226" x2="600" y2="226" stroke="#150025" stroke-width="0.8"/>
+
+  <!-- ─── Tags ─── -->
+  <g style="animation:fadeUp 0.6s 0.2s ease-out both;">
+    <rect x="34"  y="236" width="90" height="16" rx="2" fill="#1A0033"/>
+    <text x="79"  y="248" class="mono" font-size="8" fill="#9955CC" text-anchor="middle" letter-spacing="1">OFFENSIVE SEC</text>
   </g>
-  <rect x="22" y="103" width="94" height="20" rx="2" fill="#a855f7" fill-opacity=".1" stroke="#a855f7" stroke-width=".9" opacity=".85"/>
-  <text x="69" y="117" text-anchor="middle" font-family="'Courier New',monospace" font-size="10" fill="#c084fc">[ SILENCIO ]</text>
-  <text x="22" y="146" font-family="'Courier New',monospace" font-size="11.5" fill="#e8d5ff" opacity=".75">Cybersecurity Specialist  ·  AI Systems Architect</text>
-  <line x1="22" y1="158" x2="524" y2="158" stroke="#a855f7" stroke-width=".35" opacity=".3"/>
-  <text x="22" y="177" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">Defense-first intelligent systems at the intersection of</text>
-  <text x="22" y="192" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">offensive/defensive security, OSINT, and privacy engineering.</text>
-  <text x="22" y="207" font-family="'Courier New',monospace" font-size="9.5" fill="#b8a8d0" opacity=".72">Strong systems thinking. Rapid prototyping. High-stakes execution.</text>
-  <line x1="22" y1="220" x2="524" y2="220" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
-  <text x="22" y="238" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45" letter-spacing="1.5">FOCUS AREAS</text>
-  <rect x="22"  y="245" width="136" height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".55"/>
-  <text x="90"  y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t1">Offensive Security</text>
-  <rect x="166" y="245" width="154" height="22" rx="2" fill="none" stroke="#22c55e" stroke-width=".7" opacity=".45"/>
-  <text x="243" y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#4ade80" class="t2">Defensive Architecture</text>
-  <rect x="328" y="245" width="112" height="22" rx="2" fill="none" stroke="#ef4444" stroke-width=".7" opacity=".45"/>
-  <text x="384" y="260" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#f87171" class="t3">Agent Systems</text>
-  <rect x="22"  y="274" width="62"  height="22" rx="2" fill="none" stroke="#ef4444" stroke-width=".7" opacity=".45"/>
-  <text x="53"  y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#f87171" class="t2">OSINT</text>
-  <rect x="92"  y="274" width="138" height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".45"/>
-  <text x="161" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t3">Privacy Engineering</text>
-  <rect x="238" y="274" width="100" height="22" rx="2" fill="#22c55e" fill-opacity=".07" stroke="#22c55e" stroke-width=".8" opacity=".8"/>
-  <text x="288" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#4ade80" class="t1">Automation</text>
-  <rect x="346" y="274" width="82"  height="22" rx="2" fill="none" stroke="#a855f7" stroke-width=".7" opacity=".4"/>
-  <text x="387" y="289" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#c084fc" class="t2">Low-Infra</text>
-  <rect x="22"  y="303" width="108" height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
-  <text x="76"  y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t3">Rapid Prototyping</text>
-  <rect x="138" y="303" width="152" height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
-  <text x="214" y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t1">Technical Communication</text>
-  <rect x="298" y="303" width="96"  height="22" rx="2" fill="none" stroke="#6b6880" stroke-width=".6" opacity=".4"/>
-  <text x="346" y="318" text-anchor="middle" font-family="'Courier New',monospace" font-size="9" fill="#9d8fb0" class="t2">Research Mindset</text>
-  <line x1="22" y1="344" x2="524" y2="344" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
-  <text x="22" y="361" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".38" letter-spacing="1.5">DIRECTIVE //</text>
-  <text x="22" y="378" font-family="'Courier New',monospace" font-size="10.5" fill="#e8d5ff" opacity=".58" font-style="italic">Structure precedes implementation. Build durable systems.</text>
-  <text x="22" y="408" font-family="'Courier New',monospace" font-size="8" fill="#a855f7" opacity=".22">2026 · MAIN BUILD · NAVEENKUMAR-026 · SILENCIO PROTOCOL ACTIVE</text>
-  <rect x="549" y="42" width="350" height="377" fill="url(#rPanelBg)"/>
-  <text x="568" y="66" font-family="'Courier New',monospace" font-size="9" fill="#ef4444" opacity=".55" letter-spacing="1">SIGNAL METRICS // LIVE OPS SNAPSHOT</text>
-  <line x1="568" y1="73" x2="884" y2="73" stroke="#ef4444" stroke-width=".35" opacity=".35"/>
-  <text x="568" y="98"  font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">CALLSIGN</text>
-  <text x="690" y="98"  font-family="'Courier New',monospace" font-size="12.5" font-weight="bold" fill="#22c55e" filter="url(#gG)">SILENCIO</text>
-  <text x="568" y="118" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">MODE</text>
-  <text x="690" y="118" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">PUBLIC</text>
-  <text x="568" y="138" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">STATUS</text>
-  <circle class="db" cx="692" cy="133" r="4.5" fill="#22c55e" filter="url(#gG)"/>
-  <text x="704" y="138" font-family="'Courier New',monospace" font-size="12.5" fill="#22c55e">ONLINE</text>
-  <text x="568" y="158" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">HANDLE</text>
-  <text x="690" y="158" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">Naveenkumar-026</text>
-  <text x="568" y="178" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">BUILD</text>
-  <text x="690" y="178" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">MAIN</text>
-  <text x="568" y="198" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".45">MARKER</text>
-  <text x="690" y="198" font-family="'Courier New',monospace" font-size="12.5" fill="#e8d5ff" opacity=".85">SECURITY · AI</text>
-  <line x1="568" y1="212" x2="884" y2="212" stroke="#a855f7" stroke-width=".35" opacity=".25"/>
-  <text x="568" y="230" font-family="'Courier New',monospace" font-size="9" fill="#ef4444" opacity=".5" letter-spacing="1">CAPABILITY SIGNAL STRENGTH</text>
-  <text x="568" y="254" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Systems Thinking</text>
-  <rect x="690" y="244" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
-  <rect x="690" y="244" width="171" height="7" rx="1.5" fill="url(#barA)" opacity=".85"/>
-  <text x="874" y="252" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">95%</text>
-  <text x="568" y="274" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Cyber Defense</text>
-  <rect x="690" y="264" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
-  <rect x="690" y="264" width="162" height="7" rx="1.5" fill="url(#barB)" opacity=".85"/>
-  <text x="874" y="272" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
-  <text x="568" y="294" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Privacy Engineering</text>
-  <rect x="690" y="284" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
-  <rect x="690" y="284" width="153" height="7" rx="1.5" fill="url(#barA)" opacity=".8"/>
-  <text x="874" y="292" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">85%</text>
-  <text x="568" y="314" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">Agent Systems</text>
-  <rect x="690" y="304" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
-  <rect x="690" y="304" width="144" height="7" rx="1.5" fill="url(#barB)" opacity=".8"/>
-  <text x="874" y="312" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">80%</text>
-  <text x="568" y="334" font-family="'Courier New',monospace" font-size="8.5" fill="#b8a8d0" opacity=".65">OSINT</text>
-  <rect x="690" y="324" width="180" height="7" rx="1.5" fill="#a855f7" fill-opacity=".12"/>
-  <rect x="690" y="324" width="162" height="7" rx="1.5" fill="url(#barA)" opacity=".8"/>
-  <text x="874" y="332" text-anchor="end" font-family="'Courier New',monospace" font-size="7.5" fill="#4ade80" opacity=".6">90%</text>
-  <line x1="568" y1="347" x2="884" y2="347" stroke="#a855f7" stroke-width=".35" opacity=".2"/>
-  <text x="568" y="367" font-family="'Courier New',monospace" font-size="8.5" fill="#a855f7" opacity=".25">2026-03-05 UTC · LIVE TELEMETRY · MODE DOSSIER</text>
-  <text x="568" y="386" font-family="'Courier New',monospace" font-size="8.5" fill="#22c55e" opacity=".22" font-style="italic">Build durable systems. Release deliberately.</text>
-</g>
+  <g style="animation:fadeUp 0.6s 0.4s ease-out both;">
+    <rect x="132" y="236" width="90" height="16" rx="2" fill="#1A0010"/>
+    <text x="177" y="248" class="mono" font-size="8" fill="#CC4466" text-anchor="middle" letter-spacing="1">DEFENSIVE SEC</text>
+  </g>
+  <g style="animation:fadeUp 0.6s 0.6s ease-out both;">
+    <rect x="230" y="236" width="90" height="16" rx="2" fill="#1A0033"/>
+    <text x="275" y="248" class="mono" font-size="8" fill="#9955CC" text-anchor="middle" letter-spacing="1">AI ARCHITECT</text>
+  </g>
+  <g style="animation:fadeUp 0.6s 0.8s ease-out both;">
+    <rect x="328" y="236" width="52" height="16" rx="2" fill="#1A0010"/>
+    <text x="354" y="248" class="mono" font-size="8" fill="#CC4466" text-anchor="middle" letter-spacing="1">OSINT</text>
+  </g>
+  <g style="animation:fadeUp 0.6s 1.0s ease-out both;">
+    <rect x="388" y="236" width="104" height="16" rx="2" fill="#1A0033"/>
+    <text x="440" y="248" class="mono" font-size="8" fill="#9955CC" text-anchor="middle" letter-spacing="1">PRIV ENGINEER</text>
+  </g>
+  <g style="animation:fadeUp 0.6s 1.2s ease-out both;">
+    <rect x="500" y="236" width="84" height="16" rx="2" fill="#1A0010"/>
+    <text x="542" y="248" class="mono" font-size="8" fill="#CC4466" text-anchor="middle" letter-spacing="1">AUTOMATION</text>
+  </g>
+
+  <!-- ─── Right panel: Skill bars ─── -->
+  <rect x="634" y="36" width="210" height="296" rx="2" fill="#080012"/>
+  <line x1="634" y1="36" x2="844" y2="36" stroke="#2A0055" stroke-width="0.5"/>
+
+  <text x="644" y="56" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="2">PROFICIENCY INDEX</text>
+  <line x1="644" y1="62" x2="834" y2="62" stroke="#1E0033" stroke-width="0.5"/>
+
+  <!-- Bar macro: track + fill + label -->
+  <!-- Bar 1 -->
+  <text x="644" y="82"  class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">Offensive Security</text>
+  <text x="820" y="82"  class="mono" font-size="8" fill="#EE0033">97</text>
+  <rect  x="644" y="85"  width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 0.1s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="85" width="184" height="5" rx="1" fill="url(#gradR)"/>
+  </g>
+
+  <!-- Bar 2 -->
+  <text x="644" y="104" class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">Defensive Systems</text>
+  <text x="820" y="104" class="mono" font-size="8" fill="#AA55FF">95</text>
+  <rect  x="644" y="107" width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 0.3s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="107" width="180" height="5" rx="1" fill="url(#gradP)"/>
+  </g>
+
+  <!-- Bar 3 -->
+  <text x="644" y="126" class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">AI Architecture</text>
+  <text x="820" y="126" class="mono" font-size="8" fill="#EE0033">93</text>
+  <rect  x="644" y="129" width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 0.5s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="129" width="177" height="5" rx="1" fill="url(#gradR)"/>
+  </g>
+
+  <!-- Bar 4 -->
+  <text x="644" y="148" class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">OSINT &amp; Intel</text>
+  <text x="820" y="148" class="mono" font-size="8" fill="#AA55FF">96</text>
+  <rect  x="644" y="151" width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 0.7s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="151" width="182" height="5" rx="1" fill="url(#gradP)"/>
+  </g>
+
+  <!-- Bar 5 -->
+  <text x="644" y="170" class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">Privacy Engineering</text>
+  <text x="820" y="170" class="mono" font-size="8" fill="#EE0033">91</text>
+  <rect  x="644" y="173" width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 0.9s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="173" width="173" height="5" rx="1" fill="url(#gradR)"/>
+  </g>
+
+  <!-- Bar 6 -->
+  <text x="644" y="192" class="mono" font-size="8" fill="#9966BB" letter-spacing="0.8">Automation &amp; Agents</text>
+  <text x="820" y="192" class="mono" font-size="8" fill="#AA55FF">94</text>
+  <rect  x="644" y="195" width="190" height="5" rx="1" fill="#110020"/>
+  <g style="animation:grow 1.4s 1.1s ease-out both; transform-origin:644px 0;">
+    <rect x="644" y="195" width="178" height="5" rx="1" fill="url(#gradP)"/>
+  </g>
+
+  <!-- Divider in right panel -->
+  <line x1="644" y1="212" x2="834" y2="212" stroke="#1E0033" stroke-width="0.5"/>
+
+  <!-- Doctrine lines in right panel -->
+  <text x="644" y="228" class="mono" font-size="8.5" fill="#4A0077" letter-spacing="2">DOCTRINE</text>
+  <line x1="644" y1="234" x2="834" y2="234" stroke="#1E0033" stroke-width="0.5"/>
+
+  <text x="644" y="250" class="mono" font-size="8" fill="#553377" letter-spacing="0.5">Defense before features.</text>
+  <text x="644" y="265" class="mono" font-size="8" fill="#553377" letter-spacing="0.5">Threat model first, always.</text>
+  <text x="644" y="280" class="mono" font-size="8" fill="#553377" letter-spacing="0.5">Execution is the metric.</text>
+  <text x="644" y="295" class="mono" font-size="8" fill="#553377" letter-spacing="0.5">Adversarial mindset, always on.</text>
+  <text x="644" y="310" class="mono" font-size="8" fill="#553377" letter-spacing="0.5">Signal over noise. Always.</text>
+
+  <!-- ─── Bottom ticker bar ─── -->
+  <rect x="0" y="353" width="860" height="18" fill="#0C0018"/>
+  <line x1="5" y1="353" x2="855" y2="353" stroke="#2A0055" stroke-width="0.5"/>
+  <text y="365" class="mono" font-size="7.5" fill="#330055" letter-spacing="2"
+        style="animation:ticker 20s linear infinite;">
+    ∷ SECURITY · INTELLIGENCE · AUTONOMY  ∷  DEFENSE-FIRST · SIGNAL OVER NOISE · BUILD DURABLE SYSTEMS  ∷  NAVEEN KUMAR M // SILENCIO  ∷  CYBERSECURITY · AI SYSTEMS · OSINT · PRIVACY ENGINEERING
+  </text>
+  <!-- Static labels over ticker -->
+  <text x="18"  y="365" class="mono" font-size="7" fill="#2A0044">SYS::ACTIVE</text>
+  <text x="770" y="365" class="mono" font-size="7" fill="#2A0044">ID::SILENCIO</text>
 </svg>
+
+
