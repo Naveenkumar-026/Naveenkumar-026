@@ -71,6 +71,6 @@ If you want to build something serious — reach out.
   <img src="./assets/signal_barcode.svg?v=22777769879" alt="Signal Telemetry" width="100%" />
 </p>
 
-<p align="center"><em>
-"Not everything here is meant to be understood on first pass."
-</em></p>
+<p align="center">
+<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=14&duration=4000&pause=3000&color=FF3B3B&center=true&width=900&height=30&lines=%22Not+everything+here+is+meant+to+be+understood+on+first+pass.%22" />
+</p>
