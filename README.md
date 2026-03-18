@@ -68,7 +68,7 @@ If you want to build something serious — reach out.
 </p>
 
 <p align="center">
-  <img src="./assets/signal_barcode.svg?v=23212224015" alt="Signal Telemetry" width="100%" />
+  <img src="./assets/signal_barcode.svg?v=23262631434" alt="Signal Telemetry" width="100%" />
 </p>
 
 <p align="center">
