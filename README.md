@@ -1,76 +1,91 @@
 <p align="center">
-<img src="assets/operator_capabilities.svg">
-</p>
-
-<p align="center">
   <img src="./assets/eye.gif" width="900" alt="Eye animation" />
 </p>
 
-<div align="center">
-<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=18&duration=2200&pause=1200&color=FF3B3B&width=900&height=40&cursor=true&center=true&lines=%3E+SECURITY%3AINTELLIGENCE%3AAUTONOMY;%3E+SIGNAL_OVER_NOISE;%3E+DEFENSE-FIRST_BUILD_DURABLE_SYSTEMS" />
-</div>
+# Silencio
 
-<p align="center">
-  <img src="./assets/chaotic_signal_divider.svg" width="100%">
-</p>
+**Systems security, intelligence, and autonomy.**
 
-<p align="center"><em>"In the Art of Eternal Discovery."</em></p>
+I build at the edge of cybersecurity, AI systems, and operational intelligence.
 
-<br>
+My work is focused on designing systems that do more than function — they observe, adapt, defend, and endure. I care about architectures that survive pressure, tools that have real-world gravity, and intelligence workflows that reduce noise to signal.
 
----
+This profile is a record of that direction: security engineering, autonomous systems, agentic infrastructure, intelligence tooling, privacy-first design, and durable software built with intent.
 
-<div align="center">
+## Who I Am
 
-| VECTOR | WHAT I BUILD |
-|:---:|:---|
-| `Offensive Security` | Recon pipelines, exploit tooling, red team automation |
-| `Defensive Systems` | Threat detection logic, hardened infra, incident response tooling |
-| `AI Agent Systems` | Autonomous agents, LLM-integrated security workflows, agentic pipelines |
-| `OSINT & Intel` | Open-source intelligence frameworks, identity mapping, surface analysis |
-| `Privacy Engineering` | Data minimization systems, anonymization pipelines, compliance-by-design |
-| `Automation` | CLI tooling, task orchestration, rapid prototype-to-production pipelines |
+I’m a cybersecurity specialist and AI systems architect with a builder’s mindset.
 
-</div>
+I work across:
+- cyber defense and offensive security research
+- AI agents and autonomous workflows
+- OSINT and intelligence system design
+- privacy-preserving architectures
+- system hardening, monitoring, and control
+- rapid prototyping for serious, field-relevant tools
 
-<br>
+I am drawn to systems that combine cognition, defense, and execution — especially where software stops being passive and starts behaving like an operator.
 
----
+## What You’ll Find Here
 
-<div align="center">
+This GitHub is not a collection of random experiments.
 
-| OPERATING PRINCIPLE | |
-|:---|:---|
-| **Defense before features.** | A system that ships fast but breaks under pressure is not a system. |
-| **Threat model everything.** | If you haven't modeled the attacker, you haven't designed the defense. |
-| **Signal over noise.** | Most alerts are distraction. The real signal is quiet, specific, late. |
-| **Complexity is the enemy.** | Every unnecessary layer is a surface. Simplify until it hurts. |
-| **Execution is the only proof.** | Ideas are worthless at the threat boundary. Only deployed systems count. |
+It is where I develop and refine:
+- intelligent security tooling
+- autonomous agent frameworks
+- monitoring and enforcement systems
+- research-grade cyber utilities
+- privacy and identity protection mechanisms
+- modular prototypes designed to evolve into real platforms
 
-</div>
+Some projects begin as compact experiments.
+The goal is never to leave them there.
 
-<br>
+## How I Build
 
----
+I design with a few non-negotiable principles:
 
-<div align="center">
+**Defense before decoration.**  
+If a system looks good but collapses under pressure, it is unfinished.
 
-<pre>
-If something here is useful to you — you're welcome to it.
-If something here concerns you — that's intentional.
-If you want to build something serious — reach out.
-</pre>
+**Intelligence must be actionable.**  
+Data without interpretation is noise. Insight without execution is theater.
 
-</div>
+**Autonomy requires control.**  
+A system should be able to move fast without becoming unpredictable.
 
-<p align="center">
-  <img src="./assets/chaotic_signal_divider.svg" width="100%">
-</p>
+**Complexity is a liability.**  
+Every unnecessary layer expands surface area, failure modes, and maintenance cost.
 
-<p align="center">
-  <img src="./assets/signal_barcode.svg?v=23613632419" alt="Signal Telemetry" width="100%" />
-</p>
+**Build for the real world.**  
+Theory matters. Bench truth matters more.
 
-<p align="center">
-<img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=14&duration=4000&pause=3000&color=FF3B3B&center=true&width=900&height=30&lines=%22Not+everything+here+is+meant+to+be+understood+on+first+pass.%22" />
-</p>
+## Current Direction
+
+My long-term trajectory sits at the intersection of:
+- cybersecurity
+- intelligent agents
+- autonomous defense
+- privacy infrastructure
+- edge and embedded systems
+- next-generation human–machine operational tooling
+
+I am especially interested in creating systems that feel inevitable once they exist:
+tools that should have already been built, but weren’t.
+
+## Why This Profile Exists
+
+To document capability.  
+To publish systems worth studying.  
+To attract serious builders, researchers, and operators.  
+To leave behind work that carries weight.
+
+If something here is useful, use it.  
+If something here makes you think, that is the point.  
+If you are building something real, we will probably understand each other.
+
+## Reach
+
+I value precision, originality, and execution.
+
+If your work lives in security, intelligence, autonomy, or durable AI systems, feel free to connect.
