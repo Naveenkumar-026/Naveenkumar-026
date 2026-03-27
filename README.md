@@ -4,10 +4,10 @@
 
 # Silencio
 
-**Systems security, intelligence, and autonomy.**
+**Security, intelligence, and autonomy systems.**
 
 I build at the intersection of cybersecurity, AI systems, and operational intelligence.
 
 Here you’ll find work around autonomous agents, security tooling, OSINT, privacy engineering, and resilient software built for real conditions.
 
-I value precision, durability, and signal over noise.
+Built on precision, durability, and signal over noise.
