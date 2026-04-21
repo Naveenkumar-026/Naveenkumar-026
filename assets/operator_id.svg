@@ -29,7 +29,7 @@
         font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">OPERATOR ID // ACTIVE</text>
 
   <text x="928" y="58" text-anchor="end" fill="#6B7280" font-size="12"
-        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-04-20 19:21 UTC</text>
+        font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">2026-04-21 19:35 UTC</text>
 
   <!-- Status pill -->
   <rect x="746" y="74" width="182" height="24" rx="12" fill="none" stroke="#1F2937" stroke-opacity="0.65" />
@@ -52,7 +52,7 @@
   <text x="527" y="102" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">MODE:</text>
 <text x="647" y="102" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">PUBLIC</text>
   <text x="527" y="128" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">CHECKSUM:</text>
-<text x="647" y="128" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">956EB4B0F8</text>
+<text x="647" y="128" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">C83BDA977D</text>
   <text x="527" y="154" fill="#6B7280" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">TIMEBASE:</text>
 <text x="647" y="154" fill="#9CA3AF" font-size="12" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">UTC</text>
 
