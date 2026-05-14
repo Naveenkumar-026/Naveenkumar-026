@@ -1,14 +1,15 @@
-<p align="center">
-  <code>╭───────╮</code>
+<p align="left">
+  <code>╭──╱</code>
 </p>
 
 <p align="center">
   <img src="./assets/img.png" alt="Profile banner" width="100%" />
 </p>
 
-<p align="center">
-  <code>╰───────╯</code>
+<p align="right">
+  <code>╲──╯</code>
 </p>
+
 
 ```console
 ┌──[silent@recon]─[~/unknown]
