@@ -1,4 +1,4 @@
-```text
+```console
 ┌──[silent@recon]─[~/unknown]
 └─$ scan --focus security.intelligence.systems
 ```
