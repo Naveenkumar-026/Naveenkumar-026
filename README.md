@@ -3,4 +3,5 @@
 └─$ scan --focus security.intelligence.systems
 ```
 
-*The obstacle is the way.*  
+>*“He who has a why to live can bear almost any how.”*  
+>`— Friedrich Nietzsche`
