@@ -1,5 +1,5 @@
 <p align="left">
-  <samp>╭────────────────────╱</samp>
+  <samp>────────────────────</samp>
 </p>
 
 <p align="center">
@@ -7,7 +7,7 @@
 </p>
 
 <p align="right">
-  <samp>╲────────────────────╯</samp>
+  <samp>────────────────────</samp>
 </p>
 
 
