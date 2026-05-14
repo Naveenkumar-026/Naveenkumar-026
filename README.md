@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/img.png" alt="Profile banner" width="100%" />
+</p>
+
 ```console
 ┌──[silent@recon]─[~/unknown]
 └─$ scan --focus security.intelligence.systems
