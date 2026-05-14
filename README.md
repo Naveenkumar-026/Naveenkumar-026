@@ -1,6 +1,6 @@
 ```bash
 ┌──[silent@recon]─[~/unknown]
-└─$ scan --depth signal
+└─$  scan --focus cyber ai mech
 ```
 
 *I read hidden signals where systems expose their scars.*  
