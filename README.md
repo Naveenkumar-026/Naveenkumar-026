@@ -1,13 +1,24 @@
-<p align="center">
-  <img src="./assets/eye.gif" width="900" alt="Eye animation" />
-</p>
+# Naveen Kumar M
 
-# Silencio
+```bash
+┌──[silent@recon]─[~/unknown]
+└─$ scan --depth signal
+```
 
-**Security, intelligence, and autonomy systems.**
+Where others see noise,  
+I look for pattern.
 
-I build at the intersection of cybersecurity, AI systems, and operational intelligence.
+Where systems expose themselves,  
+I learn their shape.
 
-Here you’ll find work around autonomous agents, security tooling, OSINT, privacy engineering, and resilient software built for real conditions.
+Not for destruction.  
+For defense.  
+For intelligence.  
+For what comes next.
 
-Built on precision, durability, and signal over noise.
+```bash
+domain: cybersecurity · osint · ai systems
+mode: silent reconnaissance
+```
+
+> Quiet scan. Clear signal. Stronger systems.
