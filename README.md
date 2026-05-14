@@ -1,5 +1,5 @@
 <p align="left">
-  <code>╭──╱</code>
+  <code>╭──</code>
 </p>
 
 <p align="center">
@@ -7,13 +7,13 @@
 </p>
 
 <p align="right">
-  <code>╲──╯</code>
+  <code>──╯</code>
 </p>
 
 
 ```console
 ┌──[silent@recon]─[~/unknown]
-└─$ scan --focus security.intelligence.systems
+└─$ scan --focus security intelligence systems
 ```
 
 >*“He who has a why to live can bear almost any how.”*  
